@@ -23,7 +23,7 @@ import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  // serviceLocator();
+
 
   runApp(MultiProvider(
     providers: [
