@@ -1,31 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:nardilibraryapp/service/service_locator.dart';
+import 'package:nardilibraryapp/ui/views/all_departments.dart';
+import 'package:nardilibraryapp/ui/views/all_featured_releases.dart';
 import 'package:nardilibraryapp/ui/views/book_shelf_screen.dart';
-import 'package:nardilibraryapp/ui/views/dasboard_screen.dart';
-import 'package:nardilibraryapp/ui/views/password_reset_complete.dart';
-import 'package:nardilibraryapp/ui/views/profile_screen.dart';
-import 'package:nardilibraryapp/viewmodels/createnew_password_viewmodel.dart';
-import 'package:nardilibraryapp/viewmodels/forgot_password_viewmodel.dart';
-import 'package:nardilibraryapp/viewmodels/login_form_viewmodel.dart';
-import 'package:nardilibraryapp/viewmodels/nardaccess_viewmodel.dart';
 import 'package:nardilibraryapp/ui/views/create_new_password.dart';
+import 'package:nardilibraryapp/ui/views/dasboard_screen.dart';
+import 'package:nardilibraryapp/ui/views/department_book.dart';
 import 'package:nardilibraryapp/ui/views/details_screen.dart';
 import 'package:nardilibraryapp/ui/views/finish_registration.dart';
 import 'package:nardilibraryapp/ui/views/forgot_password_screen.dart';
 import 'package:nardilibraryapp/ui/views/home_page.dart';
 import 'package:nardilibraryapp/ui/views/nard_access.dart';
+import 'package:nardilibraryapp/ui/views/password_reset_complete.dart';
 import 'package:nardilibraryapp/ui/views/splash_screen.dart';
 import 'package:nardilibraryapp/ui/views/verify_email_screen.dart';
+import 'package:nardilibraryapp/viewmodels/all_featured_viewmodel.dart';
+import 'package:nardilibraryapp/viewmodels/createnew_password_viewmodel.dart';
+import 'package:nardilibraryapp/viewmodels/departments_viewmodel.dart';
+import 'package:nardilibraryapp/viewmodels/finish_registration_viewmodel.dart';
+import 'package:nardilibraryapp/viewmodels/forgot_password_viewmodel.dart';
+import 'package:nardilibraryapp/viewmodels/homepage_viemodel.dart';
+import 'package:nardilibraryapp/viewmodels/login_form_viewmodel.dart';
+import 'package:nardilibraryapp/viewmodels/nardaccess_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/signup_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/verify_email_viewmodel.dart';
-
 import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
 
-  runApp(MultiProvider(
+  runApp(
+    MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => NardViewmodel()),
       ChangeNotifierProvider(create: (_) => LoginFormViewModel()),
@@ -33,6 +38,10 @@ void main() {
       ChangeNotifierProvider(create: (_) => CreateNewPasswordViewmodel()),
       ChangeNotifierProvider(create: (_) => VerifyEmailViewmodel()),
        ChangeNotifierProvider(create: (_) => SignUpViewmodel()),
+        ChangeNotifierProvider(create: (_) => HomePageViewmodel()),
+        ChangeNotifierProvider(create: (_) => FinishRegistrationViewmodel()),
+         ChangeNotifierProvider(create: (_) => AllDepartmentsViewmodel()),
+          ChangeNotifierProvider(create: (_) => AllFeaturedViewmodel()),
       
       
       ],
@@ -55,8 +64,8 @@ class _HomeState extends State<Home> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "NardLibraryApp",
-     // home: Profile(),
-      initialRoute: Splash.routeName,
+      //home: HomePage(),
+     initialRoute: Splash.routeName,
       routes: {
         Splash.routeName: (_) => const Splash(),
         NardAccess.routeName: (_) => const NardAccess(),
@@ -66,9 +75,12 @@ class _HomeState extends State<Home> {
         FinishRegistration.routeName: (_) => const FinishRegistration(),
         PasswordResetComplete.routeName: (_)=> const PasswordResetComplete(),
         HomePage.routeName: (_) => const HomePage(),
-        BookDetails.routeName: (_) => BookDetails(),
+        BookDetails.routeName: (_) => const BookDetails(),
         BookShelf.routeName: (_)=> const BookShelf(),
-        Dashboard.routeName : (_) => Dashboard()
+        Dashboard.routeName : (_) => Dashboard(),
+        AllDepartments.route :(_) => AllDepartments(),
+        DepartmentBooks.route :(_) => const DepartmentBooks(),
+        AllFeaturedRelease.route:(_)=>  AllFeaturedRelease(),
       },
     );
   }

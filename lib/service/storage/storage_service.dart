@@ -1,5 +1,5 @@
 abstract class StorageService {
-  void saveUserName(String username);
+  Future<bool> saveUserName(String username);
 
   String? getUserName();
 }

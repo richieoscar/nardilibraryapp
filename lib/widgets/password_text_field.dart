@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:nardilibraryapp/resources/app_colors.dart';
 import 'package:nardilibraryapp/resources/app_style.dart';
 
-class CustomTextFormField extends StatelessWidget {
+class PasswordTextFormField extends StatelessWidget {
   final String headerTitle;
   final String hintText;
   final TextEditingController controller;
-  final TextInputType? inputType;
-  
-  CustomTextFormField(
-      {required this.headerTitle,
-      required this.hintText,
-      required this.controller,
-      required this.inputType});
+
+  PasswordTextFormField({
+    required this.headerTitle,
+    required this.hintText,
+    required this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +32,10 @@ class CustomTextFormField extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 color: AppColors.faintColor),
             child: TextFormField(
+                enableSuggestions: false,
+                autocorrect: false,
                 controller: controller,
+                obscureText: true,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.only(left: 10),
@@ -42,7 +44,6 @@ class CustomTextFormField extends StatelessWidget {
                   fillColor: AppColors.faintColor,
                   focusColor: AppColors.backgroundColor,
                 ),
-                keyboardType: inputType,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Required";

@@ -6,6 +6,7 @@ import 'package:nardilibraryapp/resources/app_style.dart';
 import 'package:nardilibraryapp/viewmodels/signup_viewmodel.dart';
 import 'package:nardilibraryapp/widgets/custom_button.dart';
 import 'package:nardilibraryapp/widgets/custome_text_form_field.dart';
+import 'package:nardilibraryapp/widgets/password_text_field.dart';
 import 'package:nardilibraryapp/widgets/progressar.dart';
 import 'package:provider/provider.dart';
 
@@ -72,44 +73,53 @@ class _SignUpState extends State<SignUp> {
                 CustomTextFormField(
                     headerTitle: "Firstname",
                     hintText: "Firstname",
-                    controller: _firstnameController),
+                    controller: _firstnameController,
+                    inputType: TextInputType.text),
                 const SizedBox(height: 10),
                 CustomTextFormField(
                     headerTitle: "Lastname",
                     hintText: "Lastname",
-                    controller: _lastnameController),
+                    controller: _lastnameController,
+                    inputType: TextInputType.text),
                 const SizedBox(height: 10),
                 CustomTextFormField(
-                    headerTitle: "Username",
-                    hintText: "Username",
-                    controller: _usernameController),
+                  headerTitle: "Username",
+                  hintText: "Username",
+                  controller: _usernameController,
+                  inputType: TextInputType.text,
+                ),
                 const SizedBox(height: 10),
                 CustomTextFormField(
                     headerTitle: "Email",
                     hintText: "Email",
-                    controller: _emailController),
+                    controller: _emailController,
+                    inputType: TextInputType.emailAddress),
                 const SizedBox(height: 10),
                 CustomTextFormField(
                     headerTitle: "Phone Number",
                     hintText: "Phone Number",
-                    controller: _phoneNumberController),
+                    controller: _phoneNumberController,
+                    inputType: TextInputType.phone),
                 const SizedBox(height: 10),
                 CustomTextFormField(
                     headerTitle: "Folio",
                     hintText: "Folio",
-                    controller: _folioController),
-                     const SizedBox(height: 10),
-                     CustomTextFormField(
+                    controller: _folioController,
+                    inputType: TextInputType.number),
+                const SizedBox(height: 10),
+                CustomTextFormField(
                     headerTitle: "Role",
                     hintText: "Role",
-                    controller: _roleController),
+                    controller: _roleController,
+                    inputType: TextInputType.number),
                 const SizedBox(height: 10),
-                CustomTextFormField(
-                    headerTitle: "Password",
-                    hintText: "Password",
-                    controller: _passwordController),
+                PasswordTextFormField(
+                  headerTitle: "Password",
+                  hintText: "Password",
+                  controller: _passwordController,
+                ),
                 const SizedBox(height: 10),
-                CustomTextFormField(
+                PasswordTextFormField(
                     headerTitle: "Confirm Password",
                     hintText: "Confirm Password",
                     controller: _confirmPasswordController),
@@ -120,8 +130,9 @@ class _SignUpState extends State<SignUp> {
                         activeColor: AppColors.backgroundColor,
                         value: isChecked,
                         onChanged: (value) {
-                          isChecked =
-                              context.read<SignUpViewmodel>().isChecked = value!;
+                          isChecked = context
+                              .read<SignUpViewmodel>()
+                              .isChecked = value!;
                         }),
                     Text("I agree to all the ", style: AppStyle.smallText),
                     InkWell(
@@ -138,6 +149,7 @@ class _SignUpState extends State<SignUp> {
                 CustomButton(label: "SIGN UP", onclick: () => _signUp()),
                 const SizedBox(height: 42),
                 ProgressBar(context.watch<SignUpViewmodel>().isVisible),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -182,26 +194,26 @@ class _SignUpState extends State<SignUp> {
     if (_formKey.currentState!.validate()) {
       context.read<SignUpViewmodel>().isVisible = true;
       UserInfo info = UserInfo(
-          _usernameController.text,
-          _passwordController.text,
+          _usernameController.text.trim(),
+          _passwordController.text.trim(),
           "",
           "",
           "",
           "",
           "",
-          _emailController.text,
-          _firstnameController.text,
-          _folioController.text,
+          _emailController.text.trim(),
+          _firstnameController.text.trim(),
+          _folioController.text.trim(),
           "",
           "",
           "",
-          _phoneNumberController.text,
+          _phoneNumberController.text.trim(),
           "",
           "",
-          _lastnameController.text);
+          _lastnameController.text.trim());
       context
           .read<SignUpViewmodel>()
-          .signUpUser(info, _confirmPasswordController.text, context);
+          .signUpUser(info, _confirmPasswordController.text.trim(), context);
     }
   }
 

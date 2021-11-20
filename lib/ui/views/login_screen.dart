@@ -69,6 +69,7 @@ class _LoginFormState extends State<LoginForm> {
                         color: AppColors.faintColor),
                     child: TextFormField(
                         controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           contentPadding: const EdgeInsets.only(left: 10),
@@ -76,6 +77,7 @@ class _LoginFormState extends State<LoginForm> {
                           hintStyle: const TextStyle(fontSize: 12),
                           fillColor: AppColors.faintColor,
                           focusColor: AppColors.backgroundColor,
+                          
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -100,6 +102,7 @@ class _LoginFormState extends State<LoginForm> {
                         color: AppColors.faintColor),
                     child: TextFormField(
                         controller: _passwordController,
+                        obscureText: true,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           contentPadding: const EdgeInsets.only(left: 10),
@@ -184,7 +187,7 @@ class _LoginFormState extends State<LoginForm> {
       context.read<LoginFormViewModel>().isVisible = true;
       context
           .read<LoginFormViewModel>()
-          .login(_emailController.text, _passwordController.text, context);
+          .login(_emailController.text.trim(), _passwordController.text.trim(), context);
       
     }
   }

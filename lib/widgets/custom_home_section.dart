@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nardilibraryapp/model/Books.dart';
+import 'package:nardilibraryapp/model/bookresource/book.dart';
 import 'package:nardilibraryapp/resources/app_colors.dart';
 import 'package:nardilibraryapp/resources/app_style.dart';
 import 'package:nardilibraryapp/ui/views/details_screen.dart';
@@ -43,7 +44,7 @@ class HomeSection extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: (){
-                        Navigator.pushNamed(context, BookDetails.routeName, arguments:Book(books[index].title, books[index].coverImage, books[index].author));
+                        Navigator.pushNamed(context, BookDetails.routeName, arguments:books[index].getId!);
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -55,7 +56,7 @@ class HomeSection extends StatelessWidget {
                           ),
                           child: Image(
                               fit: BoxFit.fill,
-                              image: AssetImage(books[index].coverImage)),
+                              image: NetworkImage(books[index].thumbnail)),
                         ),
                       ),
                     );

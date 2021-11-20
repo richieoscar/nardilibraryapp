@@ -11,7 +11,7 @@ class BookDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final book = ModalRoute.of(context)!.settings.arguments as Book;
+    final book = ModalRoute.of(context)!.settings.arguments as BookTest;
     return Scaffold(
       backgroundColor: AppColors.nardOrange,
       appBar: AppBar(

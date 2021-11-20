@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:nardilibraryapp/constants/state.dart';
 import 'package:nardilibraryapp/model/bookresource/book.dart';
 import 'package:nardilibraryapp/model/bookresource/department.dart';
@@ -10,31 +9,22 @@ import 'package:nardilibraryapp/service/bookResource/book_resource_service.dart'
 import 'package:nardilibraryapp/service/navigation/nav_service.dart';
 import 'package:nardilibraryapp/service/navigation/nav_service_impl.dart';
 import 'package:nardilibraryapp/service/storage/storage_service.dart';
-import 'package:nardilibraryapp/service/storage/storage_service_impl.dart';
 import 'package:nardilibraryapp/util/logger.dart';
 
-class HomePageViewmodel extends ChangeNotifier {
-  final StorageService _storageService = StorageServiceImpl.instance;
+class AllFeaturedViewmodel extends ChangeNotifier {
   final BookResourceService _bookResourceService = BookResourceImpl.instance;
   final NavigationService _navigationService = NavigationServiceImpl.instance;
   AppLogger logger = AppLogger();
 
   List<Book> _featuredBooks = [];
 
-  List<Department> _departments = [];
-  List<Department> _popularDepartments = [];
-  List<Book> _homeBooks = [];
+  int _lenght = 0;
 
-  get homeBooks => _homeBooks;
+  get lenght => _lenght;
 
-  get popularDepartment => _popularDepartments;
-  get departments => _departments;
   get featuredBooks => _featuredBooks;
-  bool isLoading = true;
 
-  String? getUsername() {
-    return _storageService.getUserName()!;
-  }
+  bool isLoading = true;
 
   void getFeaturedBooks() async {
     ResourceResponse? resourceResponse =
@@ -44,35 +34,9 @@ class HomePageViewmodel extends ChangeNotifier {
       logger.logInfo("HomepAgeViemodel: books");
       logger.logInfo(featuredBooks.toString());
       _featuredBooks = resourceResponse.books!;
-      _homeBooks.add(_featuredBooks[0]);
-      _homeBooks.add(_featuredBooks[1]);
-      _homeBooks.add(_featuredBooks[2]);
-      _homeBooks.add(_featuredBooks[3]);
+      _lenght = _featuredBooks.length;
       isLoading = false;
       notifyListeners();
     }
-  }
-
-  void getDepartments() async {
-    DepartmentResponse? resourceResponse =
-        await _bookResourceService.getDepartments();
-
-    if (resourceResponse!.status == SUCCESS) {
-      logger.logInfo("HomepAgeViemodel: departments");
-      _departments = resourceResponse.department!;
-      _popularDepartments.add(_departments[0]);
-      _popularDepartments.add(_departments[1]);
-      _popularDepartments.add(_departments[2]);
-      _popularDepartments.add(_departments[3]);
-
-      logger.logInfo(_departments.toString());
-
-      isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  void navigate(String route, BuildContext context) {
-    _navigationService.navigateAddStack(route, context);
   }
 }

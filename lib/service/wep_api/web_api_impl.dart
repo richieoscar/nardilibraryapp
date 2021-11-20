@@ -1,10 +1,17 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
+import 'package:logger/logger.dart';
 import 'package:nardilibraryapp/constants/state.dart';
 import 'package:nardilibraryapp/model/auth/auth_response.dart';
 import 'package:nardilibraryapp/model/auth/user_info.dart';
+import 'package:nardilibraryapp/model/bookresource/department_response.dart';
+import 'package:nardilibraryapp/model/bookresource/search_request.dart';
+import 'package:nardilibraryapp/model/bookresource/resource_response.dart';
+import 'package:nardilibraryapp/model/bookresource/department.dart';
+import 'package:nardilibraryapp/model/bookresource/add_resource.dart';
 import 'package:nardilibraryapp/service/wep_api/web_api.dart';
+import 'package:nardilibraryapp/util/logger.dart';
 
 class WebApiImpl implements WebApi {
   static const String _LOGIN_URL = "http://nardlibrary.org/api/User/Login";
@@ -13,6 +20,20 @@ class WebApiImpl implements WebApi {
       "http://nardlibrary.org/api/User/ForgotPassword";
   static const String _CHANAGE_PASSWORD_URL =
       "http://nardlibrary.org/api/User/ChangePassword";
+
+  static const String _ADD_RESOURCE_URL =
+      "http://nardlibrary.org/api/Resource/Add";
+  static const String _GET_RESOURCE_URL =
+      "http://nardlibrary.org/api/Resource/Get/";
+  static const String _FIND_RESOURCE_URL =
+      "http://nardlibrary.org/api/Resource/Find";
+  static const String _GET_ALL_DEPARTMENTS_URL =
+      "http://nardlibrary.org/api/Department/GetAll";
+  static const String _GET_RESOURCE_BY_DEPARTMENT_URL =
+      "http://nardlibrary.org/api/Resource/GetByDepartment/";
+  static const String _FEATURED_BOOKS_URL =
+      "http://nardlibrary.org/api/Resource/Featured";
+
   final Map<String, String> _headers = {
     "Accept": "application/json",
     'Content-Type': 'application/json; charset=UTF-8'
@@ -21,6 +42,8 @@ class WebApiImpl implements WebApi {
   WebApiImpl._internal();
   static final WebApiImpl _instance = WebApiImpl._internal();
   static get instance => _instance;
+
+  AppLogger _logger = AppLogger();
 
   @override
   Future<AuthResponse?> login(String username, String password) async {
@@ -112,5 +135,70 @@ class WebApiImpl implements WebApi {
       print("Prinitng error response" + response.body);
       return AuthResponse(FAILED, "", "");
     }
+  }
+
+  @override
+  void addAResource(BookResource resource) {
+    // TODO: implement addAResource
+  }
+
+  @override
+  Future<ResourceResponse?> getBookResourceById(int id) {
+    // TODO: implement getBookResourceById
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ResourceResponse?> getBooksByDepartment(int id) {
+    // TODO: implement getBooksByDepartment
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<DepartmentResponse?> getDepartments() async {
+    DepartmentResponse? departments;
+    _logger.logInfo("Inside getepartment()");
+    Response response = await get(
+      Uri.parse(_GET_ALL_DEPARTMENTS_URL),
+      headers: _headers,
+    );
+
+    if (response.statusCode == 200) {
+      _logger.logInfo(response.statusCode.toString());
+      _logger.logInfo(response.body);
+      departments = DepartmentResponse.fromJson(jsonDecode(response.body));
+      print(departments);
+      //_logger.logInfo("FeaturedBooks" + featuredBooks.books);
+      return departments;
+    } else {
+      return DepartmentResponse(FAILED, "", []);
+    }
+  }
+
+  @override
+  Future<ResourceResponse?> getFeaturedBooks() async {
+    ResourceResponse? featuredBooks;
+    _logger.logInfo("Inside getFeaturedBook()");
+    Response response = await get(
+      Uri.parse(_FEATURED_BOOKS_URL),
+      headers: _headers,
+    );
+
+    if (response.statusCode == 200) {
+      _logger.logInfo(response.statusCode.toString());
+      _logger.logInfo(response.body);
+      featuredBooks = ResourceResponse.fromJson(jsonDecode(response.body));
+      print(featuredBooks);
+      //_logger.logInfo("FeaturedBooks" + featuredBooks.books);
+      return featuredBooks;
+    } else {
+      return ResourceResponse(FAILED, "", []);
+    }
+  }
+
+  @override
+  Future<ResourceResponse> searchResources(SearchRequest request) {
+    // TODO: implement searchResources
+    throw UnimplementedError();
   }
 }

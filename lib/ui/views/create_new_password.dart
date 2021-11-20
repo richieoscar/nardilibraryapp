@@ -5,6 +5,7 @@ import 'package:nardilibraryapp/resources/app_colors.dart';
 import 'package:nardilibraryapp/resources/app_style.dart';
 import 'package:nardilibraryapp/ui/views/finish_registration.dart';
 import 'package:nardilibraryapp/viewmodels/createnew_password_viewmodel.dart';
+import 'package:nardilibraryapp/widgets/password_text_field.dart';
 import 'package:nardilibraryapp/widgets/progressar.dart';
 import 'package:provider/provider.dart';
 
@@ -41,17 +42,17 @@ class _CreatePasswordState extends State<CreateNewPassword> {
             child: Column(
               children: [
                 const SizedBox(height: 15),
-                CustomTextFormField(
+                PasswordTextFormField(
                     headerTitle: "Old Password",
                     hintText: "password",
                     controller: _oldPasswordcontroller),
                 const SizedBox(height: 10),
-                CustomTextFormField(
+                PasswordTextFormField(
                     headerTitle: "New Password",
                     hintText: "Password",
                     controller: _newPasswordcontroller),
                 const SizedBox(height: 10),
-                CustomTextFormField(
+                PasswordTextFormField(
                     headerTitle: "Confirm New Password",
                     hintText: "Password",
                     controller: _confirmNewPasswordController),
@@ -85,9 +86,9 @@ class _CreatePasswordState extends State<CreateNewPassword> {
     if (_formKey.currentState!.validate()) {
       context.read<CreateNewPasswordViewmodel>().isVisible = true;
       context.read<CreateNewPasswordViewmodel>().createNewPassword(
-          _oldPasswordcontroller.text,
-          _newPasswordcontroller.text,
-          _confirmNewPasswordController.text,
+          _oldPasswordcontroller.text.trim(),
+          _newPasswordcontroller.text.trim(),
+          _confirmNewPasswordController.text.trim(),
           context);
     }
   }

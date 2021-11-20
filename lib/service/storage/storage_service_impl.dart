@@ -14,8 +14,8 @@ class StorageServiceImpl implements StorageService {
   }
 
   @override
-  void saveUserName(String username) async {
+  Future<bool> saveUserName(String username) async {
     _userNamePref = await SharedPreferences.getInstance();
-    _userNamePref!.setString("userName", username);
+   return await _userNamePref!.setString("userName", username);
   }
 }

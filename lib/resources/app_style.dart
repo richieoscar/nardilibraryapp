@@ -72,6 +72,12 @@ class AppStyle {
       fontSize: 18,
       color: AppColors.white)
       );
+      static TextStyle whiteText = GoogleFonts.montserrat(
+      textStyle: TextStyle(fontWeight: FontWeight.w300,
+      fontStyle: FontStyle.normal,
+      fontSize: 16,
+      color: AppColors.white)
+      );
       static TextStyle blackBoldText = GoogleFonts.montserrat(
       textStyle: TextStyle(fontWeight: FontWeight.w700,
       fontStyle: FontStyle.normal,
@@ -108,7 +114,7 @@ class AppStyle {
       textStyle: TextStyle(
         fontWeight: FontWeight.w500,
       fontStyle: FontStyle.normal,
-      fontSize: 12,
+      fontSize: 15,
       color: AppColors.lightDark
       )
       );

@@ -10,7 +10,7 @@ class BookShelfList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: Book.getbooks().length,
+        itemCount: BookTest.getbooks().length,
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -27,7 +27,7 @@ class BookShelfList extends StatelessWidget {
                           filterQuality: FilterQuality.medium,
                           fit: BoxFit.fill,
                           image: AssetImage(
-                            Book.getbooks()[index].coverImage,
+                            BookTest.getbooks()[index].coverImage,
                           ),
                         ),
                       ),
@@ -38,13 +38,13 @@ class BookShelfList extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            Book.getbooks()[index].title,
+                            BookTest.getbooks()[index].title,
                             style: AppStyle.mediumText,
                           ),
                           const SizedBox(
                             height: 8,
                           ),
-                          Text(Book.getbooks()[index].author)
+                          Text(BookTest.getbooks()[index].author)
                         ],
                       ),
                     ),

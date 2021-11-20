@@ -7,17 +7,15 @@ class PasswordResetComplete extends StatelessWidget {
   static const routeName = "/passwordResetComplete";
   const PasswordResetComplete({Key? key}) : super(key: key);
 
-  @override
+ @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              child: const Image(
-                image: AssetImage("assets/check.png"),
-              ),
+            const Image(
+              image: AssetImage("assets/check.png"),
             ),
             const SizedBox(
               height: 42,
@@ -32,7 +30,7 @@ class PasswordResetComplete extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
-                "You have successfully reset your password.",
+                "You have Successfuly reset your password.",
                 style: AppStyle.verSmallText,
               ),
             ),

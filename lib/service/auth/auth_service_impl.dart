@@ -5,6 +5,8 @@ import 'package:nardilibraryapp/model/auth/user_info.dart';
 import 'package:nardilibraryapp/service/auth/auth_service.dart';
 import 'package:nardilibraryapp/service/navigation/nav_service.dart';
 import 'package:nardilibraryapp/service/navigation/nav_service_impl.dart';
+import 'package:nardilibraryapp/service/storage/storage_service.dart';
+import 'package:nardilibraryapp/service/storage/storage_service_impl.dart';
 import 'package:nardilibraryapp/service/wep_api/web_api.dart';
 import 'package:nardilibraryapp/service/wep_api/web_api_impl.dart';
 import 'package:nardilibraryapp/ui/views/create_new_password.dart';
@@ -17,6 +19,7 @@ import 'package:nardilibraryapp/util/utils.dart';
 class AuthServiceImpl implements AuthService {
   AuthServiceImpl._internal();
   static final AuthServiceImpl _instance = AuthServiceImpl._internal();
+  StorageService _storageService = StorageServiceImpl.instance;
   static get instance => _instance;
 
   final WebApi _apiService = WebApiImpl.instance;
@@ -28,7 +31,8 @@ class AuthServiceImpl implements AuthService {
     AuthResponse? response = await _apiService.login(username, password);
 
     if (response!.status == "success") {
-      print(response);
+      print(response.message);
+      await _storageService.saveUserName(response.message);
       _navService.navigate(Dashboard.routeName, context);
       return response;
     }

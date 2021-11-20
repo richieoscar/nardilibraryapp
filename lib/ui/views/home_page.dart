@@ -3,7 +3,13 @@ import 'package:nardilibraryapp/constants/state.dart';
 import 'package:nardilibraryapp/model/Books.dart';
 import 'package:nardilibraryapp/resources/app_colors.dart';
 import 'package:nardilibraryapp/resources/app_style.dart';
+import 'package:nardilibraryapp/ui/views/all_departments.dart';
+import 'package:nardilibraryapp/ui/views/all_featured_releases.dart';
+import 'package:nardilibraryapp/viewmodels/homepage_viemodel.dart';
 import 'package:nardilibraryapp/widgets/custom_home_section.dart';
+import 'package:nardilibraryapp/widgets/progressar.dart';
+import 'package:nardilibraryapp/widgets/show_department_section.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = "/homeapage";
@@ -16,9 +22,19 @@ class _HomePageState extends State<HomePage> {
   final _categoryDropDownValue = "Novel";
 
   @override
+  void initState() {
+    super.initState();
+
+    context.read<HomePageViewmodel>().getDepartments();
+    context.read<HomePageViewmodel>().getFeaturedBooks();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+      body: context.watch<HomePageViewmodel>().isLoading
+                  ? ProgressBar(context.watch<HomePageViewmodel>().isLoading)
+                  : SafeArea(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,7 +46,7 @@ class _HomePageState extends State<HomePage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Text(
-                  "Hello Oscar",
+                  "Hello, ${context.read<HomePageViewmodel>().getUsername()!}",
                   style: AppStyle.userNameText,
                 ),
               ),
@@ -41,31 +57,37 @@ class _HomePageState extends State<HomePage> {
                   style: AppStyle.blackBoldText,
                 ),
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               Row(
                 children: [
                   _categoryDropDown(bookCategories, _categoryDropDownValue),
                   search(),
                 ],
               ),
-              HomeSection(
-                  sectionTitle: "New Releases",
-                  books: Book.getbooks(),
-                  seeMore: () {}),
+              
               const SizedBox(
                 height: 25,
               ),
-              HomeSection(
-                  sectionTitle: "Featured Releases",
-                  books: Book.getbooks(),
-                  seeMore: () {}),
+              // context.watch<HomePageViewmodel>().isLoading
+              //     ? ProgressBar(context.watch<HomePageViewmodel>().isLoading)
+              //     : 
+                  HomeSection(
+                      sectionTitle: "Featured Releases",
+                      books: context.watch<HomePageViewmodel>().homeBooks,
+                      seeMore:_seeAllFeaturedReleases),
               const SizedBox(
                 height: 25,
               ),
-              HomeSection(
-                  sectionTitle: "Popular Books",
-                  books: Book.getbooks(),
-                  seeMore: () {}),
+              // context.watch<HomePageViewmodel>().isLoading
+              //     ? ProgressBar(context.watch<HomePageViewmodel>().isLoading)
+              //     : 
+                  DepartmentSection(
+                      sectionTitle: "Popular Books",
+                      departments:
+                          context.watch<HomePageViewmodel>().popularDepartment!,
+                      seeMore:_seeAllDepartments),
             ],
           ),
         ),
@@ -73,10 +95,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void _seeAllDepartments() {
+    context.read<HomePageViewmodel>().navigate(AllDepartments.route, context);
+  }
+  void _seeAllFeaturedReleases(){
+     context.read<HomePageViewmodel>().navigate(AllFeaturedRelease.route, context);
+
+  }
+
   Widget _categoryDropDown(List<String> items, String dropDownValue) {
     return Padding(
       padding: const EdgeInsets.only(left: 20),
-            child: Container(
+      child: Container(
           width: 150,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
@@ -114,7 +144,6 @@ class _HomePageState extends State<HomePage> {
       child: Padding(
         padding: const EdgeInsets.only(right: 20),
         child: Container(
-          
           width: 250,
           height: 50,
           decoration: BoxDecoration(
@@ -122,9 +151,8 @@ class _HomePageState extends State<HomePage> {
             borderRadius: BorderRadius.circular(5),
           ),
           child: Row(
-            children: [Icon(Icons.search_rounded, color:AppColors.searcIconColor),
-         
-            
+            children: [
+              Icon(Icons.search_rounded, color: AppColors.searcIconColor),
             ],
           ),
         ),

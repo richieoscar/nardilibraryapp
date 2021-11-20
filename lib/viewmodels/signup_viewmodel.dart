@@ -46,6 +46,7 @@ class SignUpViewmodel extends ChangeNotifier {
     }
 
     if (!validateEmail(info.email)) {
+       isVisible = false;
       AppUtils.showSnackBar(context, "Invalid Email");
       return;
     }
