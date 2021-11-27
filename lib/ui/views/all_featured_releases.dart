@@ -19,12 +19,6 @@ class AllFeaturedRelease extends StatefulWidget {
 
 class _AllFeaturedRelease extends State<AllFeaturedRelease> {
   @override
-  void initState() {
-    super.initState();
-    context.read<AllFeaturedViewmodel>().getFeaturedBooks();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final orientation = MediaQuery.of(context).orientation;
     return Scaffold(
@@ -39,42 +33,39 @@ class _AllFeaturedRelease extends State<AllFeaturedRelease> {
           ? ProgressBar(context.watch<AllFeaturedViewmodel>().isLoading)
           : GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount:
-                      (orientation == Orientation.portrait) ? 2 : 3),
-                      
+                  crossAxisCount: (orientation == Orientation.portrait) ? 2 : 3,
+                  //mainAxisSpacing: 5,
+                  crossAxisSpacing: 2),
               itemCount: context.read<AllFeaturedViewmodel>().lenght,
               physics: ClampingScrollPhysics(),
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 return InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      DepartmentBooks.route,
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        shape: BoxShape.rectangle,
-                      ),
-                      child: Card(
-                        elevation: 1,
-                        color: AppColors.white,
-                        child: 
-                           Image(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        DepartmentBooks.route,
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          shape: BoxShape.rectangle,
+                        ),
+                        child: Card(
+                          elevation: 1,
+                          color: AppColors.white,
+                          child: Image(
                               fit: BoxFit.fill,
                               image: NetworkImage(context
                                   .watch<AllFeaturedViewmodel>()
                                   .featuredBooks[index]
                                   .thumbnail)),
-                        
-                      
-                    ),
-                  ),
-                ));
+                        ),
+                      ),
+                    ));
               }),
     );
   }

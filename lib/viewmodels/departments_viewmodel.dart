@@ -7,12 +7,18 @@ import 'package:nardilibraryapp/service/bookResource/book_resource_service.dart'
 import 'package:nardilibraryapp/service/navigation/nav_service.dart';
 import 'package:nardilibraryapp/service/navigation/nav_service_impl.dart';
 import 'package:nardilibraryapp/service/storage/storage_service.dart';
+import 'package:nardilibraryapp/ui/views/all_departments.dart';
+import 'package:nardilibraryapp/ui/views/department_book.dart';
 import 'package:nardilibraryapp/util/logger.dart';
 
 class AllDepartmentsViewmodel extends ChangeNotifier {
   final BookResourceService _bookResourceService = BookResourceImpl.instance;
   final NavigationService _navigationService = NavigationServiceImpl.instance;
   AppLogger logger = AppLogger();
+
+  AllDepartmentsViewmodel() {
+    getDepartments();
+  }
 
   List<Department> _departments = [];
 
@@ -36,5 +42,10 @@ class AllDepartmentsViewmodel extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
+  }
+
+  void navigate(String route, BuildContext context, int departmentId) {
+    _navigationService.navigateToBooksFromDepartment(
+        route, context, departmentId);
   }
 }

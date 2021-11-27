@@ -11,6 +11,8 @@ import 'package:nardilibraryapp/widgets/progressar.dart';
 import 'package:nardilibraryapp/widgets/show_department_section.dart';
 import 'package:provider/provider.dart';
 
+import 'department_book.dart';
+
 class HomePage extends StatefulWidget {
   static const routeName = "/homeapage";
   const HomePage({Key? key}) : super(key: key);
@@ -25,8 +27,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    context.read<HomePageViewmodel>().getDepartments();
-    context.read<HomePageViewmodel>().getFeaturedBooks();
+    // context.read<HomePageViewmodel>().getDepartments();
+    // context.read<HomePageViewmodel>().getFeaturedBooks();
   }
 
   @override
@@ -70,9 +72,6 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(
                 height: 25,
               ),
-              // context.watch<HomePageViewmodel>().isLoading
-              //     ? ProgressBar(context.watch<HomePageViewmodel>().isLoading)
-              //     : 
                   HomeSection(
                       sectionTitle: "Featured Releases",
                       books: context.watch<HomePageViewmodel>().homeBooks,
@@ -80,14 +79,13 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(
                 height: 25,
               ),
-              // context.watch<HomePageViewmodel>().isLoading
-              //     ? ProgressBar(context.watch<HomePageViewmodel>().isLoading)
-              //     : 
                   DepartmentSection(
-                      sectionTitle: "Popular Books",
+                      sectionTitle:"Departments",
                       departments:
                           context.watch<HomePageViewmodel>().popularDepartment!,
-                      seeMore:_seeAllDepartments),
+                      seeMore:_seeAllDepartments,
+                     
+                      ),
             ],
           ),
         ),

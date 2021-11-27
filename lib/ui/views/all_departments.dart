@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nardilibraryapp/model/bookresource/department.dart';
 import 'package:nardilibraryapp/resources/app_colors.dart';
 import 'package:nardilibraryapp/resources/app_style.dart';
+import 'package:nardilibraryapp/util/logger.dart';
 import 'package:nardilibraryapp/viewmodels/departments_viewmodel.dart';
 import 'package:nardilibraryapp/widgets/custom_app_bar.dart';
 import 'package:nardilibraryapp/widgets/progressar.dart';
@@ -17,12 +18,6 @@ class AllDepartments extends StatefulWidget {
 }
 
 class _AllDepartmentState extends State<AllDepartments> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<AllDepartmentsViewmodel>().getDepartments();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,10 +37,27 @@ class _AllDepartmentState extends State<AllDepartments> {
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      DepartmentBooks.route,
-                    );
+                    int id = context
+                    
+                        .read<AllDepartmentsViewmodel>()
+                        .departments[index]
+                        .id;
+                        String title = context
+                    
+                        .read<AllDepartmentsViewmodel>()
+                        .departments[index]
+                        .name;
+                  
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => DepartmentBooks(
+                                  departmentId: id,
+                                  departmentName: title
+                                )));
+                    AppLogger logger = AppLogger();
+                    logger.logInfo(id.toString());
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),

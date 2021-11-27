@@ -26,9 +26,9 @@ class BookResourceImpl extends BookResourceService {
   }
 
   @override
-  Future<ResourceResponse?> getBooksByDepartment(int id) {
-    // TODO: implement getBooksByDepartment
-    throw UnimplementedError();
+  Future<ResourceResponse?> getBooksByDepartment(int id) async {
+     ResourceResponse? resourceResponse = await _webApi.getBooksByDepartment(id);
+    return resourceResponse!;
   }
 
   @override

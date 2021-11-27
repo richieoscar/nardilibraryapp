@@ -16,6 +16,10 @@ class AllFeaturedViewmodel extends ChangeNotifier {
   final NavigationService _navigationService = NavigationServiceImpl.instance;
   AppLogger logger = AppLogger();
 
+  AllFeaturedViewmodel() {
+    getFeaturedBooks();
+  }
+
   List<Book> _featuredBooks = [];
 
   int _lenght = 0;

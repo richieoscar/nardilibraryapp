@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:nardilibraryapp/service/navigation/nav_service.dart';
+import 'package:nardilibraryapp/ui/views/all_departments.dart';
+import 'package:nardilibraryapp/ui/views/department_book.dart';
 
 class NavigationServiceImpl implements NavigationService {
   NavigationServiceImpl._internal();
@@ -20,5 +22,11 @@ class NavigationServiceImpl implements NavigationService {
   @override
   void navigateAddStack(String route, BuildContext context) {
     Navigator.pushNamed(context, route);
+  }
+
+  @override
+  void navigateToBooksFromDepartment(
+      String route, BuildContext context, int id) {
+    Navigator.pushNamed(context, route, arguments: int);
   }
 }

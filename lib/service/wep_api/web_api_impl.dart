@@ -149,9 +149,24 @@ class WebApiImpl implements WebApi {
   }
 
   @override
-  Future<ResourceResponse?> getBooksByDepartment(int id) {
-    // TODO: implement getBooksByDepartment
-    throw UnimplementedError();
+  Future<ResourceResponse?> getBooksByDepartment(int id) async {
+    ResourceResponse? departmentBooks;
+    _logger.logInfo("Inside getResourceByDepartment()");
+    Response response = await get(
+      Uri.parse("http://nardlibrary.org/api/Resource/GetByDepartment/$id"),
+      headers: _headers,
+    );
+
+    if (response.statusCode == 200) {
+      _logger.logInfo(response.statusCode.toString());
+      _logger.logInfo(response.body);
+      departmentBooks = ResourceResponse.fromJson(jsonDecode(response.body));
+      print(departmentBooks);
+      //_logger.logInfo("FeaturedBooks" + featuredBooks.books);
+      return departmentBooks;
+    } else {
+      return ResourceResponse(FAILED, "", []);
+    }
   }
 
   @override

@@ -19,6 +19,11 @@ class HomePageViewmodel extends ChangeNotifier {
   final NavigationService _navigationService = NavigationServiceImpl.instance;
   AppLogger logger = AppLogger();
 
+  HomePageViewmodel() {
+    getFeaturedBooks();
+    getDepartments();
+  }
+
   List<Book> _featuredBooks = [];
 
   List<Department> _departments = [];

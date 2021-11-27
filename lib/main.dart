@@ -15,6 +15,7 @@ import 'package:nardilibraryapp/ui/views/splash_screen.dart';
 import 'package:nardilibraryapp/ui/views/verify_email_screen.dart';
 import 'package:nardilibraryapp/viewmodels/all_featured_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/createnew_password_viewmodel.dart';
+import 'package:nardilibraryapp/viewmodels/department_books_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/departments_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/finish_registration_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/forgot_password_viewmodel.dart';
@@ -42,7 +43,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => FinishRegistrationViewmodel()),
          ChangeNotifierProvider(create: (_) => AllDepartmentsViewmodel()),
           ChangeNotifierProvider(create: (_) => AllFeaturedViewmodel()),
-      
+           ChangeNotifierProvider(create: (_) => DepartmentBooksViewmodel()),
       
       ],
     child: Home(),
@@ -79,7 +80,7 @@ class _HomeState extends State<Home> {
         BookShelf.routeName: (_)=> const BookShelf(),
         Dashboard.routeName : (_) => Dashboard(),
         AllDepartments.route :(_) => AllDepartments(),
-        DepartmentBooks.route :(_) => const DepartmentBooks(),
+        DepartmentBooks.route :(_) => DepartmentBooks(),
         AllFeaturedRelease.route:(_)=>  AllFeaturedRelease(),
       },
     );
