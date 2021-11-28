@@ -16,7 +16,7 @@ class AppColors {
   static Color lightDark = HexColor("#8D9091");
   static Color lightGrey = HexColor("#ECECEC");
   static Color mediumLightGrey = HexColor("#ECECEC");
-  static Color searcIconColor = HexColor("#CCCCCC");
+  static Color searcIconColor =  HexColor("#21223E");
   static Color detailBody = HexColor("#8D9091");
   static Color unselectedColor = Colors.black38;
 

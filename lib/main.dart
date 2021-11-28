@@ -22,6 +22,7 @@ import 'package:nardilibraryapp/viewmodels/forgot_password_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/homepage_viemodel.dart';
 import 'package:nardilibraryapp/viewmodels/login_form_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/nardaccess_viewmodel.dart';
+import 'package:nardilibraryapp/viewmodels/search_result_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/signup_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/verify_email_viewmodel.dart';
 import 'package:provider/provider.dart';
@@ -44,6 +45,7 @@ void main() {
          ChangeNotifierProvider(create: (_) => AllDepartmentsViewmodel()),
           ChangeNotifierProvider(create: (_) => AllFeaturedViewmodel()),
            ChangeNotifierProvider(create: (_) => DepartmentBooksViewmodel()),
+            ChangeNotifierProvider(create: (_) => SearchResultViewmodel()),
       
       ],
     child: Home(),

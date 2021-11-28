@@ -212,8 +212,24 @@ class WebApiImpl implements WebApi {
   }
 
   @override
-  Future<ResourceResponse> searchResources(SearchRequest request) {
-    // TODO: implement searchResources
-    throw UnimplementedError();
+  Future<ResourceResponse> searchResources(String request) async {
+     ResourceResponse? searchResponse;
+    _logger.logInfo("Inside searchResources()");
+    Response response = await post(
+      Uri.parse(_FIND_RESOURCE_URL),
+      headers: _headers,
+      body:jsonEncode(<String, String>{"Term": request}));
+    
+
+    if (response.statusCode == 200) {
+      _logger.logInfo(response.statusCode.toString());
+      _logger.logInfo(response.body);
+      searchResponse = ResourceResponse.fromJson(jsonDecode(response.body));
+      print(searchResponse);
+      //_logger.logInfo("FeaturedBooks" + featuredBooks.books);
+      return searchResponse;
+    } else {
+      return ResourceResponse(FAILED, "", []);
+    }
   }
 }

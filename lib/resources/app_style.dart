@@ -19,7 +19,7 @@ class AppStyle {
 
   static TextStyle mediumText = GoogleFonts.montserrat(
       textStyle: TextStyle(
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w300,
           fontStyle: FontStyle.normal,
           fontSize: 14,
           color: AppColors.nardBlack));

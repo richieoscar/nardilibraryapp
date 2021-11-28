@@ -9,6 +9,6 @@ abstract class BookResourceService {
   Future<DepartmentResponse?> getDepartments();
   Future<ResourceResponse?> getBooksByDepartment(int id);
   Future<ResourceResponse?> getBookResourceById(int id);
-  Future<ResourceResponse?> searchResources(SearchRequest request);
+  Future<ResourceResponse?> searchResources(String request);
   void addAResource(BookResource resource);
 }

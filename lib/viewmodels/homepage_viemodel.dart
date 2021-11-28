@@ -5,6 +5,7 @@ import 'package:nardilibraryapp/model/bookresource/book.dart';
 import 'package:nardilibraryapp/model/bookresource/department.dart';
 import 'package:nardilibraryapp/model/bookresource/department_response.dart';
 import 'package:nardilibraryapp/model/bookresource/resource_response.dart';
+import 'package:nardilibraryapp/model/bookresource/search_request.dart';
 import 'package:nardilibraryapp/service/bookResource/book_resource_impl.dart';
 import 'package:nardilibraryapp/service/bookResource/book_resource_service.dart';
 import 'package:nardilibraryapp/service/navigation/nav_service.dart';
@@ -12,6 +13,7 @@ import 'package:nardilibraryapp/service/navigation/nav_service_impl.dart';
 import 'package:nardilibraryapp/service/storage/storage_service.dart';
 import 'package:nardilibraryapp/service/storage/storage_service_impl.dart';
 import 'package:nardilibraryapp/util/logger.dart';
+import 'package:nardilibraryapp/util/utils.dart';
 
 class HomePageViewmodel extends ChangeNotifier {
   final StorageService _storageService = StorageServiceImpl.instance;
@@ -29,6 +31,7 @@ class HomePageViewmodel extends ChangeNotifier {
   List<Department> _departments = [];
   List<Department> _popularDepartments = [];
   List<Book> _homeBooks = [];
+ 
 
   get homeBooks => _homeBooks;
 
@@ -76,6 +79,8 @@ class HomePageViewmodel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+ 
 
   void navigate(String route, BuildContext context) {
     _navigationService.navigateAddStack(route, context);
