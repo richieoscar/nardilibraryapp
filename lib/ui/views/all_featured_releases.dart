@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nardilibraryapp/model/bookresource/department.dart';
 import 'package:nardilibraryapp/resources/app_colors.dart';
 import 'package:nardilibraryapp/resources/app_style.dart';
+import 'package:nardilibraryapp/ui/views/details_screen.dart';
 import 'package:nardilibraryapp/viewmodels/all_featured_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/departments_viewmodel.dart';
 import 'package:nardilibraryapp/widgets/custom_app_bar.dart';
@@ -40,11 +41,19 @@ class _AllFeaturedRelease extends State<AllFeaturedRelease> {
               physics: ClampingScrollPhysics(),
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                return InkWell(
+                return GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(
+                      int id = context
+                          .watch<AllFeaturedViewmodel>()
+                          .featuredBooks[index]
+                          .id;
+                      Navigator.push(
                         context,
-                        DepartmentBooks.route,
+                        MaterialPageRoute(
+                          builder: (context) => BookDetails(
+                            id: id,
+                          ),
+                        ),
                       );
                     },
                     child: Padding(

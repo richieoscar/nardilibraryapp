@@ -4,6 +4,7 @@ import 'package:nardilibraryapp/resources/app_colors.dart';
 import 'package:nardilibraryapp/resources/app_style.dart';
 import 'package:nardilibraryapp/viewmodels/search_result_viewmodel.dart';
 import 'package:nardilibraryapp/widgets/custom_app_bar.dart';
+import 'package:nardilibraryapp/widgets/no_resource.dart';
 import 'package:nardilibraryapp/widgets/progressar.dart';
 import 'package:provider/provider.dart';
 
@@ -54,7 +55,7 @@ class _SearchResultState extends State<SearchResult> {
                   style: AppStyle.headline1),
                 ),
                 context.read<SearchResultViewmodel>().searchLenght == 0
-                    ? noResult()
+                    ? Noresource(image: 'assets/notfound.png', errorMessage: 'No Books Found',)
                     : Expanded(
                         child:  ListView.builder(
                    

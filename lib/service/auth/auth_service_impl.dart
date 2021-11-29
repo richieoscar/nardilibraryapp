@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:nardilibraryapp/constants/state.dart';
 import 'package:nardilibraryapp/model/auth/auth_response.dart';
 import 'package:nardilibraryapp/model/auth/user_info.dart';
 import 'package:nardilibraryapp/service/auth/auth_service.dart';
@@ -30,13 +31,13 @@ class AuthServiceImpl implements AuthService {
       String username, String password, BuildContext context) async {
     AuthResponse? response = await _apiService.login(username, password);
 
-    if (response!.status == "success") {
+    if (response!.status == SUCCESS) {
       print(response.message);
       await _storageService.saveUserName(response.message);
       _navService.navigate(Dashboard.routeName, context);
       return response;
     }
-    if (response.status == "failed") {
+    if (response.status == FAILED) {
       AppUtils.showSnackBar(context, "Invalid Details");
     }
     return response;
@@ -46,13 +47,13 @@ class AuthServiceImpl implements AuthService {
   Future<AuthResponse?> SignUpUser(UserInfo info, BuildContext context) async {
     AuthResponse? response = await _apiService.SignUpUser(info);
 
-    if (response!.status == "success") {
+    if (response!.status == SUCCESS) {
       print(response);
       _navService.navigate(FinishRegistration.routeName, context);
       return response;
     }
-    if (response.status == "failed") {
-      AppUtils.showSnackBar(context, "An Error Occured, Try again!");
+    if (response.status == FAILED) {
+      AppUtils.showSnackBar(context, response.message);
       print(response.status);
     }
     return response;
@@ -64,13 +65,13 @@ class AuthServiceImpl implements AuthService {
     AuthResponse? response =
         await _apiService.changePassword(userName, oldPassword, newPassword);
 
-    if (response!.status == "success") {
+    if (response!.status == SUCCESS) {
       print(response);
       _navService.navigate(PasswordResetComplete.routeName, context);
       return response;
     }
-    if (response.status == "failed") {
-      // AppUtils.showSnackBar(context, "An Error Occured, Try again!");
+    if (response.status == FAILED) {
+       AppUtils.showSnackBar(context, "An Error Occured, Try again!");
       return response;
     }
   }
@@ -81,13 +82,13 @@ class AuthServiceImpl implements AuthService {
     AuthResponse? response = await _apiService.forgotPassword(userName);
 
     if (response != null) {
-      if (response.status == "success") {
+      if (response.status == SUCCESS) {
         print(response);
         _navService.navigate(VerifyEmail.route, context);
         return response;
       }
-      if (response.status == "failed") {
-        AppUtils.showSnackBar(context, "Invalid Username, Try again!");
+      if (response.status == FAILED) {
+        AppUtils.showSnackBar(context, "Invalid Email, Try again!");
       }
     }
 

@@ -1,4 +1,3 @@
-
 class Book {
   int? _id;
   String? _name;
@@ -12,22 +11,22 @@ class Book {
   String? _thumbnail;
   String? _fileName;
   int? _pages;
-  
-  Book(
-    this._id,
-    this._name,
-    this._author,
-    this._published,
-    this._department,
-    this._unit,
-    this._description,
-    this._mediaType,
-    this._uploaded,
-    this._thumbnail,
-    this._fileName,
-    this._pages,
-  );
+  String? _baseFile;
 
+  Book(
+      this._id,
+      this._name,
+      this._author,
+      this._published,
+      this._department,
+      this._unit,
+      this._description,
+      this._mediaType,
+      this._uploaded,
+      this._thumbnail,
+      this._fileName,
+      this._pages,
+      this._baseFile);
 
   int? get getId => _id;
 
@@ -77,6 +76,10 @@ class Book {
 
   set pages(value) => _pages = value;
 
+  get baseFile => _baseFile;
+
+  set basefile(String? value) => _baseFile = value;
+
   Book.fromJson(Map<String, dynamic> json) {
     _id = json["id"];
     _name = json["name"];
@@ -90,5 +93,6 @@ class Book {
     _thumbnail = json["thumbnail"];
     _fileName = json["fileName"];
     _pages = json["pages"];
+    _baseFile = json['baseFile'];
   }
 }

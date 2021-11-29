@@ -4,8 +4,10 @@ import 'package:nardilibraryapp/resources/app_style.dart';
 
 class CustomAppBAr extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-   final Icon icon;
-  const CustomAppBAr({required this.title, required this.icon});
+  final Icon? icon;
+  final Color? iconColor;
+  final VoidCallback? onPressed;
+  const CustomAppBAr({required this.title, this.icon, this.iconColor, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -15,16 +17,21 @@ class CustomAppBAr extends StatelessWidget implements PreferredSizeWidget {
       leading: GestureDetector(
         onTap: () => Navigator.pop(context),
         child: Icon(
-          Icons.arrow_back_ios_new, 
+          Icons.arrow_back_ios_new,
           color: AppColors.pasejicBlack,
         ),
       ),
-      centerTitle: true,
+      centerTitle: false,
       title: Text(
         title,
         style: AppStyle.appBarText,
       ),
-      actions: [icon],
+      actions: [GestureDetector(
+        onTap: onPressed,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: icon!,
+        ))],
     );
   }
 

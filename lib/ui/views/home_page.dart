@@ -154,6 +154,7 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 child: TextField(
                   controller: _searchCOntroller,
+                  textInputAction: TextInputAction.search,
                   cursorColor: AppColors.backgroundColor,
                 
                   decoration: InputDecoration(

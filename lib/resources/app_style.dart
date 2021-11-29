@@ -124,7 +124,7 @@ class AppStyle {
         fontWeight: FontWeight.w500,
       fontStyle: FontStyle.normal,
       fontSize: 12,
-      color: AppColors.white
+      color: AppColors.nardOrange
       )
       );
       static TextStyle bookDetailBoldText = GoogleFonts.montserrat(
@@ -132,7 +132,7 @@ class AppStyle {
         fontWeight: FontWeight.w700,
       fontStyle: FontStyle.normal,
       fontSize: 14,
-      color: AppColors.white
+      color: AppColors.nardBlack
       )
       );
        static TextStyle bookDetailBodyText = GoogleFonts.montserrat(
@@ -151,6 +151,14 @@ class AppStyle {
       fontStyle: FontStyle.normal,
       fontSize: 12,
       color: AppColors.white
+      )
+      );
+      static TextStyle descriptionText = GoogleFonts.montserrat(
+      textStyle: TextStyle(
+        fontWeight: FontWeight.w500,
+      fontStyle: FontStyle.normal,
+      fontSize: 18,
+      color: AppColors.nardBlack,
       )
       );
 

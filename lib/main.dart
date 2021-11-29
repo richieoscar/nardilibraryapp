@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nardilibraryapp/resources/app_colors.dart';
 import 'package:nardilibraryapp/ui/views/all_departments.dart';
 import 'package:nardilibraryapp/ui/views/all_featured_releases.dart';
 import 'package:nardilibraryapp/ui/views/book_shelf_screen.dart';
@@ -14,6 +15,7 @@ import 'package:nardilibraryapp/ui/views/password_reset_complete.dart';
 import 'package:nardilibraryapp/ui/views/splash_screen.dart';
 import 'package:nardilibraryapp/ui/views/verify_email_screen.dart';
 import 'package:nardilibraryapp/viewmodels/all_featured_viewmodel.dart';
+import 'package:nardilibraryapp/viewmodels/book_detail_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/createnew_password_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/department_books_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/departments_viewmodel.dart';
@@ -46,6 +48,7 @@ void main() {
           ChangeNotifierProvider(create: (_) => AllFeaturedViewmodel()),
            ChangeNotifierProvider(create: (_) => DepartmentBooksViewmodel()),
             ChangeNotifierProvider(create: (_) => SearchResultViewmodel()),
+             ChangeNotifierProvider(create: (_) => BookDetailViewmodel()),
       
       ],
     child: Home(),
@@ -68,6 +71,12 @@ class _HomeState extends State<Home> {
       debugShowCheckedModeBanner: false,
       title: "NardLibraryApp",
       //home: HomePage(),
+      theme: ThemeData.light().copyWith(
+        primaryColor: AppColors.nardDark,
+        buttonTheme: ButtonThemeData(
+          buttonColor: AppColors.backgroundColor
+        )
+      ),
      initialRoute: Splash.routeName,
       routes: {
         Splash.routeName: (_) => const Splash(),

@@ -16,73 +16,74 @@ class UserInfo {
   String? _role;
   String? _state;
   String? _surname;
- String? get userName => this._userName;
 
- set userName(String? value) => this._userName = value;
+  get userName => _userName;
 
-  get password => this._password;
+  set username(String? value) => _userName = value;
 
- set password( value) => this._password = value;
+  get password => _password;
 
-  get address => this._address;
+  set password(value) => _password = value;
 
- set address( value) => this._address = value;
+  get address => _address;
 
-  get commencementYear => this._commencementYear;
+  set address(value) => _address = value;
 
- set commencementYear( value) => this._commencementYear = value;
+  get commencementYear => _commencementYear;
 
-  get department => this._department;
+  set commencementYear(value) => _commencementYear = value;
 
- set department( value) => this._department = value;
+  get department => _department;
 
-  get designation => this._designation;
+  set department(value) => _department = value;
 
- set designation( value) => this._designation = value;
+  get designation => _designation;
 
-  get dob => this._dob;
+  set designation(value) => _designation = value;
 
- set dob( value) => this._dob = value;
+  get dob => _dob;
 
-  get email => this._email;
+  set dob(value) => _dob = value;
 
- set email( value) => this._email = value;
+  get email => _email;
 
-  get firstName => this._firstName;
+  set email(value) => _email = value;
 
- set firstName( value) => this._firstName = value;
+  get firstName => _firstName;
 
-  get folio => this._folio;
+  set firstName(value) => _firstName = value;
 
- set folio( value) => this._folio = value;
+  get folio => _folio;
 
-  get gender => this._gender;
+  set folio(value) => _folio = value;
 
- set gender( value) => this._gender = value;
+  get gender => _gender;
 
-  get institution => this._institution;
+  set gender(value) => _gender = value;
 
- set institution( value) => this._institution = value;
+  get institution => _institution;
 
-  get otherNames => this._otherNames;
+  set institution(value) => _institution = value;
 
- set otherNames( value) => this._otherNames = value;
+  get otherNames => _otherNames;
 
-  get phone => this._phone;
+  set otherNames(value) => _otherNames = value;
 
- set phone( value) => this._phone = value;
+  get phone => _phone;
 
-  get role => this._role;
+  set phone(value) => _phone = value;
 
- set role( value) => this._role = value;
+  get role => _role;
 
-  get state => this._state;
+  set role(value) => _role = value;
 
- set state( value) => this._state = value;
+  get state => _state;
 
-  get surname => this._surname;
+  set state(value) => _state = value;
 
- set surname( value) => this._surname = value;
+  get surname => _surname;
+
+  set surname(value) => _surname = value;
 
   UserInfo(
       this._userName,

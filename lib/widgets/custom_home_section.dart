@@ -5,7 +5,6 @@ import 'package:nardilibraryapp/resources/app_colors.dart';
 import 'package:nardilibraryapp/resources/app_style.dart';
 import 'package:nardilibraryapp/ui/views/details_screen.dart';
 
-
 class HomeSection extends StatelessWidget {
   final String sectionTitle;
   final VoidCallback? seeMore;
@@ -34,35 +33,41 @@ class HomeSection extends StatelessWidget {
               ],
             ),
           ),
-           SizedBox(
-              height: 150,
-              child: ListView.builder(
-                  itemCount: books.length,
-                  physics: ClampingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: (){
-                        Navigator.pushNamed(context, BookDetails.routeName, arguments:books[index].getId!);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            shape: BoxShape.rectangle,
-                           
-                          ),
-                          child: Image(
-                              fit: BoxFit.fill,
-                              image: NetworkImage(books[index].thumbnail)),
+          SizedBox(
+            height: 150,
+            child: ListView.builder(
+                itemCount: books.length,
+                physics: ClampingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {
+                      int id = books[index].getId!;
+                      String baseFile = books[index].baseFile!;
+                      print(id);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BookDetails(id: id, baseFile: baseFile,),
                         ),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          shape: BoxShape.rectangle,
+                        ),
+                        child: Image(
+                            fit: BoxFit.fill,
+                            image: NetworkImage(books[index].thumbnail)),
                       ),
-                    );
-                  }),
-            ),
-          
+                    ),
+                  );
+                }),
+          ),
         ],
       ),
     );

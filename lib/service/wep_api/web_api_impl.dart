@@ -1,10 +1,15 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
 import 'package:nardilibraryapp/constants/state.dart';
 import 'package:nardilibraryapp/model/auth/auth_response.dart';
 import 'package:nardilibraryapp/model/auth/user_info.dart';
+import 'package:nardilibraryapp/model/bookresource/book_response.dart';
 import 'package:nardilibraryapp/model/bookresource/department_response.dart';
 import 'package:nardilibraryapp/model/bookresource/search_request.dart';
 import 'package:nardilibraryapp/model/bookresource/resource_response.dart';
@@ -12,6 +17,7 @@ import 'package:nardilibraryapp/model/bookresource/department.dart';
 import 'package:nardilibraryapp/model/bookresource/add_resource.dart';
 import 'package:nardilibraryapp/service/wep_api/web_api.dart';
 import 'package:nardilibraryapp/util/logger.dart';
+import 'package:path_provider/path_provider.dart';
 
 class WebApiImpl implements WebApi {
   static const String _LOGIN_URL = "http://nardlibrary.org/api/User/Login";
@@ -94,9 +100,10 @@ class WebApiImpl implements WebApi {
     if (response.statusCode == 200) {
       signUpResponse = AuthResponse.fromJson(jsonDecode(response.body));
       return signUpResponse;
-    } else {
-      print(response.body);
-      return AuthResponse(FAILED, "", "");
+    }
+    if (response.statusCode == 500) {
+      signUpResponse = AuthResponse.fromJson(jsonDecode(response.body));
+      return AuthResponse(FAILED, signUpResponse.message, "");
     }
   }
 
@@ -143,9 +150,19 @@ class WebApiImpl implements WebApi {
   }
 
   @override
-  Future<ResourceResponse?> getBookResourceById(int id) {
-    // TODO: implement getBookResourceById
-    throw UnimplementedError();
+  Future<BookResourceResponse?> getBookResourceById(int id) async {
+    BookResourceResponse? bookResource;
+    Response response = await get(
+        Uri.parse("https://nardlibrary.org/api/Resource/Get/$id"),
+        headers: _headers);
+
+    if (response.statusCode == 200) {
+      bookResource = BookResourceResponse.fromJson(jsonDecode(response.body));
+      _logger.logInfo(response.body);
+      return bookResource;
+    } else {
+      return BookResourceResponse(FAILED, "Book Resource does not exist", null);
+    }
   }
 
   @override
@@ -213,13 +230,10 @@ class WebApiImpl implements WebApi {
 
   @override
   Future<ResourceResponse> searchResources(String request) async {
-     ResourceResponse? searchResponse;
+    ResourceResponse? searchResponse;
     _logger.logInfo("Inside searchResources()");
-    Response response = await post(
-      Uri.parse(_FIND_RESOURCE_URL),
-      headers: _headers,
-      body:jsonEncode(<String, String>{"Term": request}));
-    
+    Response response = await post(Uri.parse(_FIND_RESOURCE_URL),
+        headers: _headers, body: jsonEncode(<String, String>{"Term": request}));
 
     if (response.statusCode == 200) {
       _logger.logInfo(response.statusCode.toString());
@@ -231,5 +245,31 @@ class WebApiImpl implements WebApi {
     } else {
       return ResourceResponse(FAILED, "", []);
     }
+  }
+
+  @override
+  Future<File> getPDF(String url) async {
+    Completer<File> completer = Completer();
+    print("Start download file from internet!");
+    try {
+      final filename = url.substring(url.lastIndexOf("/") + 1);
+      var request = await HttpClient().getUrl(Uri.parse(url));
+      var response = await request.close();
+      var bytes = await consolidateHttpClientResponseBytes(response);
+      var dir = await getApplicationDocumentsDirectory();
+      print("Download files");
+      print("${dir.path}/$filename");
+      File file = File("${dir.path}/$filename");
+
+      await file.writeAsBytes(bytes, flush: true);
+      completer.complete(file);
+    } catch (e) {
+      if (e is SocketException) {
+        print(e.toString());
+      }
+      throw Exception('Error parsing asset file!');
+    }
+
+    return completer.future;
   }
 }

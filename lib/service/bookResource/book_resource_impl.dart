@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:nardilibraryapp/model/bookresource/book_response.dart';
 import 'package:nardilibraryapp/model/bookresource/department_response.dart';
 import 'package:nardilibraryapp/model/bookresource/search_request.dart';
 import 'package:nardilibraryapp/model/bookresource/resource_response.dart';
@@ -20,9 +24,9 @@ class BookResourceImpl extends BookResourceService {
   }
 
   @override
-  Future<ResourceResponse?> getBookResourceById(int id) {
-    // TODO: implement getBookResourceById
-    throw UnimplementedError();
+  Future<BookResourceResponse?> getBookResourceById(int id) async {
+    BookResourceResponse? bookResponse = await _webApi.getBookResourceById(id);
+    return bookResponse;
   }
 
   @override
@@ -47,5 +51,11 @@ class BookResourceImpl extends BookResourceService {
   Future<ResourceResponse?> searchResources(String request) async {
     ResourceResponse? resourceResponse = await _webApi.searchResources(request);
     return resourceResponse!;
+  }
+
+  @override
+  Future<File> getPDF(String url) async {
+    File file = await _webApi.getPDF(url);
+    return file;
   }
 }

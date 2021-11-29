@@ -70,7 +70,7 @@ class HomePageViewmodel extends ChangeNotifier {
       _departments = resourceResponse.department!;
       _popularDepartments.add(_departments[0]);
       _popularDepartments.add(_departments[1]);
-      _popularDepartments.add(_departments[2]);
+      _popularDepartments.add(_departments[22]);
       _popularDepartments.add(_departments[3]);
 
       logger.logInfo(_departments.toString());

@@ -19,15 +19,6 @@ class DepartmentBooksViewmodel extends ChangeNotifier {
   int? _lenght;
   int? _departmentId;
 
-  // DepartmentBooksViewmodel() {
-  //   if (_departmentId == null) {
-  //     //
-  //   } else {
-  //     logger.logInfo("inside elsse block");
-  //     getBooksByDepartment(id);
-  //   }
-  // }
-
   get isLoading => _isLoading;
 
   get lenght => _lenght!;
