@@ -26,7 +26,7 @@ class BookDetailViewmodel extends ChangeNotifier {
   get isLoading => _isLoading;
   get book => _book!;
 
-  void getBooksResourceById(BuildContext context, int id) async {
+  Future getBooksResourceById(BuildContext context, int id) async {
     _isLoading = true;
     notifyListeners();
     BookResourceResponse? resource =
@@ -48,12 +48,14 @@ class BookDetailViewmodel extends ChangeNotifier {
     }
   }
 
-  void getPDF(String url) async {
-    _file = await _bookResourceService.getPDF(url).whenComplete(() => {
-         _filePath = _file!.path,
-    notifyListeners()
-    });
+  Future getPDF(String url) async {
+    // _file = await _bookResourceService.getPDF(url).whenComplete(() => {
+    //      _filePath = _file!.path,
+    // notifyListeners()
+    // });
 
-   
+    _file = await _bookResourceService.getPDF(url);
+    notifyListeners();
+    return _file!;
   }
 }

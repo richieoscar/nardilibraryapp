@@ -19,5 +19,12 @@ class AppUtils {
     );
   }
 
+  static Widget showProgressBar(BuildContext context) {
+    return const Visibility(
+      visible: false,
+      child: CircularProgressIndicator(),
+    );
+  }
+
 
 }

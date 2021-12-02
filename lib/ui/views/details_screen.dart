@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:nardilibraryapp/constants/state.dart';
 import 'package:nardilibraryapp/model/Books.dart';
 import 'package:nardilibraryapp/resources/app_colors.dart';
 import 'package:nardilibraryapp/resources/app_style.dart';
 import 'package:nardilibraryapp/ui/views/pdf_screen.dart';
+import 'package:nardilibraryapp/util/utils.dart';
 import 'package:nardilibraryapp/viewmodels/book_detail_viewmodel.dart';
 import 'package:nardilibraryapp/widgets/progressar.dart';
 import 'package:provider/provider.dart';
@@ -21,24 +24,31 @@ class BookDetails extends StatefulWidget {
 }
 
 class _BookDetailState extends State<BookDetails> {
+  File? _file;
+  String? _status = 'READ BOOK';
   @override
   void initState() {
     super.initState();
     getBookResourceById();
-   // getPDF();
+    getPDF();
   }
 
   void getBookResourceById() async {
-    context
+    await context
         .read<BookDetailViewmodel>()
         .getBooksResourceById(context, widget.id!);
-
-         context.read<BookDetailViewmodel>().getPDF(widget.baseFile!);
   }
 
   void getPDF() async {
-    context.read<BookDetailViewmodel>().getPDF(widget.baseFile!);
-    print("getPdf indetail screen initstate");
+    _file = await context.read<BookDetailViewmodel>().getPDF(widget.baseFile!);
+    _file != null ? displayResourceReady() : null;
+  }
+
+  void displayResourceReady() {
+    setState(() {
+      _status = "READ BOOK";
+    });
+    AppUtils.showSnackBar(context, "Resource ready!");
   }
 
   @override
@@ -84,10 +94,10 @@ class _BookDetailState extends State<BookDetails> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               height: 20,
                             ),
-                            Container(
+                            SizedBox(
                               width: 200,
                               height: 200,
                               child: Card(
@@ -116,7 +126,7 @@ class _BookDetailState extends State<BookDetails> {
                               height: 12,
                             ),
                             Text(
-                              context.watch<BookDetailViewmodel>().book.author,
+                              "Author: ${context.watch<BookDetailViewmodel>().book.author}",
                               style: AppStyle.bookDetailText,
                               textAlign: TextAlign.center,
                             ),
@@ -142,9 +152,6 @@ class _BookDetailState extends State<BookDetails> {
                                     color: AppColors.nardDark,
                                   ),
                                   _bookMenu("En", "Language"),
-                                  // VerticalDivider(
-                                  //    color:AppColors.white,
-                                  // ),
                                 ],
                               ),
                             ),
@@ -182,17 +189,11 @@ class _BookDetailState extends State<BookDetails> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            String? path =
-                                context.read<BookDetailViewmodel>().filePath;
-
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PDFScreen(path: path!),
-                              ),
-                            );
+                        child: InkWell(
+                          onTap: () async {
+                            _file == null
+                                ? displayLoading(context)
+                                : openPdf(context);
                           },
                           child: Container(
                             width: double.infinity,
@@ -203,7 +204,7 @@ class _BookDetailState extends State<BookDetails> {
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 15),
-                              child: Text("READ BOOK",
+                              child: Text(_status!,
                                   style: AppStyle.whiteBoldText,
                                   textAlign: TextAlign.center),
                             ),
@@ -216,7 +217,21 @@ class _BookDetailState extends State<BookDetails> {
     );
   }
 
-  void openPdf(String filePath) {}
+  void displayLoading(BuildContext context) {
+    setState(() {
+      _status = "Loading resource...";
+    });
+    return AppUtils.showSnackBar(context, "Please wait, preparing resource");
+  }
+
+  void openPdf(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PDFScreen(file: _file!),
+      ),
+    );
+  }
 
   Widget _bookMenu(String title, String subTitle) {
     return (Column(

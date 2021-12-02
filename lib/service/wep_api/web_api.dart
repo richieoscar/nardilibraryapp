@@ -22,5 +22,4 @@ abstract class WebApi {
   Future<BookResourceResponse?> getBookResourceById(int id);
   Future<ResourceResponse?> searchResources(String request);
   void addAResource(BookResource resource);
-  Future<File> getPDF(String url);
 }

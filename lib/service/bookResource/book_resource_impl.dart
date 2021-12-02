@@ -8,6 +8,8 @@ import 'package:nardilibraryapp/model/bookresource/resource_response.dart';
 import 'package:nardilibraryapp/model/bookresource/department.dart';
 import 'package:nardilibraryapp/model/bookresource/add_resource.dart';
 import 'package:nardilibraryapp/service/bookResource/book_resource_service.dart';
+import 'package:nardilibraryapp/service/wep_api/pdf_api.dart';
+import 'package:nardilibraryapp/service/wep_api/pdf_api_impl.dart';
 import 'package:nardilibraryapp/service/wep_api/web_api.dart';
 import 'package:nardilibraryapp/service/wep_api/web_api_impl.dart';
 
@@ -17,6 +19,7 @@ class BookResourceImpl extends BookResourceService {
   static get instance => _instance;
 
   final WebApi _webApi = WebApiImpl.instance;
+  final PdfApi _pdfApi = PDFApiImpl.instance;
 
   @override
   void addAResource(BookResource resource) {
@@ -54,8 +57,8 @@ class BookResourceImpl extends BookResourceService {
   }
 
   @override
-  Future<File> getPDF(String url) async {
-    File file = await _webApi.getPDF(url);
-    return file;
+  Future<File?> getPDF(String url) async {
+    File? file = await _pdfApi.loadFromNetwork(url);
+    return file!;
   }
 }

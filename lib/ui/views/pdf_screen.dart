@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
@@ -8,12 +9,13 @@ import 'package:nardilibraryapp/viewmodels/pdf_screen_viewmodel.dart';
 import 'package:nardilibraryapp/widgets/custom_app_bar.dart';
 import 'package:nardilibraryapp/widgets/custom_button.dart';
 import 'package:nardilibraryapp/widgets/goto_page.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 class PDFScreen extends StatefulWidget {
-  final String? path;
+  final File? file;
 
-  PDFScreen({this.path});
+  PDFScreen({this.file});
 
   _PDFScreenState createState() => _PDFScreenState();
 }
@@ -29,44 +31,52 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    final name = basename(widget.file!.path);
     return Scaffold(
       appBar: CustomAppBAr(
-        title: 'Document',
-        icon: Icon(Icons.find_in_page, color: AppColors.pasejicBlack),
-        onPressed: () {
-          showModalBottomSheet(
-              context: context,
-              builder: (context) {
-                return Column(
-                  children:  [
-                    TextField(
-                      controller: _pageController,
-                    )
-                   
-          
-                   
-                  ],
-                );
-              });
-        },
+        title: 'Resource',
+        icon: Icon(Icons.find_in_page, color: AppColors.white),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Text("Page ($currentPage of $pages)",
-                    style: AppStyle.mediumText),
-              ],
+            child: Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Page ($currentPage of $pages)",
+                      style: AppStyle.mediumText),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.mediumLightGrey,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    width: 70,
+                    height: 40,
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: TextField(
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                            //contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical:10),
+                            hintText: 'Goto page',
+                            hintStyle: AppStyle.smallText,
+                            border: InputBorder.none),
+                        controller: _pageController,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           Expanded(
             child: Stack(
               children: <Widget>[
                 PDFView(
-                  filePath: widget.path,
+                  filePath: widget.file!.path,
                   enableSwipe: true,
                   swipeHorizontal: true,
                   autoSpacing: false,
@@ -133,8 +143,9 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
         future: _controller.future,
         builder: (context, AsyncSnapshot<PDFViewController> snapshot) {
           if (snapshot.hasData) {
-            return FloatingActionButton.extended(
-              label: Text("Go"),
+            return FloatingActionButton(
+              backgroundColor: AppColors.backgroundColor,
+              child: Icon(Icons.find_in_page),
               onPressed: () async {
                 await snapshot.data!.setPage(int.parse(_pageController.text));
               },
