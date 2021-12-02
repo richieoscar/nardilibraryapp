@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:nardilibraryapp/model/auth/auth_response.dart';
 import 'package:nardilibraryapp/model/auth/user_info.dart';
-import 'package:nardilibraryapp/network/network.dart';
 import 'package:nardilibraryapp/ui/views/sign_up_screen.dart';
 
 abstract class AuthService {
