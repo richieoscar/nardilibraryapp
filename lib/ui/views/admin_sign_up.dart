@@ -4,6 +4,7 @@ import 'package:nardilibraryapp/model/auth/user_info.dart';
 import 'package:nardilibraryapp/resources/app_colors.dart';
 import 'package:nardilibraryapp/resources/app_style.dart';
 import 'package:nardilibraryapp/viewmodels/signup_viewmodel.dart';
+import 'package:nardilibraryapp/widgets/custom_app_bar.dart';
 import 'package:nardilibraryapp/widgets/custom_button.dart';
 import 'package:nardilibraryapp/widgets/custome_text_form_field.dart';
 import 'package:nardilibraryapp/widgets/password_text_field.dart';
@@ -12,14 +13,15 @@ import 'package:provider/provider.dart';
 
 import 'forgot_password_screen.dart';
 
-class SignUp extends StatefulWidget {
-  const SignUp({Key? key}) : super(key: key);
+class AdminSignUp extends StatefulWidget {
+  static const route = 'adminsignup';
+  const AdminSignUp({Key? key}) : super(key: key);
 
   @override
-  _SignUpState createState() => _SignUpState();
+  _AdminSignUpState createState() => _AdminSignUpState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _AdminSignUpState extends State<AdminSignUp> {
   final TextEditingController _firstnameController = TextEditingController();
   final TextEditingController _lastnameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
@@ -46,6 +48,7 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBAr(title: "Add User", icon: Icon(Icons.ac_unit)),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Form(
@@ -59,16 +62,11 @@ class _SignUpState extends State<SignUp> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    "Create an Account",
+                    "Create a User",
                     style: AppStyle.headline1,
                   ),
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Text("Create a new account with Nardlibrary",
-                      style: AppStyle.smallText),
-                ),
+               
                 const SizedBox(height: 16),
                 CustomTextFormField(
                     headerTitle: "Firstname",
@@ -107,12 +105,12 @@ class _SignUpState extends State<SignUp> {
                     controller: _folioController,
                     inputType: TextInputType.number),
                 const SizedBox(height: 10),
-                // CustomTextFormField(
-                //     headerTitle: "Role",
-                //     hintText: "Role",
-                //     controller: _roleController,
-                //     inputType: TextInputType.number),
-                // const SizedBox(height: 10),
+                CustomTextFormField(
+                    headerTitle: "Role",
+                    hintText: "Role",
+                    controller: _roleController,
+                    inputType: TextInputType.number),
+                const SizedBox(height: 10),
                 PasswordTextFormField(
                   headerTitle: "Password",
                   hintText: "Password",
@@ -146,22 +144,12 @@ class _SignUpState extends State<SignUp> {
                   child: Text("Nardlibrary", style: AppStyle.smallText),
                 ),
                 const SizedBox(height: 51),
-                CustomButton(label: "SIGN UP", onclick: () => _signUp()),
+                CustomButton(label: "CREATE USER", onclick: () => _signUp()),
                 const SizedBox(height: 42),
                 ProgressBar(context.watch<SignUpViewmodel>().isVisible),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Already a member? ", style: AppStyle.verSmallText),
-                    InkWell(
-                        child: Text(
-                      "Login",
-                      style: AppStyle.blueText,
-                    ))
-                  ],
-                ),
-                const SizedBox(height: 42),
+                const SizedBox(height: 30),
+               
+               
               ],
             ),
           ),
@@ -208,7 +196,7 @@ class _SignUpState extends State<SignUp> {
           "",
           "",
           _phoneNumberController.text.trim(),
-          USER_ROLE,
+          _roleController.text.trim(),
           "",
           _lastnameController.text.trim());
       context

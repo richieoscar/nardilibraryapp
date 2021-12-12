@@ -14,8 +14,9 @@ import 'package:provider/provider.dart';
 
 class PDFScreen extends StatefulWidget {
   final File? file;
+  String? title;
 
-  PDFScreen({this.file});
+  PDFScreen({this.file, this.title});
 
   _PDFScreenState createState() => _PDFScreenState();
 }
@@ -30,11 +31,17 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
   TextEditingController _pageController = TextEditingController();
 
   @override
+  void dispose(){
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final name = basename(widget.file!.path);
+    
     return Scaffold(
       appBar: CustomAppBAr(
-        title: 'Resource',
+        title: widget.title!,
         icon: Icon(Icons.find_in_page, color: AppColors.white),
       ),
       body: Column(

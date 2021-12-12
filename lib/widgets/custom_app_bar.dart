@@ -7,7 +7,7 @@ class CustomAppBAr extends StatelessWidget implements PreferredSizeWidget {
   final Icon? icon;
   final Color? iconColor;
   final VoidCallback? onPressed;
-  const CustomAppBAr({required this.title, this.icon, this.iconColor, this.onPressed});
+  const CustomAppBAr({required this.title, required this.icon, this.iconColor, this.onPressed});
 
   @override
   Widget build(BuildContext context) {

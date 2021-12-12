@@ -22,8 +22,9 @@ class BookResourceImpl extends BookResourceService {
   final PdfApi _pdfApi = PDFApiImpl.instance;
 
   @override
-  void addAResource(BookResource resource) {
-    // TODO: implement addAResource
+  Future<bool> addAResource(BookResource resource) async {
+    bool isSuccessful = await _webApi.addAResource(resource);
+    return isSuccessful;
   }
 
   @override

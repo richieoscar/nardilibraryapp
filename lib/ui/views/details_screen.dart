@@ -190,10 +190,12 @@ class _BookDetailState extends State<BookDetails> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: InkWell(
-                          onTap: () async {
+                          onTap: () {
+                            String? title =
+                                context.read<BookDetailViewmodel>().book.name;
                             _file == null
                                 ? displayLoading(context)
-                                : openPdf(context);
+                                : openPdf(context, title);
                           },
                           child: Container(
                             width: double.infinity,
@@ -224,11 +226,11 @@ class _BookDetailState extends State<BookDetails> {
     return AppUtils.showSnackBar(context, "Please wait, preparing resource");
   }
 
-  void openPdf(BuildContext context) {
+  void openPdf(BuildContext context, String? title) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PDFScreen(file: _file!),
+        builder: (context) => PDFScreen(file: _file!, title: title!),
       ),
     );
   }

@@ -31,7 +31,7 @@ class HomePageViewmodel extends ChangeNotifier {
   List<Department> _departments = [];
   List<Department> _popularDepartments = [];
   List<Book> _homeBooks = [];
- 
+
 
   get homeBooks => _homeBooks;
 
@@ -42,6 +42,10 @@ class HomePageViewmodel extends ChangeNotifier {
 
   String? getUsername() {
     return _storageService.getUserName()!;
+  }
+
+  String? getRole() {
+    return _storageService.getRole()!;
   }
 
   void getFeaturedBooks() async {
@@ -79,8 +83,6 @@ class HomePageViewmodel extends ChangeNotifier {
       notifyListeners();
     }
   }
-
- 
 
   void navigate(String route, BuildContext context) {
     _navigationService.navigateAddStack(route, context);

@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:nardilibraryapp/resources/app_colors.dart';
+import 'package:nardilibraryapp/ui/views/add_resource.dart';
 import 'package:nardilibraryapp/ui/views/book_shelf_screen.dart';
 import 'package:nardilibraryapp/ui/views/home_page.dart';
 import 'package:nardilibraryapp/ui/views/profile_screen.dart';
 
-class Dashboard extends StatefulWidget {
-  Dashboard({Key? key}) : super(key: key);
-  static const routeName = "/dashBoard";
+class UserDashboard extends StatefulWidget {
+  UserDashboard({Key? key}) : super(key: key);
+  static const routeName = "/userDashboard";
   @override
   _DashBoardState createState() => _DashBoardState();
 }
 
-class _DashBoardState extends State<Dashboard> {
-  var navBarLocations = [HomePage(), BookShelf(), Profile()];
+class _DashBoardState extends State<UserDashboard> {
+  var navBarLocations = [const HomePage(), const BookShelf(), const Profile()];
 
   int _selectedIndex = 0;
   @override
@@ -35,6 +36,7 @@ class _DashBoardState extends State<Dashboard> {
               label: 'Bookshelf',
               icon: Icon(Icons.book),
             ),
+          
             BottomNavigationBarItem(
               label: 'Me',
               icon: Icon(Icons.person),

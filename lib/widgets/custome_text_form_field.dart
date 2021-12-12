@@ -34,6 +34,7 @@ class CustomTextFormField extends StatelessWidget {
                 color: AppColors.faintColor),
             child: TextFormField(
                 controller: controller,
+                maxLines: null,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.only(left: 10),

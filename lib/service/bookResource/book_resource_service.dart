@@ -13,6 +13,6 @@ abstract class BookResourceService {
   Future<ResourceResponse?> getBooksByDepartment(int id);
   Future<BookResourceResponse?> getBookResourceById(int id);
   Future<ResourceResponse?> searchResources(String request);
-  void addAResource(BookResource resource);
+  Future<bool> addAResource(BookResource resource);
   Future<File?> getPDF(String url);
 }

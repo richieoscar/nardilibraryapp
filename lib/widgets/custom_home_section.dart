@@ -37,7 +37,7 @@ class HomeSection extends StatelessWidget {
             height: 150,
             child: ListView.builder(
                 itemCount: books.length,
-                physics: ClampingScrollPhysics(),
+                physics: BouncingScrollPhysics(),
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {

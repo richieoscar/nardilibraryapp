@@ -10,8 +10,9 @@ import 'package:nardilibraryapp/service/storage/storage_service.dart';
 import 'package:nardilibraryapp/service/storage/storage_service_impl.dart';
 import 'package:nardilibraryapp/service/wep_api/web_api.dart';
 import 'package:nardilibraryapp/service/wep_api/web_api_impl.dart';
+import 'package:nardilibraryapp/ui/views/admin_dashboard_screen.dart';
 import 'package:nardilibraryapp/ui/views/create_new_password.dart';
-import 'package:nardilibraryapp/ui/views/dasboard_screen.dart';
+import 'package:nardilibraryapp/ui/views/user_dashboard_screen.dart';
 import 'package:nardilibraryapp/ui/views/finish_registration.dart';
 import 'package:nardilibraryapp/ui/views/password_reset_complete.dart';
 import 'package:nardilibraryapp/ui/views/verify_email_screen.dart';
@@ -33,9 +34,20 @@ class AuthServiceImpl implements AuthService {
 
     if (response!.status == SUCCESS) {
       print(response.message);
+      print(response.data.role);
       await _storageService.saveUserName(response.message);
-      _navService.navigate(Dashboard.routeName, context);
-      return response;
+
+      if (response.data.role == USER_ROLE) {
+        print("User Role");
+        print(response.data.role);
+        _storageService.saveRole(response.data.role);
+        _navService.navigate(UserDashboard.routeName, context);
+        return response;
+      } else if (response.data.role == ADMIN) {
+        _storageService.saveRole(response.data.role);
+        _navService.navigate(AdminDashboard.routeName, context);
+        return response;
+      }
     }
     if (response.status == FAILED) {
       AppUtils.showSnackBar(context, "Invalid Details");
@@ -71,7 +83,7 @@ class AuthServiceImpl implements AuthService {
       return response;
     }
     if (response.status == FAILED) {
-       AppUtils.showSnackBar(context, "An Error Occured, Try again!");
+      AppUtils.showSnackBar(context, "An Error Occured, Try again!");
       return response;
     }
   }
@@ -92,6 +104,22 @@ class AuthServiceImpl implements AuthService {
       }
     }
 
+    return response;
+  }
+
+  @override
+  Future<AuthResponse?> deletUser(String email, BuildContext context) async {
+    AuthResponse? response = await _apiService.deleteUser(email);
+
+    if (response != null) {
+      if (response.status == SUCCESS) {
+        print(response);
+        return response;
+      }
+      if (response.status == FAILED) {
+        print(response);
+      }
+    }
     return response;
   }
 }

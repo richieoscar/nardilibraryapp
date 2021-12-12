@@ -38,7 +38,7 @@ class _AllFeaturedRelease extends State<AllFeaturedRelease> {
                   //mainAxisSpacing: 5,
                   crossAxisSpacing: 2),
               itemCount: context.read<AllFeaturedViewmodel>().lenght,
-              physics: ClampingScrollPhysics(),
+              physics: BouncingScrollPhysics(),
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 return GestureDetector(
@@ -47,11 +47,16 @@ class _AllFeaturedRelease extends State<AllFeaturedRelease> {
                           .watch<AllFeaturedViewmodel>()
                           .featuredBooks[index]
                           .id;
+                          String? baseFile = context
+                          .watch<AllFeaturedViewmodel>()
+                          .featuredBooks[index]
+                          .baseFile;
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => BookDetails(
                             id: id,
+                            baseFile:baseFile! ,
                           ),
                         ),
                       );

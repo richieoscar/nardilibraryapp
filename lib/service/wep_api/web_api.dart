@@ -8,6 +8,7 @@ import 'package:nardilibraryapp/model/bookresource/department.dart';
 import 'package:nardilibraryapp/model/bookresource/department_response.dart';
 import 'package:nardilibraryapp/model/bookresource/resource_response.dart';
 import 'package:nardilibraryapp/model/bookresource/search_request.dart';
+import 'package:nardilibraryapp/model/unit.dart';
 
 abstract class WebApi {
   Future<AuthResponse?> login(String username, String password);
@@ -15,11 +16,18 @@ abstract class WebApi {
   Future<AuthResponse?> changePassword(
       String userName, String password, String newPassword);
   Future<AuthResponse?> SignUpUser(UserInfo info);
+   Future<AuthResponse?> deleteUser(String email);
 
   Future<ResourceResponse?> getFeaturedBooks();
   Future<DepartmentResponse?> getDepartments();
   Future<ResourceResponse?> getBooksByDepartment(int id);
   Future<BookResourceResponse?> getBookResourceById(int id);
   Future<ResourceResponse?> searchResources(String request);
-  void addAResource(BookResource resource);
+  Future<bool> addAResource(BookResource? resource);
+  Future<ResourceResponse?> getHistory();
+  Future<bool> addToShelf(int resourceId, String username);
+  Future<void> removeFromShelf(int resourceId, String username);
+  Future<ResourceResponse?> getShelfBooks();
+  Future<void> addDepartment(Department? department);
+  Future<void> addUnit(Unit? unit);
 }

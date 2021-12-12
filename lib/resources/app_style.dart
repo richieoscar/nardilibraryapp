@@ -9,6 +9,12 @@ class AppStyle {
           fontStyle: FontStyle.normal,
           fontSize: 24,
           color: AppColors.headLineColor));
+          static TextStyle headline2 = GoogleFonts.montserrat(
+      textStyle: TextStyle(
+          fontWeight: FontWeight.w600,
+          fontStyle: FontStyle.normal,
+          fontSize: 20,
+          color: AppColors.headLineColor));
 
   static TextStyle smallText = GoogleFonts.montserrat(
       textStyle: TextStyle(
@@ -23,6 +29,12 @@ class AppStyle {
           fontStyle: FontStyle.normal,
           fontSize: 14,
           color: AppColors.nardBlack));
+  static TextStyle snackBarText = GoogleFonts.montserrat(
+      textStyle: TextStyle(
+          fontWeight: FontWeight.w300,
+          fontStyle: FontStyle.normal,
+          fontSize: 14,
+          color: AppColors.white));
   static TextStyle smallBoldText = GoogleFonts.montserrat(
       textStyle: TextStyle(
           fontWeight: FontWeight.w700,

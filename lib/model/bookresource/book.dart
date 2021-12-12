@@ -76,7 +76,7 @@ class Book {
 
   set pages(value) => _pages = value;
 
-  get baseFile => _baseFile;
+  get baseFile => _baseFile!;
 
   set basefile(String? value) => _baseFile = value;
 

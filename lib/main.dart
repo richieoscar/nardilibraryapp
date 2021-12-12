@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:nardilibraryapp/resources/app_colors.dart';
+import 'package:nardilibraryapp/ui/views/add_resource.dart';
+import 'package:nardilibraryapp/ui/views/admin_dashboard_screen.dart';
+import 'package:nardilibraryapp/ui/views/admin_functions.dart';
+import 'package:nardilibraryapp/ui/views/admin_sign_up.dart';
 import 'package:nardilibraryapp/ui/views/all_departments.dart';
 import 'package:nardilibraryapp/ui/views/all_featured_releases.dart';
 import 'package:nardilibraryapp/ui/views/book_shelf_screen.dart';
 import 'package:nardilibraryapp/ui/views/create_new_password.dart';
-import 'package:nardilibraryapp/ui/views/dasboard_screen.dart';
+import 'package:nardilibraryapp/ui/views/delete_user_screen.dart';
+import 'package:nardilibraryapp/ui/views/user_dashboard_screen.dart';
 import 'package:nardilibraryapp/ui/views/department_book.dart';
 import 'package:nardilibraryapp/ui/views/details_screen.dart';
 import 'package:nardilibraryapp/ui/views/finish_registration.dart';
@@ -17,6 +22,7 @@ import 'package:nardilibraryapp/ui/views/verify_email_screen.dart';
 import 'package:nardilibraryapp/viewmodels/all_featured_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/book_detail_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/createnew_password_viewmodel.dart';
+import 'package:nardilibraryapp/viewmodels/delete_user_viemodel.dart';
 import 'package:nardilibraryapp/viewmodels/department_books_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/departments_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/finish_registration_viewmodel.dart';
@@ -49,6 +55,7 @@ void main() {
            ChangeNotifierProvider(create: (_) => DepartmentBooksViewmodel()),
             ChangeNotifierProvider(create: (_) => SearchResultViewmodel()),
              ChangeNotifierProvider(create: (_) => BookDetailViewmodel()),
+              ChangeNotifierProvider(create: (_) =>DeleteUserViewmodel()),
       
       ],
     child: Home(),
@@ -70,14 +77,14 @@ class _HomeState extends State<Home> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "NardLibraryApp",
-      //home: HomePage(),
+    // home: AdminFunction(),
       theme: ThemeData.light().copyWith(
         primaryColor: AppColors.nardDark,
         buttonTheme: ButtonThemeData(
           buttonColor: AppColors.backgroundColor
         )
       ),
-     initialRoute: Splash.routeName,
+   initialRoute: Splash.routeName,
       routes: {
         Splash.routeName: (_) => const Splash(),
         NardAccess.routeName: (_) => const NardAccess(),
@@ -89,10 +96,15 @@ class _HomeState extends State<Home> {
         HomePage.routeName: (_) => const HomePage(),
         BookDetails.routeName: (_) => const BookDetails(),
         BookShelf.routeName: (_)=> const BookShelf(),
-        Dashboard.routeName : (_) => Dashboard(),
+        UserDashboard.routeName : (_) => UserDashboard(),
+        AdminDashboard.routeName:(_) => AdminDashboard(),
         AllDepartments.route :(_) => AllDepartments(),
         DepartmentBooks.route :(_) => DepartmentBooks(),
         AllFeaturedRelease.route:(_)=>  AllFeaturedRelease(),
+        AddResource.route:(_)=> AddResource(),
+        AdminSignUp.route: (_)=> AdminSignUp(),
+        DeleteUser.routeName:(_)=> DeleteUser()
+
       },
     );
   }

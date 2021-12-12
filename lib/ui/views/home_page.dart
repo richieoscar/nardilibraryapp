@@ -6,6 +6,7 @@ import 'package:nardilibraryapp/resources/app_style.dart';
 import 'package:nardilibraryapp/ui/views/all_departments.dart';
 import 'package:nardilibraryapp/ui/views/all_featured_releases.dart';
 import 'package:nardilibraryapp/ui/views/search_result.dart';
+import 'package:nardilibraryapp/util/utils.dart';
 import 'package:nardilibraryapp/viewmodels/homepage_viemodel.dart';
 import 'package:nardilibraryapp/widgets/custom_home_section.dart';
 import 'package:nardilibraryapp/widgets/progressar.dart';
@@ -34,9 +35,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var viewmodel = Provider.of<HomePageViewmodel>(context);
     return Scaffold(
-      body: context.watch<HomePageViewmodel>().isLoading
-          ? ProgressBar(context.watch<HomePageViewmodel>().isLoading)
+      body:viewmodel.isLoading
+          ? ProgressBar(viewmodel.isLoading)
           : SafeArea(
               child: SingleChildScrollView(
                 child: Column(
@@ -49,7 +51,7 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 10),
                       child: Text(
-                        "Hello, ${context.read<HomePageViewmodel>().getUsername()!}",
+                       viewmodel.getRole() == ADMIN ? "Hello Admin, ${viewmodel.getUsername()!}":"Hello, ${viewmodel.getUsername()!}",
                         style: AppStyle.userNameText,
                       ),
                     ),
@@ -156,19 +158,21 @@ class _HomePageState extends State<HomePage> {
                   controller: _searchCOntroller,
                   textInputAction: TextInputAction.search,
                   cursorColor: AppColors.backgroundColor,
-                
                   decoration: InputDecoration(
                     suffixIcon: IconButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SearchResult(
-                              searchQuery: _searchCOntroller.text,
-                            ),
-                          ),
-                        );
-                      
+                        String query = _searchCOntroller.text;
+                        query.isEmpty
+                            ? AppUtils.showSnackBar(
+                                context, "Search field empty")
+                            : Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SearchResult(
+                                    searchQuery: _searchCOntroller.text,
+                                  ),
+                                ),
+                              );
                       },
                       icon: Icon(Icons.search_rounded,
                           color: AppColors.searcIconColor),

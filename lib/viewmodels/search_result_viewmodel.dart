@@ -28,13 +28,14 @@ class SearchResultViewmodel extends ChangeNotifier {
 
   void findResource(BuildContext context, String? query) async {
     isLoading = true;
-    notifyListeners();
+   // notifyListeners();
     ResourceResponse? searchResponse =
         await _bookResourceService.searchResources(query!);
 
     if (searchResponse!.status == SUCCESS) {
       _searchQueryList = searchResponse.books;
       _searchLenght = _searchQueryList.length;
+      notifyListeners();
       if (_searchLenght == _EMPTY) {
         isLoading = false;
         notifyListeners();
@@ -45,7 +46,7 @@ class SearchResultViewmodel extends ChangeNotifier {
       if (_searchLenght! > _EMPTY) {
         isLoading = false;
         notifyListeners();
-         logger.logInfo(_searchLenght.toString());
+        logger.logInfo(_searchLenght.toString());
         logger.logInfo("Search succesfull");
       }
     }

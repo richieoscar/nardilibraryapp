@@ -32,7 +32,7 @@ class _AllDepartmentState extends State<AllDepartments> {
           ? ProgressBar(context.watch<AllDepartmentsViewmodel>().isLoading)
           : ListView.builder(
               itemCount: context.read<AllDepartmentsViewmodel>().lenght,
-              physics: ClampingScrollPhysics(),
+              physics: BouncingScrollPhysics(),
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 return InkWell(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nardilibraryapp/resources/app_colors.dart';
 import 'package:nardilibraryapp/resources/app_style.dart';
+import 'package:nardilibraryapp/ui/views/details_screen.dart';
 import 'package:nardilibraryapp/viewmodels/department_books_viewmodel.dart';
 import 'package:nardilibraryapp/widgets/custom_app_bar.dart';
 import 'package:nardilibraryapp/widgets/no_resource.dart';
@@ -51,7 +52,10 @@ class _DepartmentBooksState extends State<DepartmentBooks> {
               : Column(
                   children: [
                     context.read<DepartmentBooksViewmodel>().lenght == 0
-                        ? Noresource(image: 'assets/nobooks3.png', errorMessage: 'No Books Available',)
+                        ? Noresource(
+                            image: 'assets/nobooks3.png',
+                            errorMessage: 'No Books Available',
+                          )
                         : Expanded(
                             child: GridView.builder(
                                 gridDelegate:
@@ -65,15 +69,27 @@ class _DepartmentBooksState extends State<DepartmentBooks> {
                                 itemCount: context
                                     .read<DepartmentBooksViewmodel>()
                                     .lenght,
-                                physics: ClampingScrollPhysics(),
+                                physics: BouncingScrollPhysics(),
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
                                   return InkWell(
                                       onTap: () {
-                                        Navigator.pushNamed(
-                                          context,
-                                          DepartmentBooks.route,
-                                        );
+                                        int? id = context
+                                            .watch<DepartmentBooksViewmodel>()
+                                            .departmentBooks[index]
+                                            .id!;
+                                        String? baseFile = context
+                                            .watch<DepartmentBooksViewmodel>()
+                                            .departmentBooks[index]
+                                            .baseFile;
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => BookDetails(
+                                                id: id,
+                                                baseFile: baseFile!,
+                                              ),
+                                            ));
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
@@ -105,5 +121,3 @@ class _DepartmentBooksState extends State<DepartmentBooks> {
         ));
   }
 }
-
-

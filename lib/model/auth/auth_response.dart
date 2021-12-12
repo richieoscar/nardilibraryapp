@@ -1,7 +1,9 @@
+import 'package:nardilibraryapp/model/auth/auth_data.dart';
+
 class AuthResponse {
   String? _status;
   String? _message;
-  String? _data;
+  AuthData? _data;
 
   String get status => _status!;
 
@@ -20,7 +22,8 @@ class AuthResponse {
   AuthResponse.fromJson(Map<String, dynamic> json) {
     _status = json["status"];
     _message = json["message"];
-    _data = json["data"];
+    if (json["data"] != null) {
+      _data = AuthData.fromJson(json["data"]);
+    }
   }
-
 }

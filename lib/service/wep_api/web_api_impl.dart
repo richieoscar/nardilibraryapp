@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:logger/logger.dart';
 import 'package:nardilibraryapp/constants/state.dart';
 import 'package:nardilibraryapp/model/auth/auth_response.dart';
@@ -15,6 +16,7 @@ import 'package:nardilibraryapp/model/bookresource/search_request.dart';
 import 'package:nardilibraryapp/model/bookresource/resource_response.dart';
 import 'package:nardilibraryapp/model/bookresource/department.dart';
 import 'package:nardilibraryapp/model/bookresource/add_resource.dart';
+import 'package:nardilibraryapp/model/unit.dart';
 import 'package:nardilibraryapp/service/wep_api/web_api.dart';
 import 'package:nardilibraryapp/util/logger.dart';
 import 'package:path_provider/path_provider.dart';
@@ -22,6 +24,8 @@ import 'package:path_provider/path_provider.dart';
 class WebApiImpl implements WebApi {
   static const String _LOGIN_URL = "http://nardlibrary.org/api/User/Login";
   static const String _SIGN_UP_URL = "http://nardlibrary.org/api/User/Register";
+  static const String DELETE_USER_URL =
+      "http://nardlibrary.org/api/User/Delete";
   static const String _FORGOT_PASSWORD_URL =
       "http://nardlibrary.org/api/User/ForgotPassword";
   static const String _CHANAGE_PASSWORD_URL =
@@ -39,6 +43,22 @@ class WebApiImpl implements WebApi {
       "http://nardlibrary.org/api/Resource/GetByDepartment/";
   static const String _FEATURED_BOOKS_URL =
       "http://nardlibrary.org/api/Resource/Featured";
+  static const String _GET_HISTORY_URL =
+      "http://nardlibrary.org/api/Resource/GetHistory";
+
+  static const String _GET_SHELF_URL =
+      "http://nardlibrary.org/api/Resource/GetShelf";
+  static const String _ADD_TO_SHELF_URL =
+      "http://nardlibrary.org/api/Resource/Featured";
+
+  static const String _UPDATE_RESOURCE_URL =
+      "http://nardlibrary.org/api/Resource/Update";
+
+  static const String _UPDATE_PROFILE_URL =
+      "http://nardlibrary.org/api/User/Update";
+  static const String _GET_USER_PROFILE_URL =
+      "http://nardlibrary.org/api/User/Get";
+  static const String _LOGOUT_URL = "http://nardlibrary.org/api/User/Logout";
 
   final Map<String, String> _headers = {
     "Accept": "application/json",
@@ -61,10 +81,11 @@ class WebApiImpl implements WebApi {
 
     if (response.statusCode == 200) {
       loginResponse = AuthResponse.fromJson(jsonDecode(response.body));
+
       return loginResponse;
     } else {
       print(response.body);
-      return AuthResponse(FAILED, "", "");
+      return AuthResponse(FAILED, "", null);
     }
   }
 
@@ -103,7 +124,7 @@ class WebApiImpl implements WebApi {
     }
     if (response.statusCode == 500) {
       signUpResponse = AuthResponse.fromJson(jsonDecode(response.body));
-      return AuthResponse(FAILED, signUpResponse.message, "");
+      return AuthResponse(FAILED, signUpResponse.message, null);
     }
   }
 
@@ -124,7 +145,7 @@ class WebApiImpl implements WebApi {
       return changePwdResponse;
     } else {
       print("Printint Error response" + response.body);
-      return AuthResponse(FAILED, "", "");
+      return AuthResponse(FAILED, "", null);
     }
   }
 
@@ -140,21 +161,43 @@ class WebApiImpl implements WebApi {
       return forgotPwdResponse;
     } else {
       print("Prinitng error response" + response.body);
-      return AuthResponse(FAILED, "", "");
+      return AuthResponse(FAILED, "", null);
     }
   }
 
   @override
-  void addAResource(BookResource resource) {
-    // TODO: implement addAResource
+  Future<bool> addAResource(BookResource? resource) async {
+    var uri = Uri.parse(_ADD_RESOURCE_URL);
+    var request = MultipartRequest(
+      'POST',
+      uri,
+    )
+      ..files.add(await MultipartFile.fromPath('File', resource!.file.path,
+          contentType: MediaType('application', 'pdf')))
+      ..fields['Name'] = resource.name
+      ..fields['MediaType'] = resource.mediaType
+      ..fields['DepartmentID'] = resource.departmentId
+      ..fields['Published'] = resource.published
+      ..fields['Description'] = resource.description
+      ..fields['Author'] = resource.author;
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      _logger.logInfo('Added Resource Succesful');
+      return true;
+    } else {
+      _logger.logInfo('Added Resource Not Succesful');
+      return true;
+    }
   }
 
   @override
   Future<BookResourceResponse?> getBookResourceById(int id) async {
     BookResourceResponse? bookResource;
-    Response response = await get(
-        Uri.parse("https://nardlibrary.org/api/Resource/Get/$id"),
-        headers: _headers);
+    Response response = await post(
+        Uri.parse("https://nardlibrary.org/api/Resource/Get"),
+        headers: _headers,
+        body: json.encode(<String, int>{'ResourceID': id}));
 
     if (response.statusCode == 200) {
       bookResource = BookResourceResponse.fromJson(jsonDecode(response.body));
@@ -246,5 +289,59 @@ class WebApiImpl implements WebApi {
       return ResourceResponse(FAILED, "", []);
     }
   }
-  
+
+  @override
+  Future<void> addDepartment(Department? department) {
+    // TODO: implement addDepartment
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> addToShelf(int resourceId, String username) {
+    // TODO: implement addToShelf
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> addUnit(Unit? unit) {
+    // TODO: implement addUnit
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ResourceResponse?> getHistory() {
+    // TODO: implement getHistory
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ResourceResponse?> getShelfBooks() {
+    // TODO: implement getShelfBooks
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> removeFromShelf(int resourceId, String username) {
+    // TODO: implement removeFromShelf
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<AuthResponse?> deleteUser(String email) async {
+    AuthResponse? deleteresponse;
+    _logger.logInfo("Inside deleteUser()");
+    Response response = await post(Uri.parse(DELETE_USER_URL),
+        headers: _headers,
+        body: jsonEncode(<String, String>{"Username": email}));
+
+    if (response.statusCode == 200) {
+      _logger.logInfo(response.statusCode.toString());
+      _logger.logInfo(response.body);
+      deleteresponse = AuthResponse.fromJson(jsonDecode(response.body));
+      print(deleteresponse.status);
+      return deleteresponse;
+    } else {
+      return AuthResponse(FAILED, "User does not exist", null);
+    }
+  }
 }

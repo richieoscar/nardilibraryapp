@@ -40,7 +40,7 @@ class DepartmentSection extends StatelessWidget {
             SizedBox(
               child: ListView.builder(
                   itemCount: departments.length,
-                  physics: ClampingScrollPhysics(),
+                  physics: BouncingScrollPhysics(),
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return InkWell(
