@@ -61,6 +61,42 @@ class SignUpViewmodel extends ChangeNotifier {
     }
   }
 
+   void signUpUserAsAdmin(
+      UserInfo info, String confirmPassword, BuildContext context) async {
+    if (!passwordMatch(info.password, confirmPassword)) {
+      AppUtils.showSnackBar(context, "Password do not match");
+       isVisible = false;
+      return;
+    }
+
+    if (!isValidLength(info.password, confirmPassword)) {
+       isVisible = false;
+      AppUtils.showSnackBar(context, "Password too short");
+      return;
+    }
+
+    if(!_isChecked){
+       isVisible = false;
+       AppUtils.showSnackBar(context, "Please Agree to T&C");
+      return;
+    }
+
+    if (!validateEmail(info.email)) {
+       isVisible = false;
+      AppUtils.showSnackBar(context, "Invalid Email");
+      return;
+    }
+
+    AuthResponse? response = await _service.SignUpUserAsAdmin(info, context);
+    if (response!.status == SUCCESS) {
+      isVisible = false;
+    }
+
+    if (response.status == FAILED) {
+      isVisible = false;
+    }
+  }
+
   bool passwordMatch(String password, String confirmPassword) {
     return Validate.passwordMatch(password, confirmPassword);
   }

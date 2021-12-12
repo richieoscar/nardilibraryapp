@@ -172,7 +172,7 @@ class WebApiImpl implements WebApi {
       'POST',
       uri,
     )
-      ..files.add(await MultipartFile.fromPath('File', resource!.file.path,
+      ..files.add(await MultipartFile.fromPath('File', resource!.file,
           contentType: MediaType('application', 'pdf')))
       ..fields['Name'] = resource.name
       ..fields['MediaType'] = resource.mediaType

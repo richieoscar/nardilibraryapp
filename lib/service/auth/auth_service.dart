@@ -10,5 +10,6 @@ abstract class AuthService {
   Future<AuthResponse?> forgotPassword(String userName, BuildContext context);
   Future<AuthResponse?> changePassword(String userName,String oldPassword, String newPassword, BuildContext context);
   Future<AuthResponse?> SignUpUser(UserInfo info,BuildContext context);
+  Future<AuthResponse?> SignUpUserAsAdmin(UserInfo info,BuildContext context);
    Future<AuthResponse?> deletUser(String email,BuildContext context);
 }

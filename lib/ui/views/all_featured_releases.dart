@@ -21,6 +21,7 @@ class AllFeaturedRelease extends StatefulWidget {
 class _AllFeaturedRelease extends State<AllFeaturedRelease> {
   @override
   Widget build(BuildContext context) {
+    var viewmodel = Provider.of<AllFeaturedViewmodel>(context);
     final orientation = MediaQuery.of(context).orientation;
     return Scaffold(
       appBar: CustomAppBAr(
@@ -30,8 +31,8 @@ class _AllFeaturedRelease extends State<AllFeaturedRelease> {
           color: AppColors.white,
         ),
       ),
-      body: context.watch<AllFeaturedViewmodel>().isLoading
-          ? ProgressBar(context.watch<AllFeaturedViewmodel>().isLoading)
+      body:  viewmodel.isLoading
+          ? ProgressBar( viewmodel.isLoading)
           : GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: (orientation == Orientation.portrait) ? 2 : 3,
@@ -43,12 +44,10 @@ class _AllFeaturedRelease extends State<AllFeaturedRelease> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                     onTap: () {
-                      int id = context
-                          .watch<AllFeaturedViewmodel>()
+                      int? id =  viewmodel
                           .featuredBooks[index]
-                          .id;
-                          String? baseFile = context
-                          .watch<AllFeaturedViewmodel>()
+                          .getId!;
+                      String? baseFile =  viewmodel
                           .featuredBooks[index]
                           .baseFile;
                       Navigator.push(
@@ -56,7 +55,7 @@ class _AllFeaturedRelease extends State<AllFeaturedRelease> {
                         MaterialPageRoute(
                           builder: (context) => BookDetails(
                             id: id,
-                            baseFile:baseFile! ,
+                            baseFile: baseFile!,
                           ),
                         ),
                       );
@@ -73,8 +72,7 @@ class _AllFeaturedRelease extends State<AllFeaturedRelease> {
                           color: AppColors.white,
                           child: Image(
                               fit: BoxFit.fill,
-                              image: NetworkImage(context
-                                  .watch<AllFeaturedViewmodel>()
+                              image: NetworkImage( viewmodel
                                   .featuredBooks[index]
                                   .thumbnail)),
                         ),

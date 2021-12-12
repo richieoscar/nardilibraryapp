@@ -77,14 +77,14 @@ class _HomeState extends State<Home> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "NardLibraryApp",
-    // home: AdminFunction(),
+  // home: AddResource(),
       theme: ThemeData.light().copyWith(
         primaryColor: AppColors.nardDark,
         buttonTheme: ButtonThemeData(
           buttonColor: AppColors.backgroundColor
         )
       ),
-   initialRoute: Splash.routeName,
+  initialRoute: Splash.routeName,
       routes: {
         Splash.routeName: (_) => const Splash(),
         NardAccess.routeName: (_) => const NardAccess(),

@@ -51,15 +51,15 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 10),
                       child: Text(
-                       viewmodel.getRole() == ADMIN ? "Hello Admin, ${viewmodel.getUsername()!}":"Hello, ${viewmodel.getUsername()!}",
-                        style: AppStyle.userNameText,
+                       viewmodel.getRole() == ADMIN ? "Hello Admin,":"Hello, ${viewmodel.getUsername()!}",
+                        style:  AppStyle.blackBoldText,
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
                         "Welcome Back!",
-                        style: AppStyle.blackBoldText,
+                        style: AppStyle.mediumText,
                       ),
                     ),
                     const SizedBox(

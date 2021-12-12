@@ -19,7 +19,7 @@ class AdminFunction extends StatelessWidget {
         elevation: 0,
         centerTitle: false,
         title: Text(
-          "Admin",
+          "Nard Admin",
           style: AppStyle.appBarText,
         ),
       ),
@@ -79,6 +79,9 @@ class AdminFunction extends StatelessWidget {
                         title: "Add Resource",
                         iconData: Icons.bookmark_add_rounded,
                         backgroundColor: Colors.purple,
+                        onpressed: (){
+                          Navigator.pushNamed(context, AddResource.route);
+                        },
                       ),
                     ),
                     Expanded(

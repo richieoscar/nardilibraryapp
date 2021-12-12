@@ -38,8 +38,8 @@ class _DashBoardState extends State<AdminDashboard> {
               icon: Icon(Icons.book),
             ),
              BottomNavigationBarItem(
-              label: 'Todo',
-              icon: Icon(Icons.settings),
+              label: 'Admin',
+              icon: Icon(Icons.admin_panel_settings),
             ),
             BottomNavigationBarItem(
               label: 'Me',

@@ -53,6 +53,7 @@ class _BookDetailState extends State<BookDetails> {
 
   @override
   Widget build(BuildContext context) {
+    var viewmodel = Provider.of<BookDetailViewmodel>(context);
     return Scaffold(
       backgroundColor: AppColors.lightGrey,
       appBar: AppBar(
@@ -81,8 +82,8 @@ class _BookDetailState extends State<BookDetails> {
         ],
       ),
       body: SafeArea(
-          child: context.watch<BookDetailViewmodel>().isLoading
-              ? ProgressBar(context.watch<BookDetailViewmodel>().isLoading)
+          child: viewmodel.isLoading
+              ? ProgressBar(viewmodel.isLoading)
               : SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,10 +104,9 @@ class _BookDetailState extends State<BookDetails> {
                               child: Card(
                                 elevation: 10,
                                 child: Image.network(
-                                  context
-                                      .watch<BookDetailViewmodel>()
+                                 viewmodel
                                       .book
-                                      .thumbnail,
+                                      .thumbnail??"assets/nobook.png",
                                   fit: BoxFit.fill,
                                 ),
                               ),
@@ -117,7 +117,7 @@ class _BookDetailState extends State<BookDetails> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                context.watch<BookDetailViewmodel>().book.name,
+                                context.watch<BookDetailViewmodel>().book.name??"",
                                 style: AppStyle.blackBoldText,
                                 textAlign: TextAlign.center,
                               ),
@@ -126,7 +126,7 @@ class _BookDetailState extends State<BookDetails> {
                               height: 12,
                             ),
                             Text(
-                              "Author: ${context.watch<BookDetailViewmodel>().book.author}",
+                              "Author: ${context.watch<BookDetailViewmodel>().book.author ??''}",
                               style: AppStyle.bookDetailText,
                               textAlign: TextAlign.center,
                             ),
@@ -184,7 +184,7 @@ class _BookDetailState extends State<BookDetails> {
                                 context
                                     .watch<BookDetailViewmodel>()
                                     .book
-                                    .description,
+                                    .description ??"No description",
                                 style: AppStyle.bookDetailBodyText)),
                       ),
                       Padding(

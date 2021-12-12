@@ -57,7 +57,7 @@ class _AdminSignUpState extends State<AdminSignUp> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(
-                  height: 29,
+                  height: 15,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -66,7 +66,6 @@ class _AdminSignUpState extends State<AdminSignUp> {
                     style: AppStyle.headline1,
                   ),
                 ),
-               
                 const SizedBox(height: 16),
                 CustomTextFormField(
                     headerTitle: "Firstname",
@@ -148,8 +147,6 @@ class _AdminSignUpState extends State<AdminSignUp> {
                 const SizedBox(height: 42),
                 ProgressBar(context.watch<SignUpViewmodel>().isVisible),
                 const SizedBox(height: 30),
-               
-               
               ],
             ),
           ),
@@ -199,10 +196,21 @@ class _AdminSignUpState extends State<AdminSignUp> {
           _roleController.text.trim(),
           "",
           _lastnameController.text.trim());
-      context
-          .read<SignUpViewmodel>()
-          .signUpUser(info, _confirmPasswordController.text.trim(), context);
+      context.read<SignUpViewmodel>().signUpUserAsAdmin(
+          info, _confirmPasswordController.text.trim(), context);
+      clear();
     }
+  }
+
+  void clear() {
+    _usernameController.text = "";
+    _passwordController.text = "";
+    _emailController.text = "";
+    _firstnameController.text = "";
+    _folioController.text = "";
+    _phoneNumberController.text = "";
+    _roleController.text = "";
+    _lastnameController.text = "";
   }
 
   Widget _genderDropDown(

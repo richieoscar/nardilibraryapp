@@ -37,6 +37,7 @@ class _DepartmentBooksState extends State<DepartmentBooks> {
   Widget build(BuildContext context) {
     //var id = ModalRoute.of(context).settings!.arguments;
     //getBooksBYDepartment();
+    var viewmodel = Provider.of<DepartmentBooksViewmodel>(context);
     final orientation = MediaQuery.of(context).orientation;
     return Scaffold(
         appBar: CustomAppBAr(
@@ -47,11 +48,11 @@ class _DepartmentBooksState extends State<DepartmentBooks> {
           ),
         ),
         body: SafeArea(
-          child: context.watch<DepartmentBooksViewmodel>().isLoading
-              ? ProgressBar(context.watch<DepartmentBooksViewmodel>().isLoading)
+          child: viewmodel.isLoading
+              ? ProgressBar(viewmodel.isLoading)
               : Column(
                   children: [
-                    context.read<DepartmentBooksViewmodel>().lenght == 0
+                    viewmodel.lenght == 0
                         ? Noresource(
                             image: 'assets/nobooks3.png',
                             errorMessage: 'No Books Available',
@@ -66,20 +67,17 @@ class _DepartmentBooksState extends State<DepartmentBooks> {
                                             : 3,
                                         //mainAxisSpacing: 5,
                                         crossAxisSpacing: 2),
-                                itemCount: context
-                                    .read<DepartmentBooksViewmodel>()
+                                itemCount: viewmodel
                                     .lenght,
                                 physics: BouncingScrollPhysics(),
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
                                   return InkWell(
                                       onTap: () {
-                                        int? id = context
-                                            .watch<DepartmentBooksViewmodel>()
+                                        int? id = viewmodel
                                             .departmentBooks[index]
-                                            .id!;
-                                        String? baseFile = context
-                                            .watch<DepartmentBooksViewmodel>()
+                                            .getId!;
+                                        String? baseFile = viewmodel
                                             .departmentBooks[index]
                                             .baseFile;
                                         Navigator.push(
@@ -105,9 +103,7 @@ class _DepartmentBooksState extends State<DepartmentBooks> {
                                             color: AppColors.white,
                                             child: Image(
                                               fit: BoxFit.fill,
-                                              image: NetworkImage(context
-                                                  .watch<
-                                                      DepartmentBooksViewmodel>()
+                                              image: NetworkImage(viewmodel
                                                   .departmentBooks[index]
                                                   .thumbnail),
                                             ),

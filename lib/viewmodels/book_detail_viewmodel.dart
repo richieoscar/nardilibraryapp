@@ -17,7 +17,7 @@ class BookDetailViewmodel extends ChangeNotifier {
   AppLogger logger = AppLogger();
 
   Book? _book;
-  bool _isLoading = false;
+  bool _isLoading = true;
   File? _file;
   String? _filePath;
 
@@ -28,7 +28,7 @@ class BookDetailViewmodel extends ChangeNotifier {
 
   Future getBooksResourceById(BuildContext context, int id) async {
     _isLoading = true;
-    notifyListeners();
+ //   notifyListeners();
     BookResourceResponse? resource =
         await _bookResourceService.getBookResourceById(id);
 

@@ -72,6 +72,23 @@ class AuthServiceImpl implements AuthService {
   }
 
   @override
+  Future<AuthResponse?> SignUpUserAsAdmin(
+      UserInfo info, BuildContext context) async {
+    AuthResponse? response = await _apiService.SignUpUser(info);
+
+    if (response!.status == SUCCESS) {
+      print(response);
+      AppUtils.showSnackBar(context, "User Created Succesfully");
+      return response;
+    }
+    if (response.status == FAILED) {
+      AppUtils.showSnackBar(context, response.message);
+      print(response.status);
+    }
+    return response;
+  }
+
+  @override
   Future<AuthResponse?> changePassword(String userName, String oldPassword,
       String newPassword, BuildContext context) async {
     AuthResponse? response =

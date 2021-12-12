@@ -3,7 +3,7 @@
 import 'dart:io';
 
 class BookResource {
-  File? _file;
+  String? _file;
   String? _name;
   String? _mediaType;
   String? _departmentId;
@@ -13,7 +13,7 @@ class BookResource {
 
   get file => _file!;
 
- set setfile(File? value) => _file = value;
+ set setfile(String? value) => _file = value;
 
   get name => _name;
 
@@ -48,6 +48,14 @@ class BookResource {
     this._description,
     this._author,
   );
+
+  @override
+  String toString() {
+    
+    return super.toString();
+  }
+
+
 
   
 }
