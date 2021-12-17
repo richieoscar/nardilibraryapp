@@ -2,13 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:nardilibraryapp/model/Books.dart';
 import 'package:nardilibraryapp/resources/app_colors.dart';
 import 'package:nardilibraryapp/resources/app_style.dart';
+import 'package:nardilibraryapp/ui/views/forgot_password_screen.dart';
+import 'package:nardilibraryapp/ui/views/update_profile.dart';
+import 'package:nardilibraryapp/ui/views/view_profile.dart';
+import 'package:nardilibraryapp/viewmodels/login_form_viewmodel.dart';
+import 'package:nardilibraryapp/viewmodels/view_profile_viewmodel.dart';
 import 'package:nardilibraryapp/widgets/custom_home_section.dart';
+import 'package:provider/provider.dart';
+
+import 'nard_access.dart';
 
 class Profile extends StatelessWidget {
   const Profile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var viewmodel = Provider.of<LoginFormViewModel>(context);
     return Scaffold(
         backgroundColor: AppColors.faintColor,
         body: SafeArea(
@@ -25,23 +34,26 @@ class Profile extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      
-                     
-                           Column(
-                             crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 30,),
-                            Text(
-                              "Oscar Anyiam",
-                              style: AppStyle.whiteBoldText,
-                            ),
-                            SizedBox(height: 8,),
-                            Text("Medical Doctor",style:AppStyle.profileText),
-                             SizedBox(height: 8,),
-                            Text("User ID 9082QW22",style:AppStyle.profileText),
-                          ],
-                        ),
-                      
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 30,
+                          ),
+                          Text(
+                            "Account",
+                            style: AppStyle.whiteBoldText,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text("User ID ${viewmodel.user!.id}", style: AppStyle.profileText),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                           Text("Username:  ${viewmodel.user!.userName}", style: AppStyle.profileText),
+                        ],
+                      ),
                       CircleAvatar(
                         radius: 30,
                         backgroundImage: AssetImage("assets/profile.png"),
@@ -50,16 +62,51 @@ class Profile extends StatelessWidget {
                   ),
                 ),
               ),
-             ProfileMenu(title: "View Full Profile", icon: Icons.person),
-             ProfileMenu(title: "Edit Profile", icon: Icons.edit),
-             ProfileMenu(title: "Change Password", icon: Icons.lock),
-             
-             SizedBox(height: 10,),
-             ProfileMenu(title: "Share to Friends", icon: Icons.share_outlined),
-             ProfileMenu(title: "About Us", icon: Icons.face_sharp),
-              SizedBox(height: 10,),
-            // HomeSection(sectionTitle: "Published Books (${BookTest.getbooks().length})", books:BookTest.getbooks(), seeMore: (){})
+              ProfileMenu(
+                  title: "View Full Profile",
+                  icon: Icons.person,
+                  onpressed: () {
+                    String? email = viewmodel.getUsername;
 
+                    print(email);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ViewProfile(email: email!),
+                      ),
+                    );
+                  }),
+              ProfileMenu(title: "Edit Profile", icon: Icons.edit, onpressed:(){
+                 Navigator.pushNamed(context, UpdateProfile.route);
+              }),
+              ProfileMenu(
+                title: "Change Password",
+                icon: Icons.lock,
+                onpressed: () {
+                  Navigator.pushNamed(context, ForgotPassword.routeName);
+                },
+              ),
+
+              const SizedBox(
+                height: 10,
+              ),
+              // ProfileMenu(
+              //     title: "Share to Friends", icon: Icons.share_outlined),
+              ProfileMenu(
+                title: "Log Out",
+                icon: Icons.logout,
+                onpressed: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, NardAccess.routeName, (route) => false);
+                },
+                color: Colors.red,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              //
+              //
+              // HomeSection(sectionTitle: "Published Books (${BookTest.getbooks().length})", books:BookTest.getbooks(), seeMore: (){}),
             ],
           ),
         ));
@@ -69,23 +116,38 @@ class Profile extends StatelessWidget {
 class ProfileMenu extends StatelessWidget {
   String title;
   IconData icon;
-  ProfileMenu({required this.title, required this.icon});
+  Color? color;
+  VoidCallback? onpressed;
+  ProfileMenu(
+      {required this.title,
+      required this.icon,
+      this.onpressed,
+      this.color = Colors.black});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: 40,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(title, style: AppStyle.mediumText,),
-              Icon(icon)
-            ],
-          ), 
+    return GestureDetector(
+      onTap: onpressed,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: 40,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  style: AppStyle.mediumText,
+                ),
+                Icon(
+                  icon,
+                  color: color,
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );

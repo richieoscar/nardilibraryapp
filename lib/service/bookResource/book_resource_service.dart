@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:nardilibraryapp/model/bookresource/add_resource.dart';
 import 'package:nardilibraryapp/model/bookresource/book_response.dart';
 import 'package:nardilibraryapp/model/bookresource/department.dart';
@@ -15,4 +16,7 @@ abstract class BookResourceService {
   Future<ResourceResponse?> searchResources(String request);
   Future<bool> addAResource(BookResource resource);
   Future<File?> getPDF(String url);
+   Future<bool> deleteAResource(int resourceId, BuildContext context);
+    Future<bool> addDepartment(String name, BuildContext context);
+   
 }

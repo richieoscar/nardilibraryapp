@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:nardilibraryapp/model/bookresource/book_response.dart';
 import 'package:nardilibraryapp/model/bookresource/department_response.dart';
 import 'package:nardilibraryapp/model/bookresource/search_request.dart';
@@ -61,5 +62,17 @@ class BookResourceImpl extends BookResourceService {
   Future<File?> getPDF(String url) async {
     File? file = await _pdfApi.loadFromNetwork(url);
     return file!;
+  }
+
+  @override
+  Future<bool> deleteAResource(int resourceId, BuildContext context) async {
+    bool isDeleleted = await _webApi.deleteResource(resourceId, context);
+    return isDeleleted;
+  }
+
+  @override
+  Future<bool> addDepartment(String name, BuildContext context) async {
+    bool isAdded = await _webApi.addDepartment(name);
+    return isAdded;
   }
 }

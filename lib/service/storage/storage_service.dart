@@ -6,4 +6,7 @@ abstract class StorageService {
   Future<void> saveRole(String role);
 
   String? getRole();
+
+  Future<void>? saveEmail(String email);
+  String? getEmail();
 }

@@ -8,6 +8,7 @@ class StorageServiceImpl implements StorageService {
 
   SharedPreferences? _userNamePref;
   SharedPreferences? _userRolePref;
+  SharedPreferences? _userEmailPref;
 
   @override
   String? getUserName() {
@@ -29,5 +30,16 @@ class StorageServiceImpl implements StorageService {
   Future<void> saveRole(String role) async {
     _userRolePref = await SharedPreferences.getInstance();
     _userRolePref!.setString("role", role);
+  }
+
+  @override
+  Future<void>? saveEmail(String email) async {
+    _userEmailPref = await SharedPreferences.getInstance();
+    _userEmailPref!.setString("email", email);
+  }
+
+  @override
+  String? getEmail() {
+   return  _userEmailPref!.getString("email");
   }
 }

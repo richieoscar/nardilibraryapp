@@ -3,6 +3,7 @@ import 'package:nardilibraryapp/constants/state.dart';
 import 'package:nardilibraryapp/model/auth/user_info.dart';
 import 'package:nardilibraryapp/resources/app_colors.dart';
 import 'package:nardilibraryapp/resources/app_style.dart';
+import 'package:nardilibraryapp/viewmodels/login_form_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/signup_viewmodel.dart';
 import 'package:nardilibraryapp/widgets/custom_app_bar.dart';
 import 'package:nardilibraryapp/widgets/custom_button.dart';
@@ -13,15 +14,15 @@ import 'package:provider/provider.dart';
 
 import 'forgot_password_screen.dart';
 
-class AdminSignUp extends StatefulWidget {
-  static const route = 'adminsignup';
-  const AdminSignUp({Key? key}) : super(key: key);
+class UpdateProfile extends StatefulWidget {
+  static const route = '/updateProfile';
+  const UpdateProfile({Key? key}) : super(key: key);
 
   @override
-  _AdminSignUpState createState() => _AdminSignUpState();
+  _UpdateProfileState createState() => _UpdateProfileState();
 }
 
-class _AdminSignUpState extends State<AdminSignUp> {
+class _UpdateProfileState extends State<UpdateProfile> {
   final TextEditingController _firstnameController = TextEditingController();
   final TextEditingController _lastnameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
@@ -35,6 +36,8 @@ class _AdminSignUpState extends State<AdminSignUp> {
   final TextEditingController _designationController = TextEditingController();
   final TextEditingController _roleController = TextEditingController();
   final TextEditingController _commencementController = TextEditingController();
+  final TextEditingController _genderController = TextEditingController();
+  final TextEditingController _otherNameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
@@ -47,8 +50,10 @@ class _AdminSignUpState extends State<AdminSignUp> {
 
   @override
   Widget build(BuildContext context) {
+    initControllers();
+    final viewmodel = Provider.of<LoginFormViewModel>(context);
     return Scaffold(
-      appBar: CustomAppBAr(title: "Add User", icon: Icon(Icons.ac_unit)),
+      appBar: CustomAppBAr(title: "Update", icon: Icon(Icons.ac_unit)),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Form(
@@ -57,102 +62,139 @@ class _AdminSignUpState extends State<AdminSignUp> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(
-                  height: 15,
+                  height: 20,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    "Create a User",
+                    "Update Profile",
                     style: AppStyle.headline1,
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(
+                  height: 10,
+                ),
                 CustomTextFormField(
                     headerTitle: "Firstname",
-                    hintText: "Firstname",
+                    hintText: viewmodel.user!.firstName,
                     controller: _firstnameController,
                     inputType: TextInputType.text),
                 const SizedBox(height: 10),
                 CustomTextFormField(
                     headerTitle: "Lastname",
-                    hintText: "Lastname",
+                    hintText: viewmodel.user!.surname ?? "",
                     controller: _lastnameController,
                     inputType: TextInputType.text),
                 const SizedBox(height: 10),
                 CustomTextFormField(
                   headerTitle: "Username",
-                  hintText: "Username",
+                  hintText: viewmodel.user!.userName ?? "",
                   controller: _usernameController,
                   inputType: TextInputType.text,
                 ),
                 const SizedBox(height: 10),
                 CustomTextFormField(
                     headerTitle: "Email",
-                    hintText: "Email",
+                    hintText: viewmodel.user!.email ?? "",
                     controller: _emailController,
                     inputType: TextInputType.emailAddress),
                 const SizedBox(height: 10),
                 CustomTextFormField(
                     headerTitle: "Phone Number",
-                    hintText: "Phone Number",
+                    hintText: viewmodel.user!.phone ?? "",
                     controller: _phoneNumberController,
                     inputType: TextInputType.phone),
                 const SizedBox(height: 10),
                 CustomTextFormField(
-                    headerTitle: "Folio",
-                    hintText: "Folio",
-                    controller: _folioController,
-                    inputType: TextInputType.number),
+                    headerTitle: "Gender",
+                    hintText: viewmodel.user!.gender ?? "",
+                    controller: _genderController,
+                    inputType: TextInputType.text),
                 const SizedBox(height: 10),
                 CustomTextFormField(
-                    headerTitle: "Role",
-                    hintText: "Role",
-                    controller: _roleController,
+                    headerTitle: "Institution",
+                    hintText: viewmodel.user!.institution ?? "",
+                    controller: _institutionController,
+                    inputType: TextInputType.text),
+                CustomTextFormField(
+                    headerTitle: "DOB( dd/mm/yy )",
+                    hintText: viewmodel.user!.dob ?? "",
+                    controller: _dobController,
+                    inputType: TextInputType.number),
+                CustomTextFormField(
+                    headerTitle: "Address",
+                    hintText: viewmodel.user!.address ?? "",
+                    controller: _addressController,
+                    inputType: TextInputType.text),
+                CustomTextFormField(
+                    headerTitle: "Designation",
+                    hintText: viewmodel.user!.designation ?? "",
+                    controller: _designationController,
+                    inputType: TextInputType.text),
+                CustomTextFormField(
+                    headerTitle: "Department",
+                    hintText: viewmodel.user!.department ?? "",
+                    controller: _departmentController,
+                    inputType: TextInputType.text),
+                CustomTextFormField(
+                    headerTitle: "Commencement Year",
+                    hintText: viewmodel.user!.commencementYear,
+                    controller: _commencementController,
                     inputType: TextInputType.number),
                 const SizedBox(height: 10),
-                PasswordTextFormField(
-                  headerTitle: "Password",
-                  hintText: "Password",
-                  controller: _passwordController,
-                ),
-                const SizedBox(height: 10),
-                PasswordTextFormField(
-                    headerTitle: "Confirm Password",
-                    hintText: "Confirm Password",
-                    controller: _confirmPasswordController),
-                const SizedBox(height: 32),
-                Row(
-                  children: [
-                    Checkbox(
-                        activeColor: AppColors.backgroundColor,
-                        value: isChecked,
-                        onChanged: (value) {
-                          isChecked = context
-                              .read<SignUpViewmodel>()
-                              .isChecked = value!;
-                        }),
-                    Text("I agree to all the ", style: AppStyle.smallText),
-                    InkWell(
-                        onTap: () {},
-                        child: Text("terms & condition of",
-                            style: AppStyle.blueText)),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: Text("Nardlibrary", style: AppStyle.smallText),
-                ),
-                const SizedBox(height: 51),
-                CustomButton(label: "CREATE USER", onclick: () => _signUp(), color:Colors.blue),
+                CustomButton(label: "SAVE", onclick: () => _save()),
                 const SizedBox(height: 42),
-                ProgressBar(context.watch<SignUpViewmodel>().isVisible),
-                const SizedBox(height: 30),
+                ProgressBar(context.watch<LoginFormViewModel>().isVisible),
+                const SizedBox(height: 20),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  void initControllers() {
+    final viewmodel = Provider.of<LoginFormViewModel>(context);
+
+    viewmodel.user!.firstName != null
+        ? _firstnameController.text = viewmodel.user!.firstName
+        : null;
+    viewmodel.user!.surname != null
+        ? _lastnameController.text = viewmodel.user!.surname
+        : null;
+    viewmodel.user!.userName != null
+        ? _usernameController.text = viewmodel.user!.userName
+        : null;
+    viewmodel.user!.email != null
+        ? _emailController.text = viewmodel.user!.email
+        : null;
+    viewmodel.user!.phone != null
+        ? _phoneNumberController.text = viewmodel.user!.phone
+        : null;
+    viewmodel.user!.firstName != null
+        ? _genderController.text = viewmodel.user!.gender
+        : null;
+
+    viewmodel.user!.institution != null
+        ? _institutionController.text = viewmodel.user!.institution
+        : null;
+    viewmodel.user!.dob != null
+        ? _dobController.text = viewmodel.user!.dob
+        : null;
+    viewmodel.user!.address != null
+        ? _addressController.text = viewmodel.user!.address
+        : null;
+    viewmodel.user!.designation != null
+        ? _designationController.text = viewmodel.user!.designation
+        : null;
+    viewmodel.user!.department != null
+        ? _departmentController.text = viewmodel.user!.department
+        : null;
+
+    viewmodel.user!.commencementYear != null
+        ? _commencementController.text = viewmodel.user!.commencementYear
+        : null;
   }
 
   @override
@@ -173,47 +215,32 @@ class _AdminSignUpState extends State<AdminSignUp> {
     _confirmPasswordController.dispose();
     _designationController.dispose();
     _dobController.dispose();
+    _genderController.dispose();
   }
 
-  void _signUp() {
+  void _save() {
     if (_formKey.currentState!.validate()) {
-      context.read<SignUpViewmodel>().isVisible = true;
-      int role = int.parse(
-        _roleController.text.trim(),
-      );
+      context.read<LoginFormViewModel>().isVisible = true;
       UserInfo info = UserInfo(
           _usernameController.text.trim(),
-          _passwordController.text.trim(),
-          "",
-          "",
-          "",
-          "",
-          "",
+          context.read<LoginFormViewModel>().user!.password,
+          _addressController.text.trim(),
+          _commencementController.text.trim(),
+          _departmentController.text.trim(),
+          _designationController.text.trim(),
+          _dobController.text.trim(),
           _emailController.text.trim(),
           _firstnameController.text.trim(),
-          _folioController.text.trim(),
-          "",
-          "",
-          "",
+          context.read<LoginFormViewModel>().user!.folio,
+          _genderController.text.trim(),
+          _institutionController.text.trim(),
+          _otherNameController.text.trim(),
           _phoneNumberController.text.trim(),
-          role,
-          "",
+          context.read<LoginFormViewModel>().user!.role,
+          _stateController.text.trim(),
           _lastnameController.text.trim());
-      context.read<SignUpViewmodel>().signUpUserAsAdmin(
-          info, _confirmPasswordController.text.trim(), context);
-      clear();
+      context.read<LoginFormViewModel>().updateUser(info, context);
     }
-  }
-
-  void clear() {
-    _usernameController.text = "";
-    _passwordController.text = "";
-    _emailController.text = "";
-    _firstnameController.text = "";
-    _folioController.text = "";
-    _phoneNumberController.text = "";
-    _roleController.text = "";
-    _lastnameController.text = "";
   }
 
   Widget _genderDropDown(

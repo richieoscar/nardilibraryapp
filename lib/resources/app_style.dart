@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nardilibraryapp/resources/app_colors.dart';
 
@@ -22,6 +23,12 @@ class AppStyle {
           fontStyle: FontStyle.normal,
           fontSize: 12,
           color: AppColors.headLineColor));
+           static TextStyle smallGreenText = GoogleFonts.montserrat(
+      textStyle: TextStyle(
+          fontWeight: FontWeight.w400,
+          fontStyle: FontStyle.normal,
+          fontSize: 12,
+          color: Colors.green));
 
   static TextStyle mediumText = GoogleFonts.montserrat(
       textStyle: TextStyle(

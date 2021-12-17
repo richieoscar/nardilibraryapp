@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:nardilibraryapp/constants/state.dart';
 import 'package:nardilibraryapp/model/auth/auth_response.dart';
 import 'package:nardilibraryapp/model/auth/user_info.dart';
+import 'package:nardilibraryapp/model/auth/user_response.dart';
 import 'package:nardilibraryapp/service/auth/auth_service.dart';
 import 'package:nardilibraryapp/service/navigation/nav_service.dart';
 import 'package:nardilibraryapp/service/navigation/nav_service_impl.dart';
@@ -136,6 +137,37 @@ class AuthServiceImpl implements AuthService {
       if (response.status == FAILED) {
         print(response);
       }
+    }
+    return response;
+  }
+
+  @override
+  Future<UserResponse?> getUser(String email, BuildContext context) async {
+    // TODO: implement getUser
+    UserResponse? userResponse = await _apiService.getUser(email);
+    if (userResponse != null) {
+      if (userResponse.status == SUCCESS) {
+        return userResponse;
+      }
+      if (userResponse.status == FAILED) {
+        print(userResponse.message);
+      }
+    }
+    return userResponse;
+  }
+
+  @override
+  Future<UserResponse?> updateUser(UserInfo info, BuildContext context) async {
+    UserResponse? response = await _apiService.updateUser(info);
+
+    if (response!.status == SUCCESS) {
+      print(response);
+       AppUtils.showSnackBar(context, "Profile Updated");
+      return response;
+    }
+    if (response.status == FAILED) {
+      AppUtils.showSnackBar(context, response.message!);
+      print(response.status);
     }
     return response;
   }

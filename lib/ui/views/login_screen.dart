@@ -25,6 +25,12 @@ class _LoginFormState extends State<LoginForm> {
   bool _visible = false;
 
   @override
+  void initstate() {
+   
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -76,7 +82,6 @@ class _LoginFormState extends State<LoginForm> {
                           hintStyle: const TextStyle(fontSize: 12),
                           fillColor: AppColors.faintColor,
                           focusColor: AppColors.backgroundColor,
-                          
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -157,7 +162,7 @@ class _LoginFormState extends State<LoginForm> {
                 const SizedBox(
                   height: 20,
                 ),
-                ProgressBar( context.watch<LoginFormViewModel>().isVisible),
+                ProgressBar(context.watch<LoginFormViewModel>().isVisible),
                 const SizedBox(
                   height: 26,
                 ),
@@ -183,13 +188,11 @@ class _LoginFormState extends State<LoginForm> {
 
   _login(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
-      context.read<LoginFormViewModel>().isVisible = true;
-      context
-          .read<LoginFormViewModel>()
-          .login(_emailController.text.trim(), _passwordController.text.trim(), context);
-      
+  
+      context.read<LoginFormViewModel>().login(_emailController.text.trim(),
+          _passwordController.text.trim(), context);
+
+        
     }
   }
 }
-
-

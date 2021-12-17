@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:nardilibraryapp/model/auth/auth_response.dart';
 import 'package:nardilibraryapp/model/auth/user_info.dart';
+import 'package:nardilibraryapp/model/auth/user_response.dart';
 import 'package:nardilibraryapp/model/bookresource/add_resource.dart';
 import 'package:nardilibraryapp/model/bookresource/book_response.dart';
 import 'package:nardilibraryapp/model/bookresource/department.dart';
@@ -16,7 +18,9 @@ abstract class WebApi {
   Future<AuthResponse?> changePassword(
       String userName, String password, String newPassword);
   Future<AuthResponse?> SignUpUser(UserInfo info);
-   Future<AuthResponse?> deleteUser(String email);
+  Future<AuthResponse?> deleteUser(String email);
+  Future<UserResponse?> getUser(String email);
+  Future<UserResponse?> updateUser(UserInfo info);
 
   Future<ResourceResponse?> getFeaturedBooks();
   Future<DepartmentResponse?> getDepartments();
@@ -26,8 +30,9 @@ abstract class WebApi {
   Future<bool> addAResource(BookResource? resource);
   Future<ResourceResponse?> getHistory();
   Future<bool> addToShelf(int resourceId, String username);
-  Future<void> removeFromShelf(int resourceId, String username);
+  Future<bool> removeFromShelf(int resourceId, String username);
   Future<ResourceResponse?> getShelfBooks();
-  Future<void> addDepartment(Department? department);
-  Future<void> addUnit(Unit? unit);
+  Future<bool> addDepartment(String? department);
+  Future<bool> addUnit(Unit? unit);
+  Future<bool> deleteResource(int? id, BuildContext context);
 }

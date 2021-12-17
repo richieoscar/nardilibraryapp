@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:nardilibraryapp/constants/state.dart';
 import 'package:nardilibraryapp/resources/app_colors.dart';
 import 'package:nardilibraryapp/resources/app_style.dart';
+import 'package:nardilibraryapp/ui/views/add_department.dart';
 import 'package:nardilibraryapp/ui/views/add_resource.dart';
 import 'package:nardilibraryapp/ui/views/admin_sign_up.dart';
+import 'package:nardilibraryapp/ui/views/admin_update_user.dart';
+import 'package:nardilibraryapp/ui/views/delete_resource.dart';
 import 'package:nardilibraryapp/ui/views/delete_user_screen.dart';
 import 'package:nardilibraryapp/widgets/admin_options.dart';
 import 'package:nardilibraryapp/widgets/custom_app_bar.dart';
@@ -62,7 +65,10 @@ class AdminFunction extends StatelessWidget {
                         child: AdminOptions(
                       title: "Update User",
                       iconData: Icons.update,
-                      backgroundColor: Colors.yellow,
+                      backgroundColor: Colors.green,
+                      onpressed: (){
+                          Navigator.pushNamed(context, AdminUpdateUserProfile.route);
+                      },
                     )),
                   ],
                 ),
@@ -89,6 +95,9 @@ class AdminFunction extends StatelessWidget {
                         title: "Delete Resource",
                         iconData: Icons.delete_rounded,
                         backgroundColor: Colors.red[300],
+                         onpressed: (){
+                          Navigator.pushNamed(context, DeleteResource.routeName);
+                        },
                       ),
                     ),
                     Expanded(
@@ -112,6 +121,9 @@ class AdminFunction extends StatelessWidget {
                         title: "Add Department",
                         iconData: Icons.school,
                         backgroundColor: AppColors.backgroundColor,
+                         onpressed: (){
+                          Navigator.pushNamed(context, AddDepartment.routeName);
+                        },
                       ),
                     ),
                     Expanded(

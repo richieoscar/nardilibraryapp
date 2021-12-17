@@ -10,6 +10,7 @@ import 'package:logger/logger.dart';
 import 'package:nardilibraryapp/constants/state.dart';
 import 'package:nardilibraryapp/model/auth/auth_response.dart';
 import 'package:nardilibraryapp/model/auth/user_info.dart';
+import 'package:nardilibraryapp/model/auth/user_response.dart';
 import 'package:nardilibraryapp/model/bookresource/book_response.dart';
 import 'package:nardilibraryapp/model/bookresource/department_response.dart';
 import 'package:nardilibraryapp/model/bookresource/search_request.dart';
@@ -26,6 +27,8 @@ class WebApiImpl implements WebApi {
   static const String _SIGN_UP_URL = "http://nardlibrary.org/api/User/Register";
   static const String DELETE_USER_URL =
       "http://nardlibrary.org/api/User/Delete";
+  static const String UPDATE_USER_URL =
+      "http://nardlibrary.org/api/User/Update";
   static const String _FORGOT_PASSWORD_URL =
       "http://nardlibrary.org/api/User/ForgotPassword";
   static const String _CHANAGE_PASSWORD_URL =
@@ -37,6 +40,8 @@ class WebApiImpl implements WebApi {
       "http://nardlibrary.org/api/Resource/Get/";
   static const String _FIND_RESOURCE_URL =
       "http://nardlibrary.org/api/Resource/Find";
+  static const String _DELETE_RESOURCE_URL =
+      "http://nardlibrary.org/api/Resource/Delete";
   static const String _GET_ALL_DEPARTMENTS_URL =
       "http://nardlibrary.org/api/Department/GetAll";
   static const String _GET_RESOURCE_BY_DEPARTMENT_URL =
@@ -50,6 +55,9 @@ class WebApiImpl implements WebApi {
       "http://nardlibrary.org/api/Resource/GetShelf";
   static const String _ADD_TO_SHELF_URL =
       "http://nardlibrary.org/api/Resource/Featured";
+
+  static const String _ADD_DEPARTMENT_URL =
+      "http://nardlibrary.org/api/Department/Add";
 
   static const String _UPDATE_RESOURCE_URL =
       "http://nardlibrary.org/api/Resource/Update";
@@ -74,18 +82,25 @@ class WebApiImpl implements WebApi {
   @override
   Future<AuthResponse?> login(String username, String password) async {
     AuthResponse? loginResponse;
-    Response response = await post(Uri.parse(_LOGIN_URL),
-        headers: _headers,
-        body: jsonEncode(
-            <String, String>{"Username": username, "Password": password}));
 
-    if (response.statusCode == 200) {
-      loginResponse = AuthResponse.fromJson(jsonDecode(response.body));
+    try {
+      Response response = await post(Uri.parse(_LOGIN_URL),
+          headers: _headers,
+          body: jsonEncode(
+              <String, String>{"Username": username, "Password": password}));
 
-      return loginResponse;
-    } else {
-      print(response.body);
-      return AuthResponse(FAILED, "", null);
+      if (response.statusCode == 200) {
+        loginResponse = AuthResponse.fromJson(jsonDecode(response.body));
+
+        return loginResponse;
+      } else {
+        print(response.body);
+        return AuthResponse(FAILED, "", null);
+      }
+    } catch (e) {
+      if (e is SocketException) {
+        print(e);
+      }
     }
   }
 
@@ -291,9 +306,20 @@ class WebApiImpl implements WebApi {
   }
 
   @override
-  Future<void> addDepartment(Department? department) {
-    // TODO: implement addDepartment
-    throw UnimplementedError();
+  Future<bool> addDepartment(String? department) async {
+    _logger.logInfo("Inside Adddepartment()");
+    Response response = await post(Uri.parse(_ADD_DEPARTMENT_URL),
+        headers: _headers,
+        body: jsonEncode(<String, String>{"Name": department!}));
+
+    if (response.statusCode == 200) {
+      _logger.logInfo(response.body);
+      print(response);
+   
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override
@@ -303,7 +329,7 @@ class WebApiImpl implements WebApi {
   }
 
   @override
-  Future<void> addUnit(Unit? unit) {
+  Future<bool> addUnit(Unit? unit) {
     // TODO: implement addUnit
     throw UnimplementedError();
   }
@@ -321,7 +347,7 @@ class WebApiImpl implements WebApi {
   }
 
   @override
-  Future<void> removeFromShelf(int resourceId, String username) {
+  Future<bool> removeFromShelf(int resourceId, String username) {
     // TODO: implement removeFromShelf
     throw UnimplementedError();
   }
@@ -342,6 +368,82 @@ class WebApiImpl implements WebApi {
       return deleteresponse;
     } else {
       return AuthResponse(FAILED, "User does not exist", null);
+    }
+  }
+
+  @override
+  Future<UserResponse?> getUser(String email) async {
+    UserResponse? userResponse;
+    _logger.logInfo("Inside searchResources()");
+    Response response = await post(Uri.parse(_GET_USER_PROFILE_URL),
+        headers: _headers,
+        body: jsonEncode(<String, String>{"Username": email}));
+
+    if (response.statusCode == 200) {
+      _logger.logInfo(response.statusCode.toString());
+      _logger.logInfo(response.body);
+      userResponse = UserResponse.fromJson(jsonDecode(response.body));
+      print(userResponse);
+      //_logger.logInfo("FeaturedBooks" + featuredBooks.books);
+      return userResponse;
+    } else {
+      return UserResponse(FAILED, '', null);
+    }
+  }
+
+  @override
+  Future<UserResponse?> updateUser(UserInfo info) async {
+    UserResponse? updateResponse;
+    Response response = await post(
+      Uri.parse(_SIGN_UP_URL),
+      headers: _headers,
+      body: jsonEncode(
+        <String, String>{
+          "Username": info.userName!,
+          "Password": info.password!,
+          "Address": info.address,
+          "CommencementYear": info.commencementYear,
+          "Department": info.department,
+          "Designation": info.department,
+          "DOB": info.dob,
+          "Email": info.email,
+          "Firstname": info.firstName,
+          "Folio": info.folio!,
+          "Gender": info.gender,
+          "Institution": info.institution,
+          "Othernames": info.otherNames,
+          "Phone": info.phone,
+          "Role": info.role.toString(),
+          "State": info.state,
+          "Surname": info.surname
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      updateResponse = UserResponse.fromJson(jsonDecode(response.body));
+      return updateResponse;
+    }
+    if (response.statusCode == 500) {
+      updateResponse = UserResponse.fromJson(jsonDecode(response.body));
+      return UserResponse(FAILED, updateResponse.message, null);
+    }
+  }
+
+  @override
+  Future<bool> deleteResource(int? id, BuildContext context) async {
+    AuthResponse? deleteResponse;
+    Response response = await post(Uri.parse(_FORGOT_PASSWORD_URL),
+        headers: _headers, body: jsonEncode(<String, int>{"ResourceID": id!}));
+
+    if (response.statusCode == 200) {
+      // deleteResponse = AuthResponse.fromJson(jsonDecode(response.body));
+      print(response.body);
+      return true;
+    } else {
+      print("Prinitng error response" + response.body);
+      //return AuthResponse(FAILED, "", null);
+      return false;
     }
   }
 }
