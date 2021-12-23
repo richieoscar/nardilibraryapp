@@ -40,6 +40,7 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: CustomAppBAr(
         title: widget.title!,
         icon: Icon(Icons.find_in_page, color: AppColors.white),
@@ -49,8 +50,7 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Expanded(
-              child: Row(
+            child:  Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("Page ($currentPage of $pages)",
@@ -77,65 +77,67 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
                   ),
                 ],
               ),
-            ),
+            
           ),
-          Expanded(
-            child: Stack(
-              children: <Widget>[
-                PDFView(
-                  filePath: widget.file!.path,
-                  enableSwipe: true,
-                  swipeHorizontal: true,
-                  autoSpacing: false,
-                  pageFling: true,
-                  pageSnap: true,
-                  defaultPage: currentPage!,
-                  fitPolicy: FitPolicy.BOTH,
-                  preventLinkNavigation:
-                      false, // if set to true the link is handled in flutter
-                  onRender: (_pages) {
-                    setState(() {
-                      pages = _pages;
-                      isReady = true;
-                    });
-                  },
-                  onError: (error) {
-                    setState(() {
-                      errorMessage = error.toString();
-                    });
-                    print(error.toString());
-                  },
-                  onPageError: (page, error) {
-                    setState(() {
-                      errorMessage = '$page: ${error.toString()}';
-                    });
-                    print('$page: ${error.toString()}');
-                  },
-                  onViewCreated: (PDFViewController pdfViewController) {
-                    _controller.complete(pdfViewController);
-                  },
-                  onLinkHandler: (String? uri) {
-                    print('goto uri: $uri');
-                  },
-                  onPageChanged: (int? page, int? total) {
-                    print('page change: $page/$total');
-                    setState(() {
-                      currentPage = page;
-                    });
-                  },
-                ),
-                errorMessage.isEmpty
-                    ? !isReady
-                        ? Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        : Container()
-                    : Center(
-                        child: Text(errorMessage),
-                      )
-              ],
-            ),
-          ),
+           Expanded(
+             child: Stack(
+                children: <Widget>[
+                   PDFView(
+                      filePath: widget.file!.path,
+                      enableSwipe: true,
+                      swipeHorizontal: true,
+                      autoSpacing: false,
+                      pageFling: true,
+                      pageSnap: true,
+                      defaultPage: currentPage!,
+                      fitPolicy: FitPolicy.BOTH,
+                      preventLinkNavigation:
+                          false, // if set to true the link is handled in flutter
+                      onRender: (_pages) {
+                        setState(() {
+                          pages = _pages;
+                          isReady = true;
+                        });
+                      },
+                      onError: (error) {
+                        setState(() {
+                          errorMessage = error.toString();
+                        });
+                        print(error.toString());
+                      },
+                      onPageError: (page, error) {
+                        setState(() {
+                          errorMessage = '$page: ${error.toString()}';
+                        });
+                        print('$page: ${error.toString()}');
+                      },
+                      onViewCreated: (PDFViewController pdfViewController) {
+                        _controller.complete(pdfViewController);
+                      },
+                      onLinkHandler: (String? uri) {
+                        print('goto uri: $uri');
+                      },
+                      onPageChanged: (int? page, int? total) {
+                        print('page change: $page/$total');
+                        setState(() {
+                          currentPage = page;
+                        });
+                      },
+                    ),
+                  
+                  errorMessage.isEmpty
+                      ? !isReady
+                          ? Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : Container()
+                      : Center(
+                          child: Text(errorMessage),
+                        )
+                ],
+              ),
+           ),
+          
           Center(
               child: Padding(
             padding: const EdgeInsets.all(8.0),

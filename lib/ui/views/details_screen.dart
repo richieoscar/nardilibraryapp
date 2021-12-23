@@ -10,6 +10,7 @@ import 'package:nardilibraryapp/util/utils.dart';
 import 'package:nardilibraryapp/viewmodels/book_detail_viewmodel.dart';
 import 'package:nardilibraryapp/widgets/progressar.dart';
 import 'package:provider/provider.dart';
+import 'package:nardilibraryapp/model/shelf/add_to_shelf.dart';
 
 class BookDetails extends StatefulWidget {
   static const routeName = "/bookDetail";
@@ -73,12 +74,18 @@ class _BookDetailState extends State<BookDetails> {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Icon(
-              Icons.bookmark_border_outlined,
-              color: AppColors.nardBlack,
-            ),
-          )
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: IconButton(
+                  onPressed: () {
+                    int? resourceID = widget.id;
+                    String? username = viewmodel.username();
+                    AddToShelf shelf = AddToShelf(resourceID, username);
+                    print(resourceID);
+                    print(username);
+                    viewmodel.addToShelf(shelf, context);
+                  },
+                  icon: Icon(Icons.bookmark_border_outlined,
+                      color: AppColors.nardBlack)))
         ],
       ),
       body: SafeArea(
@@ -104,9 +111,8 @@ class _BookDetailState extends State<BookDetails> {
                               child: Card(
                                 elevation: 10,
                                 child: Image.network(
-                                 viewmodel
-                                      .book
-                                      .thumbnail??"assets/nobook.png",
+                                  viewmodel.book.thumbnail ??
+                                      "assets/nobook.png",
                                   fit: BoxFit.fill,
                                 ),
                               ),
@@ -117,7 +123,11 @@ class _BookDetailState extends State<BookDetails> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                context.watch<BookDetailViewmodel>().book.name??"",
+                                context
+                                        .watch<BookDetailViewmodel>()
+                                        .book
+                                        .name ??
+                                    "",
                                 style: AppStyle.blackBoldText,
                                 textAlign: TextAlign.center,
                               ),
@@ -126,7 +136,7 @@ class _BookDetailState extends State<BookDetails> {
                               height: 12,
                             ),
                             Text(
-                              "Author: ${context.watch<BookDetailViewmodel>().book.author ??''}",
+                              "Author: ${context.watch<BookDetailViewmodel>().book.author ?? ''}",
                               style: AppStyle.bookDetailText,
                               textAlign: TextAlign.center,
                             ),
@@ -182,9 +192,10 @@ class _BookDetailState extends State<BookDetails> {
                             padding: const EdgeInsets.all(10.0),
                             child: Text(
                                 context
-                                    .watch<BookDetailViewmodel>()
-                                    .book
-                                    .description ??"No description",
+                                        .watch<BookDetailViewmodel>()
+                                        .book
+                                        .description ??
+                                    "No description",
                                 style: AppStyle.bookDetailBodyText)),
                       ),
                       Padding(

@@ -17,6 +17,8 @@ import 'package:nardilibraryapp/model/bookresource/search_request.dart';
 import 'package:nardilibraryapp/model/bookresource/resource_response.dart';
 import 'package:nardilibraryapp/model/bookresource/department.dart';
 import 'package:nardilibraryapp/model/bookresource/add_resource.dart';
+import 'package:nardilibraryapp/model/shelf/add_to_shelf.dart';
+import 'package:nardilibraryapp/model/shelf/shelf_response.dart';
 import 'package:nardilibraryapp/model/unit.dart';
 import 'package:nardilibraryapp/service/wep_api/web_api.dart';
 import 'package:nardilibraryapp/util/logger.dart';
@@ -54,7 +56,7 @@ class WebApiImpl implements WebApi {
   static const String _GET_SHELF_URL =
       "http://nardlibrary.org/api/Resource/GetShelf";
   static const String _ADD_TO_SHELF_URL =
-      "http://nardlibrary.org/api/Resource/Featured";
+      "http://nardlibrary.org/api/Resource/AddToShelf";
 
   static const String _ADD_DEPARTMENT_URL =
       "http://nardlibrary.org/api/Department/Add";
@@ -62,8 +64,6 @@ class WebApiImpl implements WebApi {
   static const String _UPDATE_RESOURCE_URL =
       "http://nardlibrary.org/api/Resource/Update";
 
-  static const String _UPDATE_PROFILE_URL =
-      "http://nardlibrary.org/api/User/Update";
   static const String _GET_USER_PROFILE_URL =
       "http://nardlibrary.org/api/User/Get";
   static const String _LOGOUT_URL = "http://nardlibrary.org/api/User/Logout";
@@ -315,7 +315,7 @@ class WebApiImpl implements WebApi {
     if (response.statusCode == 200) {
       _logger.logInfo(response.body);
       print(response);
-   
+
       return true;
     } else {
       return false;
@@ -323,9 +323,20 @@ class WebApiImpl implements WebApi {
   }
 
   @override
-  Future<bool> addToShelf(int resourceId, String username) {
-    // TODO: implement addToShelf
-    throw UnimplementedError();
+  Future<ShelfResponse> addToShelf(AddToShelf shelf) async {
+    ShelfResponse? shelfResponse;
+    Response response = await post(Uri.parse(_ADD_TO_SHELF_URL),
+        headers: _headers,
+        body: jsonEncode(
+            <String, dynamic>{"ResourceID": shelf.getResourceId, "Username": shelf.getUsername}));
+
+    if (response.statusCode == 200) {
+      shelfResponse = ShelfResponse.fromJson(jsonDecode(response.body));
+      return shelfResponse;
+    } else {
+      print("Printint Error response" + response.body);
+      return ShelfResponse(FAILED, "", null);
+    }
   }
 
   @override
@@ -341,13 +352,24 @@ class WebApiImpl implements WebApi {
   }
 
   @override
-  Future<ResourceResponse?> getShelfBooks() {
-    // TODO: implement getShelfBooks
-    throw UnimplementedError();
+  Future<ShelfResponse?> getShelfBooks(String? username) async {
+   ShelfResponse? shelfResponse;
+    Response response = await post(Uri.parse(_GET_SHELF_URL),
+        headers: _headers,
+        body: jsonEncode(
+            <String, String>{ "Username": username!}));
+
+    if (response.statusCode == 200) {
+      shelfResponse = ShelfResponse.fromJsonList(jsonDecode(response.body));
+      return shelfResponse;
+    } else {
+      print("Printint Error response" + response.body);
+      return ShelfResponse(FAILED, "", null);
+    }
   }
 
   @override
-  Future<bool> removeFromShelf(int resourceId, String username) {
+  Future<bool> removeFromShelf(AddToShelf shelf) {
     // TODO: implement removeFromShelf
     throw UnimplementedError();
   }
@@ -395,7 +417,7 @@ class WebApiImpl implements WebApi {
   Future<UserResponse?> updateUser(UserInfo info) async {
     UserResponse? updateResponse;
     Response response = await post(
-      Uri.parse(_SIGN_UP_URL),
+      Uri.parse(UPDATE_USER_URL),
       headers: _headers,
       body: jsonEncode(
         <String, String>{
@@ -433,7 +455,7 @@ class WebApiImpl implements WebApi {
   @override
   Future<bool> deleteResource(int? id, BuildContext context) async {
     AuthResponse? deleteResponse;
-    Response response = await post(Uri.parse(_FORGOT_PASSWORD_URL),
+    Response response = await post(Uri.parse(_DELETE_RESOURCE_URL),
         headers: _headers, body: jsonEncode(<String, int>{"ResourceID": id!}));
 
     if (response.statusCode == 200) {

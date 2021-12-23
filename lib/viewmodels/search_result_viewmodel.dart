@@ -28,7 +28,7 @@ class SearchResultViewmodel extends ChangeNotifier {
 
   void findResource(BuildContext context, String? query) async {
     isLoading = true;
-   // notifyListeners();
+    // notifyListeners();
     ResourceResponse? searchResponse =
         await _bookResourceService.searchResources(query!);
 

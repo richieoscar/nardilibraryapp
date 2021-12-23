@@ -13,6 +13,7 @@ class AddResourceViewmodel extends ChangeNotifier {
     notifyListeners();
     bool isSuccessful = await _bookResourceService.addAResource(resource);
     if (isSuccessful) {
+        print(resource); 
       AppUtils.showSnackBar(context, "Upload Successful");
       isLoading = false;
       notifyListeners();

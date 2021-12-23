@@ -208,7 +208,7 @@ class _SignUpState extends State<SignUp> {
           "",
           "",
           _phoneNumberController.text.trim(),
-          USER_ROLE,
+          user_role,
           "",
           _lastnameController.text.trim());
       context

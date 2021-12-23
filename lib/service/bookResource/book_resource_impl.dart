@@ -8,6 +8,8 @@ import 'package:nardilibraryapp/model/bookresource/search_request.dart';
 import 'package:nardilibraryapp/model/bookresource/resource_response.dart';
 import 'package:nardilibraryapp/model/bookresource/department.dart';
 import 'package:nardilibraryapp/model/bookresource/add_resource.dart';
+import 'package:nardilibraryapp/model/shelf/add_to_shelf.dart';
+import 'package:nardilibraryapp/model/shelf/shelf_response.dart';
 import 'package:nardilibraryapp/service/bookResource/book_resource_service.dart';
 import 'package:nardilibraryapp/service/wep_api/pdf_api.dart';
 import 'package:nardilibraryapp/service/wep_api/pdf_api_impl.dart';
@@ -74,5 +76,23 @@ class BookResourceImpl extends BookResourceService {
   Future<bool> addDepartment(String name, BuildContext context) async {
     bool isAdded = await _webApi.addDepartment(name);
     return isAdded;
+  }
+
+  @override
+  Future<ShelfResponse?> addToShelf(AddToShelf shelf) async {
+    ShelfResponse? response = await _webApi.addToShelf(shelf);
+    return response;
+  }
+
+  @override
+  Future<ShelfResponse?> getShelfBooks(String? username) async {
+    ShelfResponse? response = await _webApi.getShelfBooks(username);
+    return response;
+  }
+
+  @override
+  Future<bool> removeFromShelf(AddToShelf shelf) {
+    // TODO: implement removeFromShelf
+    throw UnimplementedError();
   }
 }

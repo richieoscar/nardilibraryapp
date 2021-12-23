@@ -105,7 +105,7 @@ class _DepartmentBooksState extends State<DepartmentBooks> {
                                               fit: BoxFit.fill,
                                               image: NetworkImage(viewmodel
                                                   .departmentBooks[index]
-                                                  .thumbnail),
+                                                  .thumbnail??"https://pixabay.com/vectors/student-teenager-book-learning-147783/"),
                                             ),
                                           ),
                                         ),

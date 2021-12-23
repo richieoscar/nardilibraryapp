@@ -10,6 +10,8 @@ import 'package:nardilibraryapp/model/bookresource/department.dart';
 import 'package:nardilibraryapp/model/bookresource/department_response.dart';
 import 'package:nardilibraryapp/model/bookresource/resource_response.dart';
 import 'package:nardilibraryapp/model/bookresource/search_request.dart';
+import 'package:nardilibraryapp/model/shelf/add_to_shelf.dart';
+import 'package:nardilibraryapp/model/shelf/shelf_response.dart';
 import 'package:nardilibraryapp/model/unit.dart';
 
 abstract class WebApi {
@@ -29,9 +31,9 @@ abstract class WebApi {
   Future<ResourceResponse?> searchResources(String request);
   Future<bool> addAResource(BookResource? resource);
   Future<ResourceResponse?> getHistory();
-  Future<bool> addToShelf(int resourceId, String username);
-  Future<bool> removeFromShelf(int resourceId, String username);
-  Future<ResourceResponse?> getShelfBooks();
+  Future<ShelfResponse?> addToShelf(AddToShelf shelfData);
+  Future<bool> removeFromShelf(AddToShelf shelfData);
+  Future<ShelfResponse?> getShelfBooks(String? username);
   Future<bool> addDepartment(String? department);
   Future<bool> addUnit(Unit? unit);
   Future<bool> deleteResource(int? id, BuildContext context);

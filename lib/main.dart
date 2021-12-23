@@ -26,6 +26,7 @@ import 'package:nardilibraryapp/ui/views/verify_email_screen.dart';
 import 'package:nardilibraryapp/ui/views/view_profile.dart';
 import 'package:nardilibraryapp/viewmodels/all_featured_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/book_detail_viewmodel.dart';
+import 'package:nardilibraryapp/viewmodels/book_shelf_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/createnew_password_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/delete_user_viemodel.dart';
 import 'package:nardilibraryapp/viewmodels/department_books_viewmodel.dart';
@@ -44,27 +45,25 @@ import 'package:provider/provider.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-
-  runApp(
-    MultiProvider(
+  runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => NardViewmodel()),
       ChangeNotifierProvider(create: (_) => LoginFormViewModel()),
       ChangeNotifierProvider(create: (_) => ForgotPasswordViewmodel()),
       ChangeNotifierProvider(create: (_) => CreateNewPasswordViewmodel()),
       ChangeNotifierProvider(create: (_) => VerifyEmailViewmodel()),
-       ChangeNotifierProvider(create: (_) => SignUpViewmodel()),
-        ChangeNotifierProvider(create: (_) => HomePageViewmodel()),
-        ChangeNotifierProvider(create: (_) => FinishRegistrationViewmodel()),
-         ChangeNotifierProvider(create: (_) => AllDepartmentsViewmodel()),
-          ChangeNotifierProvider(create: (_) => AllFeaturedViewmodel()),
-           ChangeNotifierProvider(create: (_) => DepartmentBooksViewmodel()),
-            ChangeNotifierProvider(create: (_) => SearchResultViewmodel()),
-             ChangeNotifierProvider(create: (_) => BookDetailViewmodel()),
-              ChangeNotifierProvider(create: (_) =>DeleteUserViewmodel()),
-               ChangeNotifierProvider(create: (_) =>ViewProfileViewmodel()),
-      
-      ],
+      ChangeNotifierProvider(create: (_) => SignUpViewmodel()),
+      ChangeNotifierProvider(create: (_) => HomePageViewmodel()),
+      ChangeNotifierProvider(create: (_) => FinishRegistrationViewmodel()),
+      ChangeNotifierProvider(create: (_) => AllDepartmentsViewmodel()),
+      ChangeNotifierProvider(create: (_) => AllFeaturedViewmodel()),
+      ChangeNotifierProvider(create: (_) => DepartmentBooksViewmodel()),
+      ChangeNotifierProvider(create: (_) => SearchResultViewmodel()),
+      ChangeNotifierProvider(create: (_) => BookDetailViewmodel()),
+      ChangeNotifierProvider(create: (_) => DeleteUserViewmodel()),
+      ChangeNotifierProvider(create: (_) => ViewProfileViewmodel()),
+      ChangeNotifierProvider(create: (_) => BookShelfViewmodel()),
+    ],
     child: Home(),
 
     // Home(),
@@ -84,14 +83,11 @@ class _HomeState extends State<Home> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "NardLibraryApp",
-  // home: AddResource(),
+      // home: AddResource(),
       theme: ThemeData.light().copyWith(
-        primaryColor: AppColors.nardDark,
-        buttonTheme: ButtonThemeData(
-          buttonColor: AppColors.backgroundColor
-        )
-      ),
-  initialRoute: Splash.routeName,
+          primaryColor: AppColors.nardDark,
+          buttonTheme: ButtonThemeData(buttonColor: AppColors.backgroundColor)),
+      initialRoute: Splash.routeName,
       routes: {
         Splash.routeName: (_) => const Splash(),
         NardAccess.routeName: (_) => const NardAccess(),
@@ -99,25 +95,24 @@ class _HomeState extends State<Home> {
         VerifyEmail.route: (_) => const VerifyEmail(),
         CreateNewPassword.routeName: (_) => CreateNewPassword(),
         FinishRegistration.routeName: (_) => const FinishRegistration(),
-        PasswordResetComplete.routeName: (_)=> const PasswordResetComplete(),
+        PasswordResetComplete.routeName: (_) => const PasswordResetComplete(),
         HomePage.routeName: (_) => const HomePage(),
         BookDetails.routeName: (_) => const BookDetails(),
-        BookShelf.routeName: (_)=> const BookShelf(),
-        UserDashboard.routeName : (_) => UserDashboard(),
-        AdminDashboard.routeName:(_) => AdminDashboard(),
-        AllDepartments.route :(_) => AllDepartments(),
-        DepartmentBooks.route :(_) => DepartmentBooks(),
-        AllFeaturedRelease.route:(_)=>  AllFeaturedRelease(),
-        AddResource.route:(_)=> AddResource(),
-        AdminSignUp.route: (_)=> AdminSignUp(),
-        DeleteUser.routeName:(_)=> DeleteUser(),
-        ViewProfile.route:(_)=> ViewProfile(),
-        UpdateProfile.route:(_)=> UpdateProfile(),
-        AdminUpdateUserProfile.route:(_)=> AdminUpdateUserProfile(),
-        DeleteUser.routeName:(_) => DeleteResource(),
-        AddDepartment.routeName:(_)=>AddDepartment(),
-        DeleteResource.routeName:(_)=> DeleteResource()
-
+        BookShelf.routeName: (_) => const BookShelf(),
+        UserDashboard.routeName: (_) => UserDashboard(),
+        AdminDashboard.routeName: (_) => AdminDashboard(),
+        AllDepartments.route: (_) => AllDepartments(),
+        DepartmentBooks.route: (_) => DepartmentBooks(),
+        AllFeaturedRelease.route: (_) => AllFeaturedRelease(),
+        AddResource.route: (_) => AddResource(),
+        AdminSignUp.route: (_) => AdminSignUp(),
+        DeleteUser.routeName: (_) => DeleteUser(),
+        ViewProfile.route: (_) => ViewProfile(),
+        UpdateProfile.route: (_) => UpdateProfile(),
+        AdminUpdateUserProfile.route: (_) => AdminUpdateUserProfile(),
+        DeleteUser.routeName: (_) => DeleteUser(),
+        AddDepartment.routeName: (_) => AddDepartment(),
+        DeleteResource.routeName: (_) => DeleteResource()
       },
     );
   }

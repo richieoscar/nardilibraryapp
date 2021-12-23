@@ -7,6 +7,8 @@ import 'package:nardilibraryapp/model/bookresource/department.dart';
 import 'package:nardilibraryapp/model/bookresource/department_response.dart';
 import 'package:nardilibraryapp/model/bookresource/resource_response.dart';
 import 'package:nardilibraryapp/model/bookresource/search_request.dart';
+import 'package:nardilibraryapp/model/shelf/add_to_shelf.dart';
+import 'package:nardilibraryapp/model/shelf/shelf_response.dart';
 
 abstract class BookResourceService {
   Future<ResourceResponse?> getFeaturedBooks();
@@ -16,7 +18,9 @@ abstract class BookResourceService {
   Future<ResourceResponse?> searchResources(String request);
   Future<bool> addAResource(BookResource resource);
   Future<File?> getPDF(String url);
-   Future<bool> deleteAResource(int resourceId, BuildContext context);
-    Future<bool> addDepartment(String name, BuildContext context);
-   
+  Future<bool> deleteAResource(int resourceId, BuildContext context);
+  Future<bool> addDepartment(String name, BuildContext context);
+  Future<ShelfResponse?> addToShelf(AddToShelf shelf);
+  Future<bool> removeFromShelf(AddToShelf shelf);
+  Future<ShelfResponse?> getShelfBooks(String? username);
 }

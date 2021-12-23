@@ -4,16 +4,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:nardilibraryapp/constants/state.dart';
 import 'package:nardilibraryapp/model/bookresource/book.dart';
 import 'package:nardilibraryapp/model/bookresource/book_response.dart';
+import 'package:nardilibraryapp/model/shelf/shelf_response.dart';
 import 'package:nardilibraryapp/service/bookResource/book_resource_impl.dart';
 import 'package:nardilibraryapp/service/bookResource/book_resource_service.dart';
 import 'package:nardilibraryapp/service/navigation/nav_service.dart';
 import 'package:nardilibraryapp/service/navigation/nav_service_impl.dart';
+import 'package:nardilibraryapp/service/storage/storage_service.dart';
+import 'package:nardilibraryapp/service/storage/storage_service_impl.dart';
 import 'package:nardilibraryapp/util/logger.dart';
 import 'package:nardilibraryapp/util/utils.dart';
+import 'package:nardilibraryapp/model/shelf/add_to_shelf.dart';
 
 class BookDetailViewmodel extends ChangeNotifier {
   final BookResourceService _bookResourceService = BookResourceImpl.instance;
-  final NavigationService _navigationService = NavigationServiceImpl.instance;
+  final StorageService _storageService = StorageServiceImpl.instance;
   AppLogger logger = AppLogger();
 
   Book? _book;
@@ -28,7 +32,7 @@ class BookDetailViewmodel extends ChangeNotifier {
 
   Future getBooksResourceById(BuildContext context, int id) async {
     _isLoading = true;
- //   notifyListeners();
+    //   notifyListeners();
     BookResourceResponse? resource =
         await _bookResourceService.getBookResourceById(id);
 
@@ -49,13 +53,24 @@ class BookDetailViewmodel extends ChangeNotifier {
   }
 
   Future getPDF(String url) async {
-    // _file = await _bookResourceService.getPDF(url).whenComplete(() => {
-    //      _filePath = _file!.path,
-    // notifyListeners()
-    // });
-
     _file = await _bookResourceService.getPDF(url);
     notifyListeners();
     return _file!;
+  }
+
+  void addToShelf(AddToShelf shelf, BuildContext context) async {
+    ShelfResponse? response =
+        await _bookResourceService.addToShelf(shelf);
+
+    if (response!.status == SUCCESS) {
+      AppUtils.showSnackBar(context, "Book Added to your shelf");
+    }
+    if (response!.status == FAILED) {
+      AppUtils.showSnackBar(context, "Failed to add book to your shelf");
+    }
+  }
+
+  String? username() {
+    return _storageService.getUserName();
   }
 }

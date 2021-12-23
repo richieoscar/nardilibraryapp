@@ -63,6 +63,6 @@ const KDefaultButtonColor = Color(0xFF21223E);
 const KDefaltWhite = Colors.white;
 
 //roles
-const USER_ROLE = 2;
+const USER_ROLE = "2";
 const user_role = 2;
 const ADMIN = "1";

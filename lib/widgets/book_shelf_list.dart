@@ -1,64 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:nardilibraryapp/model/Books.dart';
+import 'package:nardilibraryapp/model/bookresource/book.dart';
 import 'package:nardilibraryapp/resources/app_colors.dart';
 import 'package:nardilibraryapp/resources/app_style.dart';
+import 'package:nardilibraryapp/viewmodels/book_shelf_viewmodel.dart';
+import 'package:nardilibraryapp/widgets/custom_home_section.dart';
+import 'package:nardilibraryapp/widgets/custom_shelf.dart';
+import 'package:provider/provider.dart';
+
 class BookShelfList extends StatelessWidget {
-  const BookShelfList({
-    Key? key,
-  }) : super(key: key);
+  final List<Book>? shelvedbooks;
+  const BookShelfList({required this.shelvedbooks});
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: BookTest.getbooks().length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: SizedBox(
-                        height: 100,
-                        child: Image(
-                          filterQuality: FilterQuality.medium,
-                          fit: BoxFit.fill,
-                          image: AssetImage(
-                            BookTest.getbooks()[index].coverImage,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            BookTest.getbooks()[index].title,
-                            style: AppStyle.mediumText,
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Text(BookTest.getbooks()[index].author)
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.headphones,
-                      color: AppColors.pasejicBlack,
-                    ))
-              ],
-            ),
-          );
-        });
+    var viewmodel = Provider.of<BookShelfViewmodel>(context);
+    return SafeArea(
+        child: Column(
+      children: [
+        ShelfSection(
+          
+            books: viewmodel.shelvedBooks,
+            
+          )
+      ],
+    ));
   }
 }

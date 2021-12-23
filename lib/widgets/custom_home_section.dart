@@ -9,8 +9,9 @@ class HomeSection extends StatelessWidget {
   final String sectionTitle;
   final VoidCallback? seeMore;
   final List<Book> books;
+  final Axis? axis;
   HomeSection(
-      {required this.sectionTitle, required this.books, required this.seeMore});
+      {required this.sectionTitle, required this.books, required this.seeMore, this.axis = Axis.horizontal});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,7 @@ class HomeSection extends StatelessWidget {
             child: ListView.builder(
                 itemCount: books.length,
                 physics: BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
+                scrollDirection: axis!,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return InkWell(
@@ -49,7 +50,10 @@ class HomeSection extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => BookDetails(id: id, baseFile: baseFile,),
+                          builder: (context) => BookDetails(
+                            id: id,
+                            baseFile: baseFile,
+                          ),
                         ),
                       );
                     },

@@ -138,7 +138,7 @@ class _AddResourceState extends State<AddResource> {
                             _controllerName.text,
                             "Text",
                             _departmentDropDownValue!.id!.toString(),
-                            _publishedDropDownValue,
+                            "",
                             _controllerDescription.text,
                             _controllerAuthor.text);
 

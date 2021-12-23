@@ -34,7 +34,7 @@ class DepartmentBooksViewmodel extends ChangeNotifier {
 
   void getBooksByDepartment(BuildContext context, int id) async {
     _isLoading = true;
-    notifyListeners();
+    //notifyListeners();
     ResourceResponse? resource =
         await _bookResourceService.getBooksByDepartment(id);
 
