@@ -57,6 +57,8 @@ class WebApiImpl implements WebApi {
       "http://nardlibrary.org/api/Resource/GetShelf";
   static const String _ADD_TO_SHELF_URL =
       "http://nardlibrary.org/api/Resource/AddToShelf";
+       static const String _REMOVE_FROM_SHELF_URL =
+      "http://nardlibrary.org/api/Resource/RemoveFromShelf";
 
   static const String _ADD_DEPARTMENT_URL =
       "http://nardlibrary.org/api/Department/Add";
@@ -111,7 +113,7 @@ class WebApiImpl implements WebApi {
       Uri.parse(_SIGN_UP_URL),
       headers: _headers,
       body: jsonEncode(
-        <String, String>{
+        <String, dynamic>{
           "Username": info.userName!,
           "Password": info.password!,
           "Address": info.address,
@@ -327,14 +329,18 @@ class WebApiImpl implements WebApi {
     ShelfResponse? shelfResponse;
     Response response = await post(Uri.parse(_ADD_TO_SHELF_URL),
         headers: _headers,
-        body: jsonEncode(
-            <String, dynamic>{"ResourceID": shelf.getResourceId, "Username": shelf.getUsername}));
+        body: jsonEncode(<String, dynamic>{
+          "ResourceID": shelf.getResourceId,
+          "Username": shelf.getUsername
+        }));
 
     if (response.statusCode == 200) {
       shelfResponse = ShelfResponse.fromJson(jsonDecode(response.body));
       return shelfResponse;
     } else {
-      print("Printint Error response" + response.body);
+      print("Print Error response");
+      print(response.statusCode);
+      print(response.body);
       return ShelfResponse(FAILED, "", null);
     }
   }
@@ -353,11 +359,10 @@ class WebApiImpl implements WebApi {
 
   @override
   Future<ShelfResponse?> getShelfBooks(String? username) async {
-   ShelfResponse? shelfResponse;
+    ShelfResponse? shelfResponse;
     Response response = await post(Uri.parse(_GET_SHELF_URL),
         headers: _headers,
-        body: jsonEncode(
-            <String, String>{ "Username": username!}));
+        body: jsonEncode(<String, String>{"Username": username!}));
 
     if (response.statusCode == 200) {
       shelfResponse = ShelfResponse.fromJsonList(jsonDecode(response.body));
@@ -369,9 +374,24 @@ class WebApiImpl implements WebApi {
   }
 
   @override
-  Future<bool> removeFromShelf(AddToShelf shelf) {
-    // TODO: implement removeFromShelf
-    throw UnimplementedError();
+  Future<ShelfResponse> removeFromShelf(AddToShelf shelf)async {
+    ShelfResponse? shelfResponse;
+    Response response = await post(Uri.parse(_REMOVE_FROM_SHELF_URL),
+        headers: _headers,
+        body: jsonEncode(<String, dynamic>{
+          "ResourceID": shelf.getResourceId,
+          "Username": shelf.getUsername
+        }));
+
+    if (response.statusCode == 200) {
+      shelfResponse = ShelfResponse.fromJson(jsonDecode(response.body));
+      return shelfResponse;
+    } else {
+      print("Print Error response");
+      print(response.statusCode);
+      print(response.body);
+      return ShelfResponse(FAILED, "", null);
+    }
   }
 
   @override

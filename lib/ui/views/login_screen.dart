@@ -4,6 +4,7 @@ import 'package:nardilibraryapp/resources/app_style.dart';
 import 'package:nardilibraryapp/ui/views/user_dashboard_screen.dart';
 import 'package:nardilibraryapp/ui/views/forgot_password_screen.dart';
 import 'package:nardilibraryapp/ui/views/home_page.dart';
+import 'package:nardilibraryapp/util/network_connection.dart';
 import 'package:nardilibraryapp/util/utils.dart';
 import 'package:nardilibraryapp/viewmodels/login_form_viewmodel.dart';
 import 'package:nardilibraryapp/widgets/custom_button.dart';
@@ -26,8 +27,8 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   void initstate() {
-   
     super.initState();
+    NetworkConection.initializeConnection();
   }
 
   @override
@@ -187,12 +188,14 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   _login(BuildContext context) async {
-    if (_formKey.currentState!.validate()) {
-  
-      context.read<LoginFormViewModel>().login(_emailController.text.trim(),
-          _passwordController.text.trim(), context);
-
-        
+    bool? isConnected = await NetworkConection.checkNetworkConnection();
+    if (isConnected!) {
+      if (_formKey.currentState!.validate()) {
+        context.read<LoginFormViewModel>().login(_emailController.text.trim(),
+            _passwordController.text.trim(), context);
+      }
+    } else {
+      AppUtils.showSnackBarforNetwork(context, "No Network Connection");
     }
   }
 }

@@ -47,11 +47,13 @@ class Profile extends StatelessWidget {
                           SizedBox(
                             height: 8,
                           ),
-                          Text("User ID ${viewmodel.user!.id}", style: AppStyle.profileText),
+                          Text("User ID ${viewmodel.user!.id}",
+                              style: AppStyle.profileText),
                           const SizedBox(
                             height: 8,
                           ),
-                           Text("Username:  ${viewmodel.user!.userName}", style: AppStyle.profileText),
+                          Text("Username:  ${viewmodel.user!.userName}",
+                              style: AppStyle.profileText),
                         ],
                       ),
                       CircleAvatar(
@@ -76,9 +78,12 @@ class Profile extends StatelessWidget {
                       ),
                     );
                   }),
-              ProfileMenu(title: "Edit Profile", icon: Icons.edit, onpressed:(){
-                 Navigator.pushNamed(context, UpdateProfile.route);
-              }),
+              ProfileMenu(
+                  title: "Edit Profile",
+                  icon: Icons.edit,
+                  onpressed: () {
+                    Navigator.pushNamed(context, UpdateProfile.route);
+                  }),
               ProfileMenu(
                 title: "Change Password",
                 icon: Icons.lock,
@@ -96,8 +101,7 @@ class Profile extends StatelessWidget {
                 title: "Log Out",
                 icon: Icons.logout,
                 onpressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, NardAccess.routeName, (route) => false);
+                  Navigator.popAndPushNamed(context, NardAccess.routeName);
                 },
                 color: Colors.red,
               ),

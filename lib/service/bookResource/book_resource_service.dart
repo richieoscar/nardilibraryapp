@@ -21,6 +21,6 @@ abstract class BookResourceService {
   Future<bool> deleteAResource(int resourceId, BuildContext context);
   Future<bool> addDepartment(String name, BuildContext context);
   Future<ShelfResponse?> addToShelf(AddToShelf shelf);
-  Future<bool> removeFromShelf(AddToShelf shelf);
+  Future<ShelfResponse?> removeFromShelf(AddToShelf shelf);
   Future<ShelfResponse?> getShelfBooks(String? username);
 }

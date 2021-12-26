@@ -3,6 +3,8 @@ import 'package:nardilibraryapp/constants/state.dart';
 import 'package:nardilibraryapp/model/auth/user_info.dart';
 import 'package:nardilibraryapp/resources/app_colors.dart';
 import 'package:nardilibraryapp/resources/app_style.dart';
+import 'package:nardilibraryapp/util/network_connection.dart';
+import 'package:nardilibraryapp/util/utils.dart';
 import 'package:nardilibraryapp/viewmodels/signup_viewmodel.dart';
 import 'package:nardilibraryapp/widgets/custom_button.dart';
 import 'package:nardilibraryapp/widgets/custome_text_form_field.dart';
@@ -42,6 +44,12 @@ class _SignUpState extends State<SignUp> {
   String? _stateDropDownValue;
   bool isChecked = false;
   bool notChecked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    NetworkConection.initializeConnection();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -190,30 +198,35 @@ class _SignUpState extends State<SignUp> {
     _dobController.dispose();
   }
 
-  void _signUp() {
-    if (_formKey.currentState!.validate()) {
-      context.read<SignUpViewmodel>().isVisible = true;
-      UserInfo info = UserInfo(
-          _usernameController.text.trim(),
-          _passwordController.text.trim(),
-          "",
-          "",
-          "",
-          "",
-          "",
-          _emailController.text.trim(),
-          _firstnameController.text.trim(),
-          _folioController.text.trim(),
-          "",
-          "",
-          "",
-          _phoneNumberController.text.trim(),
-          user_role,
-          "",
-          _lastnameController.text.trim());
-      context
-          .read<SignUpViewmodel>()
-          .signUpUser(info, _confirmPasswordController.text.trim(), context);
+  void _signUp() async {
+    bool? isConnected = await NetworkConection.checkNetworkConnection();
+    if (isConnected!) {
+      if (_formKey.currentState!.validate()) {
+        context.read<SignUpViewmodel>().isVisible = true;
+        UserInfo info = UserInfo(
+            _usernameController.text.trim(),
+            _passwordController.text.trim(),
+            "",
+            "",
+            "",
+            "",
+            "",
+            _emailController.text.trim(),
+            _firstnameController.text.trim(),
+            _folioController.text.trim(),
+            "",
+            "",
+            "",
+            _phoneNumberController.text.trim(),
+            user_role,
+            "",
+            _lastnameController.text.trim());
+        context
+            .read<SignUpViewmodel>()
+            .signUpUser(info, _confirmPasswordController.text.trim(), context);
+      }
+    } else {
+      AppUtils.showSnackBarforNetwork(context, "No Network Connection");
     }
   }
 

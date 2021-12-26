@@ -35,6 +35,7 @@ class _BookDetailState extends State<BookDetails> {
   }
 
   void getBookResourceById() async {
+    print(widget.id);
     await context
         .read<BookDetailViewmodel>()
         .getBooksResourceById(context, widget.id!);

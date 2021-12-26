@@ -1,21 +1,33 @@
 import 'package:flutter/cupertino.dart';
 import 'package:nardilibraryapp/constants/state.dart';
 import 'package:nardilibraryapp/model/bookresource/book.dart';
+import 'package:nardilibraryapp/model/shelf/add_to_shelf.dart';
 import 'package:nardilibraryapp/model/shelf/shelf_response.dart';
 import 'package:nardilibraryapp/service/bookResource/book_resource_impl.dart';
 import 'package:nardilibraryapp/service/bookResource/book_resource_service.dart';
 import 'package:nardilibraryapp/service/storage/storage_service.dart';
 import 'package:nardilibraryapp/service/storage/storage_service_impl.dart';
 import 'package:nardilibraryapp/util/logger.dart';
+import 'package:nardilibraryapp/util/utils.dart';
 
 class BookShelfViewmodel extends ChangeNotifier {
   final BookResourceService _bookResourceService = BookResourceImpl.instance;
   final StorageService _storageService = StorageServiceImpl.instance;
   AppLogger logger = AppLogger();
 
+  BookShelfViewmodel() {
+    getUsername();
+  }
+
   bool isLoading = true;
   List<Book>? _shelvedBooks;
   bool _isShelfEmpty = false;
+  String? username = "";
+
+  void getUsername() {
+    username = _storageService.getUserName();
+    notifyListeners();
+  }
 
   get shelvedBooks => _shelvedBooks;
 
@@ -33,16 +45,43 @@ class BookShelfViewmodel extends ChangeNotifier {
         _isShelfEmpty = true;
         notifyListeners();
       }
+       if (_shelvedBooks!.isNotEmpty) {
+        _isShelfEmpty = false;
+        notifyListeners();
+      }
+      
       logger.logInfo("Inside GetShelved Books");
       print(_shelvedBooks);
     }
 
-    if (shelfResponse!.status == FAILED) {
+    if (shelfResponse.status == FAILED) {
       isLoading = false;
       notifyListeners();
 
       logger.logInfo("Inside GetShelved Books");
       print(_shelvedBooks);
+    }
+  }
+
+  void removeFromShelf(AddToShelf shelf, BuildContext context) async {
+    ShelfResponse? shelfResponse =
+        await _bookResourceService.removeFromShelf(shelf);
+
+    if (shelfResponse!.status == SUCCESS) {
+      isLoading = false;
+      logger.logInfo(shelfResponse.message);
+      AppUtils.showSnackBar(context, "Book removed from shelf");
+      notifyListeners();
+      logger.logInfo("Inside RemovedFromShelved Books");
+    }
+
+    if (shelfResponse.status == FAILED) {
+      isLoading = false;
+      logger.logError(shelfResponse.message);
+      notifyListeners();
+      AppUtils.showSnackBar(context, "Failed to removed from shelf");
+
+      logger.logInfo("Inside GetShelved Books Error response");
     }
   }
 }

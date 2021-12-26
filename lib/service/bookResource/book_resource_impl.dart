@@ -91,8 +91,8 @@ class BookResourceImpl extends BookResourceService {
   }
 
   @override
-  Future<bool> removeFromShelf(AddToShelf shelf) {
-    // TODO: implement removeFromShelf
-    throw UnimplementedError();
+  Future<ShelfResponse?> removeFromShelf(AddToShelf shelf)async {
+    ShelfResponse? response = await _webApi.removeFromShelf(shelf);
+    return response;
   }
 }

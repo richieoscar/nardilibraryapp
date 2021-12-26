@@ -55,6 +55,12 @@ class AppStyle {
           fontStyle: FontStyle.normal,
           fontSize: 18,
           color: AppColors.nardBlack));
+   static TextStyle shelfHeadlineText = GoogleFonts.montserrat(
+      textStyle: TextStyle(
+          fontWeight: FontWeight.w600,
+          fontStyle: FontStyle.normal,
+          fontSize: 16,
+          color: AppColors.nardOrange));
 
    static TextStyle sectionTitleText = GoogleFonts.montserrat(
       textStyle: TextStyle(
