@@ -5,6 +5,8 @@ import 'package:nardilibraryapp/model/shelf/add_to_shelf.dart';
 import 'package:nardilibraryapp/resources/app_colors.dart';
 import 'package:nardilibraryapp/resources/app_style.dart';
 import 'package:nardilibraryapp/ui/views/details_screen.dart';
+import 'package:nardilibraryapp/util/network_connection.dart';
+import 'package:nardilibraryapp/util/utils.dart';
 import 'package:nardilibraryapp/viewmodels/book_shelf_viewmodel.dart';
 import 'package:nardilibraryapp/widgets/book_shelf_list.dart';
 import 'package:nardilibraryapp/widgets/books_shelf_empty.dart';
@@ -21,10 +23,24 @@ class BookShelf extends StatefulWidget {
 }
 
 class _BookShelfState extends State<BookShelf> {
+  bool? _isConnected;
   @override
   void initState() {
-    context.read<BookShelfViewmodel>().getShelvedBooks();
+    checkConnectivity();
     super.initState();
+  }
+
+  void checkConnectivity() async {
+    await NetworkConection.initializeConnection();
+    bool status = NetworkConection.checkNetworkConnection();
+    setState(() {
+      _isConnected = status;
+    });
+    if (!status) {
+      AppUtils.showSnackBarforNetwork(context, "No Network Connection");
+    } else {
+      context.read<BookShelfViewmodel>().getShelvedBooks();
+    }
   }
 
   @override
@@ -50,8 +66,8 @@ class _BookShelfState extends State<BookShelf> {
         ],
       ),
       body: SafeArea(
-        child: viewmodel.isLoading
-            ? ProgressBar(viewmodel.isLoading)
+        child: viewmodel.getIsLoading
+            ? ProgressBar(viewmodel.getIsLoading)
             : Column(
                 children: [
                   const SizedBox(
@@ -67,15 +83,16 @@ class _BookShelfState extends State<BookShelf> {
                   viewmodel.isShelfEmpty
                       ? BookShelfEmpty()
                       : Expanded(
-                          child: Consumer<BookShelfViewmodel>(builder:(_,viewmodel,__)=>
-                             ListView.builder(
+                          child: Consumer<BookShelfViewmodel>(
+                            builder: (_, viewmodel, __) => ListView.builder(
                               itemCount: viewmodel.shelvedBooks.length,
                               shrinkWrap: true,
                               physics: BouncingScrollPhysics(),
                               itemBuilder: (context, index) {
                                 return InkWell(
                                   onTap: () {
-                                    int id = viewmodel.shelvedBooks[index].getId!;
+                                    int id =
+                                        viewmodel.shelvedBooks[index].getId!;
                                     String baseFile =
                                         viewmodel.shelvedBooks[index].baseFile!;
                                     print(id);
@@ -106,11 +123,11 @@ class _BookShelfState extends State<BookShelf> {
                                                     BorderRadius.circular(10),
                                                 shape: BoxShape.rectangle,
                                               ),
-                                              child: Image(
+                                              child: _isConnected==true? Image(
                                                   fit: BoxFit.fill,
                                                   image: NetworkImage(viewmodel
                                                       .shelvedBooks[index]
-                                                      .thumbnail)),
+                                                      .thumbnail)):noNetworkImage(),
                                             ),
                                             const SizedBox(
                                               width: 10,
@@ -121,7 +138,8 @@ class _BookShelfState extends State<BookShelf> {
                                                   width: 150,
                                                   child: Text(
                                                     viewmodel
-                                                        .shelvedBooks[index].name,
+                                                        .shelvedBooks[index]
+                                                        .name,
                                                     style: AppStyle.smallText,
                                                     softWrap: true,
                                                   ),
@@ -134,7 +152,8 @@ class _BookShelfState extends State<BookShelf> {
                                           onPressed: () {
                                             int id = viewmodel
                                                 .shelvedBooks[index].getId!;
-                                            String? username = viewmodel.username;
+                                            String? username =
+                                                viewmodel.username;
                                             print(id);
                                             print(username);
                                             viewmodel.removeFromShelf(
@@ -158,5 +177,9 @@ class _BookShelfState extends State<BookShelf> {
               ),
       ),
     );
+  }
+
+  Widget noNetworkImage() {
+    return const Image(image: AssetImage("assets/nobooks.png"));
   }
 }

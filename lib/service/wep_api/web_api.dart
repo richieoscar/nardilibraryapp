@@ -32,9 +32,9 @@ abstract class WebApi {
   Future<bool> addAResource(BookResource? resource);
   Future<ResourceResponse?> getHistory();
   Future<ShelfResponse?> addToShelf(AddToShelf shelfData);
-  Future<ShelfResponse> removeFromShelf(AddToShelf shelfData);
+  Future<ShelfResponse?> removeFromShelf(AddToShelf shelfData);
   Future<ShelfResponse?> getShelfBooks(String? username);
   Future<bool> addDepartment(String? department);
   Future<bool> addUnit(Unit? unit);
-  Future<bool> deleteResource(int? id, BuildContext context);
+  Future<bool?> deleteResource(int? id, BuildContext context);
 }

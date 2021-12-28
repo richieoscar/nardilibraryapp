@@ -66,3 +66,6 @@ const KDefaltWhite = Colors.white;
 const USER_ROLE = "2";
 const user_role = 2;
 const ADMIN = "1";
+
+//Socket exception message
+const socketExceptionMessage = "Please check internet connection";

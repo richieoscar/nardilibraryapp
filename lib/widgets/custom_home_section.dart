@@ -10,8 +10,13 @@ class HomeSection extends StatelessWidget {
   final VoidCallback? seeMore;
   final List<Book> books;
   final Axis? axis;
+  final bool? isConnected;
   HomeSection(
-      {required this.sectionTitle, required this.books, required this.seeMore, this.axis = Axis.horizontal});
+      {required this.sectionTitle,
+      required this.books,
+      required this.seeMore,
+      this.axis = Axis.horizontal,
+      this.isConnected = true});
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +69,9 @@ class HomeSection extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                           shape: BoxShape.rectangle,
                         ),
-                        child: Image(
+                        child: isConnected ==true? Image(
                             fit: BoxFit.fill,
-                            image: NetworkImage(books[index].thumbnail)),
+                            image: NetworkImage(books[index].thumbnail)): noNetworImage(),
                       ),
                     ),
                   );
@@ -75,5 +80,9 @@ class HomeSection extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget noNetworImage() {
+    return const  Image(fit: BoxFit.fill, image: AssetImage("assets/nobooks.png"));
   }
 }

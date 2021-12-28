@@ -24,11 +24,20 @@ class _LoginFormState extends State<LoginForm> {
   bool isChecked = false;
   bool notChecked = false;
   bool _visible = false;
+  bool _isConnected = false;
 
   @override
-  void initstate() {
+  void initState() {
     super.initState();
-    NetworkConection.initializeConnection();
+    checkConnectivity();
+  }
+
+  void checkConnectivity() async {
+    await NetworkConection.initializeConnection();
+    bool status = NetworkConection.checkNetworkConnection();
+    if (!status) {
+      AppUtils.showSnackBarforNetwork(context, "No Network Connection");
+    }
   }
 
   @override
@@ -187,15 +196,17 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  _login(BuildContext context) async {
-    bool? isConnected = await NetworkConection.checkNetworkConnection();
-    if (isConnected!) {
-      if (_formKey.currentState!.validate()) {
+  _login(BuildContext context) {
+   
+    if (_formKey.currentState!.validate()) {
+       NetworkConection.initializeConnection();
+      if (NetworkConection.checkNetworkConnection()) {
+        print(NetworkConection.checkNetworkConnection());
         context.read<LoginFormViewModel>().login(_emailController.text.trim(),
             _passwordController.text.trim(), context);
+      } else {
+        AppUtils.showSnackBarforNetwork(context, "No Network Connection");
       }
-    } else {
-      AppUtils.showSnackBarforNetwork(context, "No Network Connection");
     }
   }
 }

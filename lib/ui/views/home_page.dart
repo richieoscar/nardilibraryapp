@@ -6,6 +6,7 @@ import 'package:nardilibraryapp/resources/app_style.dart';
 import 'package:nardilibraryapp/ui/views/all_departments.dart';
 import 'package:nardilibraryapp/ui/views/all_featured_releases.dart';
 import 'package:nardilibraryapp/ui/views/search_result.dart';
+import 'package:nardilibraryapp/util/network_connection.dart';
 import 'package:nardilibraryapp/util/utils.dart';
 import 'package:nardilibraryapp/viewmodels/homepage_viemodel.dart';
 import 'package:nardilibraryapp/widgets/custom_home_section.dart';
@@ -26,6 +27,7 @@ class _HomePageState extends State<HomePage> {
   final _categoryDropDownValue = "Novel";
 
   final TextEditingController _searchCOntroller = TextEditingController();
+  bool? _isConnected;
 
   @override
   void dispose() {
@@ -34,10 +36,27 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    checkConnectivity();
+  }
+
+  void checkConnectivity() async {
+    await NetworkConection.initializeConnection();
+    bool status = NetworkConection.checkNetworkConnection();
+    setState(() {
+      _isConnected = status;
+    });
+    if (!status) {
+      AppUtils.showSnackBarforNetwork(context, "No Network Connection");
+    } else {}
+  }
+
+  @override
   Widget build(BuildContext context) {
     var viewmodel = Provider.of<HomePageViewmodel>(context);
     return Scaffold(
-      body:viewmodel.isLoading
+      body: viewmodel.isLoading
           ? ProgressBar(viewmodel.isLoading)
           : SafeArea(
               child: SingleChildScrollView(
@@ -51,8 +70,10 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 10),
                       child: Text(
-                       viewmodel.getRole() == ADMIN ? "Hello Admin,":"Hello, ${viewmodel.getUsername()!}",
-                        style:  AppStyle.blackBoldText,
+                        viewmodel.getRole() == ADMIN
+                            ? "Hello Admin,"
+                            : "Hello, ${viewmodel.getUsername()!}",
+                        style: AppStyle.blackBoldText,
                       ),
                     ),
                     Padding(
@@ -75,9 +96,11 @@ class _HomePageState extends State<HomePage> {
                       height: 25,
                     ),
                     HomeSection(
-                        sectionTitle: "Featured Releases",
-                        books: context.watch<HomePageViewmodel>().homeBooks,
-                        seeMore: _seeAllFeaturedReleases),
+                      sectionTitle: "Featured Releases",
+                      books: context.watch<HomePageViewmodel>().homeBooks,
+                      seeMore: _seeAllFeaturedReleases,
+                      isConnected: _isConnected,
+                    ),
                     const SizedBox(
                       height: 25,
                     ),

@@ -18,7 +18,7 @@ abstract class BookResourceService {
   Future<ResourceResponse?> searchResources(String request);
   Future<bool> addAResource(BookResource resource);
   Future<File?> getPDF(String url);
-  Future<bool> deleteAResource(int resourceId, BuildContext context);
+  Future<bool?> deleteAResource(int resourceId, BuildContext context);
   Future<bool> addDepartment(String name, BuildContext context);
   Future<ShelfResponse?> addToShelf(AddToShelf shelf);
   Future<ShelfResponse?> removeFromShelf(AddToShelf shelf);

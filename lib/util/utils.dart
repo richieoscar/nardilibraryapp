@@ -19,14 +19,16 @@ class AppUtils {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-   static void showSnackBarforNetwork(BuildContext context, String message) {
+  
+
+   static void showSnackBarforNetwork(BuildContext? context, String? message) {
     SnackBar snackBar = SnackBar(
         backgroundColor: AppColors.nardOrange,
         dismissDirection: DismissDirection.horizontal,
         elevation: 8,
-        duration: Duration(seconds: 3),
-        content: Text(message, style:AppStyle.snackBarText));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        duration: Duration(seconds: 5),
+        content: Text(message!, style:AppStyle.snackBarText));
+    ScaffoldMessenger.of(context!).showSnackBar(snackBar);
   }
 
   static Widget hideProgressBar(BuildContext context) {

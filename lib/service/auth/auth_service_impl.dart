@@ -32,7 +32,6 @@ class AuthServiceImpl implements AuthService {
   Future<AuthResponse?> loginUser(
       String username, String password, BuildContext context) async {
     AuthResponse? response = await _apiService.login(username, password);
-
     if (response!.status == SUCCESS) {
       print(response.message);
       print(response.data.role);
@@ -51,7 +50,7 @@ class AuthServiceImpl implements AuthService {
       }
     }
     if (response.status == FAILED) {
-      AppUtils.showSnackBar(context, "Invalid Details");
+      AppUtils.showSnackBarforNetwork(context, response.message);
     }
     return response;
   }

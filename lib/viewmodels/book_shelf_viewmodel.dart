@@ -19,7 +19,14 @@ class BookShelfViewmodel extends ChangeNotifier {
     getUsername();
   }
 
-  bool isLoading = true;
+  bool _isLoading = true;
+  get getIsLoading => _isLoading;
+
+  set setIsLoading(isLoading) {
+    _isLoading = isLoading;
+    notifyListeners();
+  }
+
   List<Book>? _shelvedBooks;
   bool _isShelfEmpty = false;
   String? username = "";
@@ -38,24 +45,24 @@ class BookShelfViewmodel extends ChangeNotifier {
         await _bookResourceService.getShelfBooks(_storageService.getUserName());
 
     if (shelfResponse!.status == SUCCESS) {
-      isLoading = false;
+      _isLoading = false;
       _shelvedBooks = shelfResponse.shelVedBooks;
       notifyListeners();
       if (_shelvedBooks!.isEmpty) {
         _isShelfEmpty = true;
         notifyListeners();
       }
-       if (_shelvedBooks!.isNotEmpty) {
+      if (_shelvedBooks!.isNotEmpty) {
         _isShelfEmpty = false;
         notifyListeners();
       }
-      
+
       logger.logInfo("Inside GetShelved Books");
       print(_shelvedBooks);
     }
 
     if (shelfResponse.status == FAILED) {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
 
       logger.logInfo("Inside GetShelved Books");
@@ -68,7 +75,7 @@ class BookShelfViewmodel extends ChangeNotifier {
         await _bookResourceService.removeFromShelf(shelf);
 
     if (shelfResponse!.status == SUCCESS) {
-      isLoading = false;
+      _isLoading = false;
       logger.logInfo(shelfResponse.message);
       AppUtils.showSnackBar(context, "Book removed from shelf");
       notifyListeners();
@@ -76,7 +83,7 @@ class BookShelfViewmodel extends ChangeNotifier {
     }
 
     if (shelfResponse.status == FAILED) {
-      isLoading = false;
+      _isLoading = false;
       logger.logError(shelfResponse.message);
       notifyListeners();
       AppUtils.showSnackBar(context, "Failed to removed from shelf");

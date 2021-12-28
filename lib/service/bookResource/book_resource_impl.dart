@@ -67,8 +67,8 @@ class BookResourceImpl extends BookResourceService {
   }
 
   @override
-  Future<bool> deleteAResource(int resourceId, BuildContext context) async {
-    bool isDeleleted = await _webApi.deleteResource(resourceId, context);
+  Future<bool?> deleteAResource(int resourceId, BuildContext context) async {
+    bool? isDeleleted = await _webApi.deleteResource(resourceId, context);
     return isDeleleted;
   }
 

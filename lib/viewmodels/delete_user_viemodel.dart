@@ -40,9 +40,9 @@ class DeleteUserViewmodel extends ChangeNotifier {
   }
 
   void deleteResource(int id, BuildContext context) async {
-    bool response = await _bookService.deleteAResource(id, context);
+    bool? response = await _bookService.deleteAResource(id, context);
 
-    if (response) {
+    if (response!) {
       AppUtils.showSnackBar(context, "Resource Deleted");
       print(response);
       isVisible = false;
@@ -63,8 +63,9 @@ class DeleteUserViewmodel extends ChangeNotifier {
       print(isAdded);
       isVisible = false;
     }
-    if(!isAdded){
-       AppUtils.showSnackBar(context, "Department could not be added, Try again");
+    if (!isAdded) {
+      AppUtils.showSnackBar(
+          context, "Department could not be added, Try again");
       print(isAdded);
       isVisible = false;
     }

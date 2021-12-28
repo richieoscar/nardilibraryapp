@@ -22,6 +22,7 @@ import 'package:nardilibraryapp/model/shelf/shelf_response.dart';
 import 'package:nardilibraryapp/model/unit.dart';
 import 'package:nardilibraryapp/service/wep_api/web_api.dart';
 import 'package:nardilibraryapp/util/logger.dart';
+import 'package:nardilibraryapp/util/utils.dart';
 import 'package:path_provider/path_provider.dart';
 
 class WebApiImpl implements WebApi {
@@ -57,7 +58,7 @@ class WebApiImpl implements WebApi {
       "http://nardlibrary.org/api/Resource/GetShelf";
   static const String _ADD_TO_SHELF_URL =
       "http://nardlibrary.org/api/Resource/AddToShelf";
-       static const String _REMOVE_FROM_SHELF_URL =
+  static const String _REMOVE_FROM_SHELF_URL =
       "http://nardlibrary.org/api/Resource/RemoveFromShelf";
 
   static const String _ADD_DEPARTMENT_URL =
@@ -97,11 +98,12 @@ class WebApiImpl implements WebApi {
         return loginResponse;
       } else {
         print(response.body);
-        return AuthResponse(FAILED, "", null);
+        return AuthResponse(FAILED, "Invalid Details", null);
       }
     } catch (e) {
       if (e is SocketException) {
         print(e);
+        return AuthResponse(FAILED, socketExceptionMessage, null);
       }
     }
   }
@@ -109,39 +111,45 @@ class WebApiImpl implements WebApi {
   @override
   Future<AuthResponse?> SignUpUser(UserInfo info) async {
     AuthResponse? signUpResponse;
-    Response response = await post(
-      Uri.parse(_SIGN_UP_URL),
-      headers: _headers,
-      body: jsonEncode(
-        <String, dynamic>{
-          "Username": info.userName!,
-          "Password": info.password!,
-          "Address": info.address,
-          "CommencementYear": info.commencementYear,
-          "Department": info.department,
-          "Designation": info.department,
-          "DOB": info.dob,
-          "Email": info.email,
-          "Firstname": info.firstName,
-          "Folio": info.folio!,
-          "Gender": info.gender,
-          "Institution": info.institution,
-          "Othernames": info.otherNames,
-          "Phone": info.phone,
-          "Role": info.role,
-          "State": info.state,
-          "Surname": info.surname
-        },
-      ),
-    );
+    try {
+      Response response = await post(
+        Uri.parse(_SIGN_UP_URL),
+        headers: _headers,
+        body: jsonEncode(
+          <String, dynamic>{
+            "Username": info.userName!,
+            "Password": info.password!,
+            "Address": info.address,
+            "CommencementYear": info.commencementYear,
+            "Department": info.department,
+            "Designation": info.department,
+            "DOB": info.dob,
+            "Email": info.email,
+            "Firstname": info.firstName,
+            "Folio": info.folio!,
+            "Gender": info.gender,
+            "Institution": info.institution,
+            "Othernames": info.otherNames,
+            "Phone": info.phone,
+            "Role": info.role,
+            "State": info.state,
+            "Surname": info.surname
+          },
+        ),
+      );
 
-    if (response.statusCode == 200) {
-      signUpResponse = AuthResponse.fromJson(jsonDecode(response.body));
-      return signUpResponse;
-    }
-    if (response.statusCode == 500) {
-      signUpResponse = AuthResponse.fromJson(jsonDecode(response.body));
-      return AuthResponse(FAILED, signUpResponse.message, null);
+      if (response.statusCode == 200) {
+        signUpResponse = AuthResponse.fromJson(jsonDecode(response.body));
+        return signUpResponse;
+      }
+      if (response.statusCode == 500) {
+        signUpResponse = AuthResponse.fromJson(jsonDecode(response.body));
+        return AuthResponse(FAILED, signUpResponse.message, null);
+      }
+    } catch (e) {
+      if (e is SocketException) {
+        return AuthResponse(FAILED, socketExceptionMessage, null);
+      }
     }
   }
 
@@ -149,79 +157,106 @@ class WebApiImpl implements WebApi {
   Future<AuthResponse?> changePassword(
       String userName, String password, String newPassword) async {
     AuthResponse? changePwdResponse;
-    Response response = await post(Uri.parse(_CHANAGE_PASSWORD_URL),
-        headers: _headers,
-        body: jsonEncode(<String, String>{
-          "Username": userName,
-          "Password": password,
-          "NewPassword": newPassword
-        }));
+    try {
+      Response response = await post(Uri.parse(_CHANAGE_PASSWORD_URL),
+          headers: _headers,
+          body: jsonEncode(<String, String>{
+            "Username": userName,
+            "Password": password,
+            "NewPassword": newPassword
+          }));
 
-    if (response.statusCode == 200) {
-      changePwdResponse = AuthResponse.fromJson(jsonDecode(response.body));
-      return changePwdResponse;
-    } else {
-      print("Printint Error response" + response.body);
-      return AuthResponse(FAILED, "", null);
+      if (response.statusCode == 200) {
+        changePwdResponse = AuthResponse.fromJson(jsonDecode(response.body));
+        return changePwdResponse;
+      } else {
+        print("Printint Error response" + response.body);
+        return AuthResponse(FAILED, "", null);
+      }
+    } catch (e) {
+      if (e is SocketException) {
+        return AuthResponse(FAILED, socketExceptionMessage, null);
+      }
     }
   }
 
   @override
   Future<AuthResponse?> forgotPassword(String userName) async {
     AuthResponse? forgotPwdResponse;
-    Response response = await post(Uri.parse(_FORGOT_PASSWORD_URL),
-        headers: _headers,
-        body: jsonEncode(<String, String>{"Username": userName}));
+    try {
+      Response response = await post(Uri.parse(_FORGOT_PASSWORD_URL),
+          headers: _headers,
+          body: jsonEncode(<String, String>{"Username": userName}));
 
-    if (response.statusCode == 200) {
-      forgotPwdResponse = AuthResponse.fromJson(jsonDecode(response.body));
-      return forgotPwdResponse;
-    } else {
-      print("Prinitng error response" + response.body);
-      return AuthResponse(FAILED, "", null);
+      if (response.statusCode == 200) {
+        forgotPwdResponse = AuthResponse.fromJson(jsonDecode(response.body));
+        return forgotPwdResponse;
+      } else {
+        print("Prinitng error response" + response.body);
+        return AuthResponse(FAILED, "", null);
+      }
+    } catch (e) {
+      if (e is SocketException) {
+        return AuthResponse(FAILED, socketExceptionMessage, null);
+      }
     }
   }
 
   @override
   Future<bool> addAResource(BookResource? resource) async {
     var uri = Uri.parse(_ADD_RESOURCE_URL);
-    var request = MultipartRequest(
-      'POST',
-      uri,
-    )
-      ..files.add(await MultipartFile.fromPath('File', resource!.file,
-          contentType: MediaType('application', 'pdf')))
-      ..fields['Name'] = resource.name
-      ..fields['MediaType'] = resource.mediaType
-      ..fields['DepartmentID'] = resource.departmentId
-      ..fields['Published'] = resource.published
-      ..fields['Description'] = resource.description
-      ..fields['Author'] = resource.author;
-    var response = await request.send();
+    try {
+      var request = MultipartRequest(
+        'POST',
+        uri,
+      )
+        ..files.add(await MultipartFile.fromPath('File', resource!.file,
+            contentType: MediaType('application', 'pdf')))
+        ..fields['Name'] = resource.name
+        ..fields['MediaType'] = resource.mediaType
+        ..fields['DepartmentID'] = resource.departmentId
+        ..fields['Published'] = resource.published
+        ..fields['Description'] = resource.description
+        ..fields['Author'] = resource.author;
+      var response = await request.send();
 
-    if (response.statusCode == 200) {
-      _logger.logInfo('Added Resource Succesful');
-      return true;
-    } else {
-      _logger.logInfo('Added Resource Not Succesful');
-      return true;
+      if (response.statusCode == 200) {
+        _logger.logInfo('Added Resource Succesful');
+        return true;
+      } else {
+        _logger.logInfo('Added Resource Not Succesful');
+        return false;
+      }
+    } catch (e) {
+      if (e is SocketException) {
+        return false;
+      }
     }
+    return false;
   }
 
   @override
   Future<BookResourceResponse?> getBookResourceById(int id) async {
     BookResourceResponse? bookResource;
-    Response response = await post(
-        Uri.parse("https://nardlibrary.org/api/Resource/Get"),
-        headers: _headers,
-        body: json.encode(<String, int>{'ResourceID': id}));
 
-    if (response.statusCode == 200) {
-      bookResource = BookResourceResponse.fromJson(jsonDecode(response.body));
-      _logger.logInfo(response.body);
-      return bookResource;
-    } else {
-      return BookResourceResponse(FAILED, "Book Resource does not exist", null);
+    try {
+      Response response = await post(
+          Uri.parse("https://nardlibrary.org/api/Resource/Get"),
+          headers: _headers,
+          body: json.encode(<String, int>{'ResourceID': id}));
+
+      if (response.statusCode == 200) {
+        bookResource = BookResourceResponse.fromJson(jsonDecode(response.body));
+        _logger.logInfo(response.body);
+        return bookResource;
+      } else {
+        return BookResourceResponse(
+            FAILED, "Book Resource does not exist", null);
+      }
+    } catch (e) {
+      if (e is SocketException) {
+        return BookResourceResponse(FAILED, socketExceptionMessage, null);
+      }
     }
   }
 
@@ -229,20 +264,27 @@ class WebApiImpl implements WebApi {
   Future<ResourceResponse?> getBooksByDepartment(int id) async {
     ResourceResponse? departmentBooks;
     _logger.logInfo("Inside getResourceByDepartment()");
-    Response response = await get(
-      Uri.parse("http://nardlibrary.org/api/Resource/GetByDepartment/$id"),
-      headers: _headers,
-    );
 
-    if (response.statusCode == 200) {
-      _logger.logInfo(response.statusCode.toString());
-      _logger.logInfo(response.body);
-      departmentBooks = ResourceResponse.fromJson(jsonDecode(response.body));
-      print(departmentBooks);
-      //_logger.logInfo("FeaturedBooks" + featuredBooks.books);
-      return departmentBooks;
-    } else {
-      return ResourceResponse(FAILED, "", []);
+    try {
+      Response response = await get(
+        Uri.parse("http://nardlibrary.org/api/Resource/GetByDepartment/$id"),
+        headers: _headers,
+      );
+
+      if (response.statusCode == 200) {
+        _logger.logInfo(response.statusCode.toString());
+        _logger.logInfo(response.body);
+        departmentBooks = ResourceResponse.fromJson(jsonDecode(response.body));
+        print(departmentBooks);
+        //_logger.logInfo("FeaturedBooks" + featuredBooks.books);
+        return departmentBooks;
+      } else {
+        return ResourceResponse(FAILED, "", []);
+      }
+    } catch (e) {
+      if (e is SocketException) {
+        return ResourceResponse(FAILED, socketExceptionMessage, []);
+      }
     }
   }
 
@@ -250,20 +292,26 @@ class WebApiImpl implements WebApi {
   Future<DepartmentResponse?> getDepartments() async {
     DepartmentResponse? departments;
     _logger.logInfo("Inside getepartment()");
-    Response response = await get(
-      Uri.parse(_GET_ALL_DEPARTMENTS_URL),
-      headers: _headers,
-    );
+    try {
+      Response response = await get(
+        Uri.parse(_GET_ALL_DEPARTMENTS_URL),
+        headers: _headers,
+      );
 
-    if (response.statusCode == 200) {
-      _logger.logInfo(response.statusCode.toString());
-      _logger.logInfo(response.body);
-      departments = DepartmentResponse.fromJson(jsonDecode(response.body));
-      print(departments);
-      //_logger.logInfo("FeaturedBooks" + featuredBooks.books);
-      return departments;
-    } else {
-      return DepartmentResponse(FAILED, "", []);
+      if (response.statusCode == 200) {
+        _logger.logInfo(response.statusCode.toString());
+        _logger.logInfo(response.body);
+        departments = DepartmentResponse.fromJson(jsonDecode(response.body));
+        print(departments);
+        //_logger.logInfo("FeaturedBooks" + featuredBooks.books);
+        return departments;
+      } else {
+        return DepartmentResponse(FAILED, "", []);
+      }
+    } catch (e) {
+      if (e is SocketException) {
+        return DepartmentResponse(FAILED, socketExceptionMessage, []);
+      }
     }
   }
 
@@ -271,77 +319,103 @@ class WebApiImpl implements WebApi {
   Future<ResourceResponse?> getFeaturedBooks() async {
     ResourceResponse? featuredBooks;
     _logger.logInfo("Inside getFeaturedBook()");
-    Response response = await get(
-      Uri.parse(_FEATURED_BOOKS_URL),
-      headers: _headers,
-    );
+    try {
+      Response response = await get(
+        Uri.parse(_FEATURED_BOOKS_URL),
+        headers: _headers,
+      );
 
-    if (response.statusCode == 200) {
-      _logger.logInfo(response.statusCode.toString());
-      _logger.logInfo(response.body);
-      featuredBooks = ResourceResponse.fromJson(jsonDecode(response.body));
-      print(featuredBooks);
-      //_logger.logInfo("FeaturedBooks" + featuredBooks.books);
-      return featuredBooks;
-    } else {
-      return ResourceResponse(FAILED, "", []);
+      if (response.statusCode == 200) {
+        _logger.logInfo(response.statusCode.toString());
+        _logger.logInfo(response.body);
+        featuredBooks = ResourceResponse.fromJson(jsonDecode(response.body));
+        print(featuredBooks);
+        //_logger.logInfo("FeaturedBooks" + featuredBooks.books);
+        return featuredBooks;
+      } else {
+        return ResourceResponse(FAILED, "", []);
+      }
+    } catch (e) {
+      if (e is SocketException) {
+        return ResourceResponse(FAILED, socketExceptionMessage, []);
+      }
     }
   }
 
   @override
-  Future<ResourceResponse> searchResources(String request) async {
+  Future<ResourceResponse?> searchResources(String request) async {
     ResourceResponse? searchResponse;
     _logger.logInfo("Inside searchResources()");
-    Response response = await post(Uri.parse(_FIND_RESOURCE_URL),
-        headers: _headers, body: jsonEncode(<String, String>{"Term": request}));
+    try {
+      Response response = await post(Uri.parse(_FIND_RESOURCE_URL),
+          headers: _headers,
+          body: jsonEncode(<String, String>{"Term": request}));
 
-    if (response.statusCode == 200) {
-      _logger.logInfo(response.statusCode.toString());
-      _logger.logInfo(response.body);
-      searchResponse = ResourceResponse.fromJson(jsonDecode(response.body));
-      print(searchResponse);
-      //_logger.logInfo("FeaturedBooks" + featuredBooks.books);
-      return searchResponse;
-    } else {
-      return ResourceResponse(FAILED, "", []);
+      if (response.statusCode == 200) {
+        _logger.logInfo(response.statusCode.toString());
+        _logger.logInfo(response.body);
+        searchResponse = ResourceResponse.fromJson(jsonDecode(response.body));
+        print(searchResponse);
+        //_logger.logInfo("FeaturedBooks" + featuredBooks.books);
+        return searchResponse;
+      } else {
+        return ResourceResponse(FAILED, "", []);
+      }
+    } catch (e) {
+      if (e is SocketException) {
+        return ResourceResponse(FAILED, socketExceptionMessage, []);
+      }
     }
   }
 
   @override
   Future<bool> addDepartment(String? department) async {
     _logger.logInfo("Inside Adddepartment()");
-    Response response = await post(Uri.parse(_ADD_DEPARTMENT_URL),
-        headers: _headers,
-        body: jsonEncode(<String, String>{"Name": department!}));
+    try {
+      Response response = await post(Uri.parse(_ADD_DEPARTMENT_URL),
+          headers: _headers,
+          body: jsonEncode(<String, String>{"Name": department!}));
 
-    if (response.statusCode == 200) {
-      _logger.logInfo(response.body);
-      print(response);
+      if (response.statusCode == 200) {
+        _logger.logInfo(response.body);
+        print(response);
 
-      return true;
-    } else {
-      return false;
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      if (e is SocketException) {
+        return false;
+      }
     }
+    return false;
   }
 
   @override
-  Future<ShelfResponse> addToShelf(AddToShelf shelf) async {
+  Future<ShelfResponse?> addToShelf(AddToShelf shelf) async {
     ShelfResponse? shelfResponse;
-    Response response = await post(Uri.parse(_ADD_TO_SHELF_URL),
-        headers: _headers,
-        body: jsonEncode(<String, dynamic>{
-          "ResourceID": shelf.getResourceId,
-          "Username": shelf.getUsername
-        }));
+    try {
+      Response response = await post(Uri.parse(_ADD_TO_SHELF_URL),
+          headers: _headers,
+          body: jsonEncode(<String, dynamic>{
+            "ResourceID": shelf.getResourceId,
+            "Username": shelf.getUsername
+          }));
 
-    if (response.statusCode == 200) {
-      shelfResponse = ShelfResponse.fromJson(jsonDecode(response.body));
-      return shelfResponse;
-    } else {
-      print("Print Error response");
-      print(response.statusCode);
-      print(response.body);
-      return ShelfResponse(FAILED, "", null);
+      if (response.statusCode == 200) {
+        shelfResponse = ShelfResponse.fromJson(jsonDecode(response.body));
+        return shelfResponse;
+      } else {
+        print("Print Error response");
+        print(response.statusCode);
+        print(response.body);
+        return ShelfResponse(FAILED, "", null);
+      }
+    } catch (e) {
+      if (e is SocketException) {
+        return ShelfResponse(FAILED, socketExceptionMessage, null);
+      }
     }
   }
 
@@ -360,37 +434,49 @@ class WebApiImpl implements WebApi {
   @override
   Future<ShelfResponse?> getShelfBooks(String? username) async {
     ShelfResponse? shelfResponse;
-    Response response = await post(Uri.parse(_GET_SHELF_URL),
-        headers: _headers,
-        body: jsonEncode(<String, String>{"Username": username!}));
+    try {
+      Response response = await post(Uri.parse(_GET_SHELF_URL),
+          headers: _headers,
+          body: jsonEncode(<String, String>{"Username": username!}));
 
-    if (response.statusCode == 200) {
-      shelfResponse = ShelfResponse.fromJsonList(jsonDecode(response.body));
-      return shelfResponse;
-    } else {
-      print("Printint Error response" + response.body);
-      return ShelfResponse(FAILED, "", null);
+      if (response.statusCode == 200) {
+        shelfResponse = ShelfResponse.fromJsonList(jsonDecode(response.body));
+        return shelfResponse;
+      } else {
+        print("Printint Error response" + response.body);
+        return ShelfResponse(FAILED, "", null);
+      }
+    } catch (e) {
+      if (e is SocketException) {
+        return ShelfResponse(FAILED, socketExceptionMessage, null);
+      }
     }
   }
 
   @override
-  Future<ShelfResponse> removeFromShelf(AddToShelf shelf)async {
+  Future<ShelfResponse?> removeFromShelf(AddToShelf shelf) async {
     ShelfResponse? shelfResponse;
-    Response response = await post(Uri.parse(_REMOVE_FROM_SHELF_URL),
-        headers: _headers,
-        body: jsonEncode(<String, dynamic>{
-          "ResourceID": shelf.getResourceId,
-          "Username": shelf.getUsername
-        }));
+    try {
+      Response response = await post(Uri.parse(_REMOVE_FROM_SHELF_URL),
+          headers: _headers,
+          body: jsonEncode(<String, dynamic>{
+            "ResourceID": shelf.getResourceId,
+            "Username": shelf.getUsername
+          }));
 
-    if (response.statusCode == 200) {
-      shelfResponse = ShelfResponse.fromJson(jsonDecode(response.body));
-      return shelfResponse;
-    } else {
-      print("Print Error response");
-      print(response.statusCode);
-      print(response.body);
-      return ShelfResponse(FAILED, "", null);
+      if (response.statusCode == 200) {
+        shelfResponse = ShelfResponse.fromJson(jsonDecode(response.body));
+        return shelfResponse;
+      } else {
+        print("Print Error response");
+        print(response.statusCode);
+        print(response.body);
+        return ShelfResponse(FAILED, "", null);
+      }
+    } catch (e) {
+      if (e is SocketException) {
+        return ShelfResponse(FAILED, socketExceptionMessage, null);
+      }
     }
   }
 
@@ -398,18 +484,24 @@ class WebApiImpl implements WebApi {
   Future<AuthResponse?> deleteUser(String email) async {
     AuthResponse? deleteresponse;
     _logger.logInfo("Inside deleteUser()");
-    Response response = await post(Uri.parse(DELETE_USER_URL),
-        headers: _headers,
-        body: jsonEncode(<String, String>{"Username": email}));
+    try {
+      Response response = await post(Uri.parse(DELETE_USER_URL),
+          headers: _headers,
+          body: jsonEncode(<String, String>{"Username": email}));
 
-    if (response.statusCode == 200) {
-      _logger.logInfo(response.statusCode.toString());
-      _logger.logInfo(response.body);
-      deleteresponse = AuthResponse.fromJson(jsonDecode(response.body));
-      print(deleteresponse.status);
-      return deleteresponse;
-    } else {
-      return AuthResponse(FAILED, "User does not exist", null);
+      if (response.statusCode == 200) {
+        _logger.logInfo(response.statusCode.toString());
+        _logger.logInfo(response.body);
+        deleteresponse = AuthResponse.fromJson(jsonDecode(response.body));
+        print(deleteresponse.status);
+        return deleteresponse;
+      } else {
+        return AuthResponse(FAILED, "User does not exist", null);
+      }
+    } catch (e) {
+      if (e is SocketException) {
+        return AuthResponse(FAILED, socketExceptionMessage, null);
+      }
     }
   }
 
@@ -417,75 +509,95 @@ class WebApiImpl implements WebApi {
   Future<UserResponse?> getUser(String email) async {
     UserResponse? userResponse;
     _logger.logInfo("Inside searchResources()");
-    Response response = await post(Uri.parse(_GET_USER_PROFILE_URL),
-        headers: _headers,
-        body: jsonEncode(<String, String>{"Username": email}));
+    try {
+      Response response = await post(Uri.parse(_GET_USER_PROFILE_URL),
+          headers: _headers,
+          body: jsonEncode(<String, String>{"Username": email}));
 
-    if (response.statusCode == 200) {
-      _logger.logInfo(response.statusCode.toString());
-      _logger.logInfo(response.body);
-      userResponse = UserResponse.fromJson(jsonDecode(response.body));
-      print(userResponse);
-      //_logger.logInfo("FeaturedBooks" + featuredBooks.books);
-      return userResponse;
-    } else {
-      return UserResponse(FAILED, '', null);
+      if (response.statusCode == 200) {
+        _logger.logInfo(response.statusCode.toString());
+        _logger.logInfo(response.body);
+        userResponse = UserResponse.fromJson(jsonDecode(response.body));
+        print(userResponse);
+        //_logger.logInfo("FeaturedBooks" + featuredBooks.books);
+        return userResponse;
+      } else {
+        return UserResponse(FAILED, '', null);
+      }
+    } catch (e) {
+      if (e is SocketException) {
+        return UserResponse(FAILED, socketExceptionMessage, null);
+      }
     }
   }
 
   @override
   Future<UserResponse?> updateUser(UserInfo info) async {
     UserResponse? updateResponse;
-    Response response = await post(
-      Uri.parse(UPDATE_USER_URL),
-      headers: _headers,
-      body: jsonEncode(
-        <String, String>{
-          "Username": info.userName!,
-          "Password": info.password!,
-          "Address": info.address,
-          "CommencementYear": info.commencementYear,
-          "Department": info.department,
-          "Designation": info.department,
-          "DOB": info.dob,
-          "Email": info.email,
-          "Firstname": info.firstName,
-          "Folio": info.folio!,
-          "Gender": info.gender,
-          "Institution": info.institution,
-          "Othernames": info.otherNames,
-          "Phone": info.phone,
-          "Role": info.role.toString(),
-          "State": info.state,
-          "Surname": info.surname
-        },
-      ),
-    );
+    try {
+      Response response = await post(
+        Uri.parse(UPDATE_USER_URL),
+        headers: _headers,
+        body: jsonEncode(
+          <String, String>{
+            "Username": info.userName!,
+            "Password": info.password!,
+            "Address": info.address,
+            "CommencementYear": info.commencementYear,
+            "Department": info.department,
+            "Designation": info.department,
+            "DOB": info.dob,
+            "Email": info.email,
+            "Firstname": info.firstName,
+            "Folio": info.folio!,
+            "Gender": info.gender,
+            "Institution": info.institution,
+            "Othernames": info.otherNames,
+            "Phone": info.phone,
+            "Role": info.role.toString(),
+            "State": info.state,
+            "Surname": info.surname
+          },
+        ),
+      );
 
-    if (response.statusCode == 200) {
-      updateResponse = UserResponse.fromJson(jsonDecode(response.body));
-      return updateResponse;
-    }
-    if (response.statusCode == 500) {
-      updateResponse = UserResponse.fromJson(jsonDecode(response.body));
-      return UserResponse(FAILED, updateResponse.message, null);
+      if (response.statusCode == 200) {
+        updateResponse = UserResponse.fromJson(jsonDecode(response.body));
+        return updateResponse;
+      }
+      if (response.statusCode == 500) {
+        updateResponse = UserResponse.fromJson(jsonDecode(response.body));
+        return UserResponse(FAILED, updateResponse.message, null);
+      }
+    } catch (e) {
+      if (e is SocketException) {
+        return UserResponse(FAILED, socketExceptionMessage, null);
+      }
     }
   }
 
   @override
-  Future<bool> deleteResource(int? id, BuildContext context) async {
-    AuthResponse? deleteResponse;
-    Response response = await post(Uri.parse(_DELETE_RESOURCE_URL),
-        headers: _headers, body: jsonEncode(<String, int>{"ResourceID": id!}));
+  Future<bool?> deleteResource(int? id, BuildContext context) async {
+    // AuthResponse? deleteResponse;
+    try {
+      Response response = await post(Uri.parse(_DELETE_RESOURCE_URL),
+          headers: _headers,
+          body: jsonEncode(<String, int>{"ResourceID": id!}));
 
-    if (response.statusCode == 200) {
-      // deleteResponse = AuthResponse.fromJson(jsonDecode(response.body));
-      print(response.body);
-      return true;
-    } else {
-      print("Prinitng error response" + response.body);
-      //return AuthResponse(FAILED, "", null);
-      return false;
+      if (response.statusCode == 200) {
+        // deleteResponse = AuthResponse.fromJson(jsonDecode(response.body));
+        print(response.body);
+        return true;
+      } else {
+        print("Prinitng error response" + response.body);
+        //return AuthResponse(FAILED, "", null);
+        return false;
+      }
+    } catch (e) {
+      if (e is SocketException) {
+        return false;
+      }
     }
+    return false;
   }
 }
