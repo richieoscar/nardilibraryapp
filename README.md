@@ -10,5 +10,7 @@ Written by Medical professionals
  
 ![Screenshot_20220103-102355](https://user-images.githubusercontent.com/71092412/147915609-f1fe4d53-1a97-429a-995a-d60a4985a9c5.png)
 
+![Screenshot_20220103-102403](https://user-images.githubusercontent.com/71092412/147916161-8ed4e228-f4b5-4745-9375-63e50bc6dc51.png)
+![Screenshot_20220103-102409](https://user-images.githubusercontent.com/71092412/147916186-48ca93fc-0542-4e14-9bd7-7fa2b62e0124.png)
 
 
