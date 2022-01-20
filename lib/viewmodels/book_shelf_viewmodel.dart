@@ -9,6 +9,7 @@ import 'package:nardilibraryapp/service/storage/storage_service.dart';
 import 'package:nardilibraryapp/service/storage/storage_service_impl.dart';
 import 'package:nardilibraryapp/util/logger.dart';
 import 'package:nardilibraryapp/util/utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BookShelfViewmodel extends ChangeNotifier {
   final BookResourceService _bookResourceService = BookResourceImpl.instance;
@@ -29,11 +30,15 @@ class BookShelfViewmodel extends ChangeNotifier {
 
   List<Book>? _shelvedBooks;
   bool _isShelfEmpty = false;
-  String? username = "";
+  String? _username = "";
+  get username => _username;
 
-  void getUsername() {
-    username = _storageService.getUserName();
+  void getUsername() async {
+     SharedPreferences pref = await SharedPreferences.getInstance();
+    _username = pref.getString("userName") ?? "";
     notifyListeners();
+  
+   
   }
 
   get shelvedBooks => _shelvedBooks;
@@ -42,7 +47,7 @@ class BookShelfViewmodel extends ChangeNotifier {
 
   void getShelvedBooks() async {
     ShelfResponse? shelfResponse =
-        await _bookResourceService.getShelfBooks(_storageService.getUserName());
+        await _bookResourceService.getShelfBooks(_username);
 
     if (shelfResponse!.status == SUCCESS) {
       _isLoading = false;

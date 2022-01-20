@@ -8,6 +8,7 @@ import 'package:nardilibraryapp/resources/app_style.dart';
 import 'package:nardilibraryapp/ui/views/pdf_screen.dart';
 import 'package:nardilibraryapp/util/utils.dart';
 import 'package:nardilibraryapp/viewmodels/book_detail_viewmodel.dart';
+import 'package:nardilibraryapp/widgets/cache_image.dart';
 import 'package:nardilibraryapp/widgets/progressar.dart';
 import 'package:provider/provider.dart';
 import 'package:nardilibraryapp/model/shelf/add_to_shelf.dart';
@@ -111,10 +112,10 @@ class _BookDetailState extends State<BookDetails> {
                               height: 200,
                               child: Card(
                                 elevation: 10,
-                                child: Image.network(
+                                child: CacheImage(imageUrl:
                                   viewmodel.book.thumbnail ??
                                       "assets/nobook.png",
-                                  fit: BoxFit.fill,
+
                                 ),
                               ),
                             ),

@@ -13,6 +13,7 @@ import 'package:nardilibraryapp/widgets/custom_home_section.dart';
 import 'package:nardilibraryapp/widgets/progressar.dart';
 import 'package:nardilibraryapp/widgets/show_department_section.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'department_book.dart';
 
@@ -55,6 +56,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var viewmodel = Provider.of<HomePageViewmodel>(context);
+     print(viewmodel.role);
     return Scaffold(
       body: viewmodel.isLoading
           ? ProgressBar(viewmodel.isLoading)
@@ -70,9 +72,10 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 10),
                       child: Text(
-                        viewmodel.getRole() == ADMIN
+                       
+                        viewmodel.role == ADMIN
                             ? "Hello Admin,"
-                            : "Hello, ${viewmodel.getUsername()!}",
+                            : "Hello, ${viewmodel.username}",
                         style: AppStyle.blackBoldText,
                       ),
                     ),
@@ -115,6 +118,20 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
     );
+  }
+
+  void _performSearchQuery(String searchQuery) {
+    String query = searchQuery;
+    query.isEmpty
+        ? AppUtils.showSnackBar(context, "Search field empty")
+        : Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SearchResult(
+                searchQuery: query,
+              ),
+            ),
+          );
   }
 
   void _seeAllDepartments() {
@@ -180,22 +197,14 @@ class _HomePageState extends State<HomePage> {
                 child: TextField(
                   controller: _searchCOntroller,
                   textInputAction: TextInputAction.search,
+                  onSubmitted: (value) {
+                    _performSearchQuery(value);
+                  },
                   cursorColor: AppColors.backgroundColor,
                   decoration: InputDecoration(
                     suffixIcon: IconButton(
                       onPressed: () {
-                        String query = _searchCOntroller.text;
-                        query.isEmpty
-                            ? AppUtils.showSnackBar(
-                                context, "Search field empty")
-                            : Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SearchResult(
-                                    searchQuery: _searchCOntroller.text,
-                                  ),
-                                ),
-                              );
+                        _performSearchQuery(_searchCOntroller.text);
                       },
                       icon: Icon(Icons.search_rounded,
                           color: AppColors.searcIconColor),

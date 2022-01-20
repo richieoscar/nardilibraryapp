@@ -3,6 +3,7 @@ import 'package:nardilibraryapp/resources/app_colors.dart';
 import 'package:nardilibraryapp/resources/app_style.dart';
 import 'package:nardilibraryapp/ui/views/details_screen.dart';
 import 'package:nardilibraryapp/viewmodels/department_books_viewmodel.dart';
+import 'package:nardilibraryapp/widgets/cache_image.dart';
 import 'package:nardilibraryapp/widgets/custom_app_bar.dart';
 import 'package:nardilibraryapp/widgets/no_resource.dart';
 
@@ -101,14 +102,12 @@ class _DepartmentBooksState extends State<DepartmentBooks> {
                                           child: Card(
                                             elevation: 1,
                                             color: AppColors.white,
-                                            child: Image(
-                                              fit: BoxFit.fill,
-                                              image: NetworkImage(viewmodel
+                                            child: CacheImage(imageUrl:  viewmodel
                                                   .departmentBooks[index]
                                                   .thumbnail??"https://pixabay.com/vectors/student-teenager-book-learning-147783/"),
                                             ),
                                           ),
-                                        ),
+                                        
                                       ));
                                 }),
                           ),

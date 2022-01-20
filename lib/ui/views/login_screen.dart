@@ -42,6 +42,7 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    var viewmodel = Provider.of<LoginFormViewModel>(context);
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -159,6 +160,7 @@ class _LoginFormState extends State<LoginForm> {
                           onChanged: (value) {
                             setState(() {
                               isChecked = value!;
+                              viewmodel.keepMeLoggedIn(isChecked);
                             });
                           }),
                       Text("Keeped me Logged In", style: AppStyle.smallText)
@@ -172,7 +174,7 @@ class _LoginFormState extends State<LoginForm> {
                 const SizedBox(
                   height: 20,
                 ),
-                ProgressBar(context.watch<LoginFormViewModel>().isVisible),
+                ProgressBar(viewmodel.isVisible),
                 const SizedBox(
                   height: 26,
                 ),
@@ -197,9 +199,8 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   _login(BuildContext context) {
-   
     if (_formKey.currentState!.validate()) {
-       NetworkConection.initializeConnection();
+      NetworkConection.initializeConnection();
       if (NetworkConection.checkNetworkConnection()) {
         print(NetworkConection.checkNetworkConnection());
         context.read<LoginFormViewModel>().login(_emailController.text.trim(),

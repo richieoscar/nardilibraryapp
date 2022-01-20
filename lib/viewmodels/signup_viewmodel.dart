@@ -5,11 +5,14 @@ import 'package:nardilibraryapp/model/auth/auth_response.dart';
 import 'package:nardilibraryapp/model/auth/user_info.dart';
 import 'package:nardilibraryapp/service/auth/auth_service.dart';
 import 'package:nardilibraryapp/service/auth/auth_service_impl.dart';
+import 'package:nardilibraryapp/service/storage/storage_service.dart';
+import 'package:nardilibraryapp/service/storage/storage_service_impl.dart';
 import 'package:nardilibraryapp/util/utils.dart';
 import 'package:nardilibraryapp/util/validate_util.dart';
 
 class SignUpViewmodel extends ChangeNotifier {
   final AuthService _service = AuthServiceImpl.instance;
+  final StorageService _storageService = StorageServiceImpl.instance;
   bool _isVisible = false;
   bool _isChecked = false;
   bool get isChecked => _isChecked;
@@ -21,7 +24,7 @@ class SignUpViewmodel extends ChangeNotifier {
   }
 
   set isChecked(bool value) {
-    _isChecked= value;
+    _isChecked = value;
     notifyListeners();
   }
 
@@ -29,30 +32,31 @@ class SignUpViewmodel extends ChangeNotifier {
       UserInfo info, String confirmPassword, BuildContext context) async {
     if (!passwordMatch(info.password, confirmPassword)) {
       AppUtils.showSnackBar(context, "Password do not match");
-       isVisible = false;
+      isVisible = false;
       return;
     }
 
     if (!isValidLength(info.password, confirmPassword)) {
-       isVisible = false;
+      isVisible = false;
       AppUtils.showSnackBar(context, "Password too short");
       return;
     }
 
-    if(!_isChecked){
-       isVisible = false;
-       AppUtils.showSnackBar(context, "Please Agree to T&C");
+    if (!_isChecked) {
+      isVisible = false;
+      AppUtils.showSnackBar(context, "Please Agree to T&C");
       return;
     }
 
     if (!validateEmail(info.email)) {
-       isVisible = false;
+      isVisible = false;
       AppUtils.showSnackBar(context, "Invalid Email");
       return;
     }
 
     AuthResponse? response = await _service.SignUpUser(info, context);
     if (response!.status == SUCCESS) {
+      _storageService.saveRole(info.role.toString());
       isVisible = false;
     }
 
@@ -61,34 +65,35 @@ class SignUpViewmodel extends ChangeNotifier {
     }
   }
 
-   void signUpUserAsAdmin(
+  void signUpUserAsAdmin(
       UserInfo info, String confirmPassword, BuildContext context) async {
     if (!passwordMatch(info.password, confirmPassword)) {
       AppUtils.showSnackBar(context, "Password do not match");
-       isVisible = false;
+      isVisible = false;
       return;
     }
 
     if (!isValidLength(info.password, confirmPassword)) {
-       isVisible = false;
+      isVisible = false;
       AppUtils.showSnackBar(context, "Password too short");
       return;
     }
 
-    if(!_isChecked){
-       isVisible = false;
-       AppUtils.showSnackBar(context, "Please Agree to T&C");
+    if (!_isChecked) {
+      isVisible = false;
+      AppUtils.showSnackBar(context, "Please Agree to T&C");
       return;
     }
 
     if (!validateEmail(info.email)) {
-       isVisible = false;
+      isVisible = false;
       AppUtils.showSnackBar(context, "Invalid Email");
       return;
     }
 
     AuthResponse? response = await _service.SignUpUserAsAdmin(info, context);
     if (response!.status == SUCCESS) {
+     // _storageService.saveRole(info.role.toString());
       isVisible = false;
     }
 

@@ -14,6 +14,7 @@ import 'package:nardilibraryapp/service/storage/storage_service.dart';
 import 'package:nardilibraryapp/service/storage/storage_service_impl.dart';
 import 'package:nardilibraryapp/util/logger.dart';
 import 'package:nardilibraryapp/util/utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePageViewmodel extends ChangeNotifier {
   final StorageService _storageService = StorageServiceImpl.instance;
@@ -24,6 +25,8 @@ class HomePageViewmodel extends ChangeNotifier {
   HomePageViewmodel() {
     getFeaturedBooks();
     getDepartments();
+    getRole();
+    getUsername();
   }
 
   List<Book> _featuredBooks = [];
@@ -31,7 +34,11 @@ class HomePageViewmodel extends ChangeNotifier {
   List<Department> _departments = [];
   List<Department> _popularDepartments = [];
   List<Book> _homeBooks = [];
+  String _role = "";
+  String _username = "";
+  String get username => _username;
 
+  get role => _role;
 
   get homeBooks => _homeBooks;
 
@@ -40,12 +47,16 @@ class HomePageViewmodel extends ChangeNotifier {
   get featuredBooks => _featuredBooks;
   bool isLoading = true;
 
-  String? getUsername() {
-    return _storageService.getUserName()!;
+  void getUsername() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    _username = pref.getString("userName") ?? "";
+    notifyListeners();
   }
 
-  String? getRole() {
-    return _storageService.getRole()!;
+  getRole() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    _role = pref.getString("role") ?? "";
+    notifyListeners();
   }
 
   void getFeaturedBooks() async {
@@ -74,7 +85,7 @@ class HomePageViewmodel extends ChangeNotifier {
       _departments = resourceResponse.department!;
       _popularDepartments.add(_departments[0]);
       _popularDepartments.add(_departments[1]);
-      _popularDepartments.add(_departments[22]);
+      _popularDepartments.add(_departments[2]);
       _popularDepartments.add(_departments[3]);
 
       logger.logInfo(_departments.toString());

@@ -20,6 +20,8 @@ import 'package:nardilibraryapp/model/bookresource/add_resource.dart';
 import 'package:nardilibraryapp/model/shelf/add_to_shelf.dart';
 import 'package:nardilibraryapp/model/shelf/shelf_response.dart';
 import 'package:nardilibraryapp/model/unit.dart';
+import 'package:nardilibraryapp/service/storage/storage_service.dart';
+import 'package:nardilibraryapp/service/storage/storage_service_impl.dart';
 import 'package:nardilibraryapp/service/wep_api/web_api.dart';
 import 'package:nardilibraryapp/util/logger.dart';
 import 'package:nardilibraryapp/util/utils.dart';
@@ -79,6 +81,7 @@ class WebApiImpl implements WebApi {
   WebApiImpl._internal();
   static final WebApiImpl _instance = WebApiImpl._internal();
   static get instance => _instance;
+  StorageService _storageService = StorageServiceImpl.instance;
 
   AppLogger _logger = AppLogger();
 
@@ -94,6 +97,10 @@ class WebApiImpl implements WebApi {
 
       if (response.statusCode == 200) {
         loginResponse = AuthResponse.fromJson(jsonDecode(response.body));
+        print("Saving user role at login");
+        print(loginResponse.data.role);
+        _storageService.saveRole(loginResponse.data.role);
+        
 
         return loginResponse;
       } else {
@@ -140,6 +147,8 @@ class WebApiImpl implements WebApi {
 
       if (response.statusCode == 200) {
         signUpResponse = AuthResponse.fromJson(jsonDecode(response.body));
+        _storageService.saveRole(info.role);
+        print("Saving user role at Sign up");
         return signUpResponse;
       }
       if (response.statusCode == 500) {
@@ -518,6 +527,8 @@ class WebApiImpl implements WebApi {
         _logger.logInfo(response.statusCode.toString());
         _logger.logInfo(response.body);
         userResponse = UserResponse.fromJson(jsonDecode(response.body));
+        _storageService.saveUserID(userResponse.userInfo!.id);
+        _storageService.saveEmail(email);
         print(userResponse);
         //_logger.logInfo("FeaturedBooks" + featuredBooks.books);
         return userResponse;

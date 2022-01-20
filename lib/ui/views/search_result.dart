@@ -8,6 +8,7 @@ import 'package:nardilibraryapp/ui/views/add_resource.dart';
 import 'package:nardilibraryapp/ui/views/details_screen.dart';
 import 'package:nardilibraryapp/util/utils.dart';
 import 'package:nardilibraryapp/viewmodels/search_result_viewmodel.dart';
+import 'package:nardilibraryapp/widgets/cache_image.dart';
 import 'package:nardilibraryapp/widgets/custom_app_bar.dart';
 import 'package:nardilibraryapp/widgets/no_resource.dart';
 import 'package:nardilibraryapp/widgets/progressar.dart';
@@ -95,12 +96,9 @@ class _SearchResultState extends State<SearchResult> {
                                       child: Row(
                                         children: [
                                           Expanded(
-                                            child: Image(
-                                              fit: BoxFit.fill,
-                                              image: NetworkImage(provider
+                                            child: CacheImage(imageUrl:provider
                                                   .searchQueryList[index]
                                                   .thumbnail),
-                                            ),
                                           ),
                                           SizedBox(
                                             width: 10,

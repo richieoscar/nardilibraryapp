@@ -38,6 +38,7 @@ import 'package:nardilibraryapp/viewmodels/login_form_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/nardaccess_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/search_result_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/signup_viewmodel.dart';
+import 'package:nardilibraryapp/viewmodels/splash_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/verify_email_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/view_profile_viewmodel.dart';
 import 'package:provider/provider.dart';
@@ -63,6 +64,7 @@ void main() {
       ChangeNotifierProvider(create: (_) => DeleteUserViewmodel()),
       ChangeNotifierProvider(create: (_) => ViewProfileViewmodel()),
       ChangeNotifierProvider(create: (_) => BookShelfViewmodel()),
+       ChangeNotifierProvider(create: (_) => SplashViewmodel()),
     ],
     child: Home(),
 

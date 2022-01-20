@@ -4,6 +4,8 @@ import 'package:nardilibraryapp/model/bookresource/book.dart';
 import 'package:nardilibraryapp/resources/app_colors.dart';
 import 'package:nardilibraryapp/resources/app_style.dart';
 import 'package:nardilibraryapp/ui/views/details_screen.dart';
+import 'package:nardilibraryapp/util/utils.dart';
+import 'package:nardilibraryapp/widgets/cache_image.dart';
 
 class HomeSection extends StatelessWidget {
   final String sectionTitle;
@@ -49,7 +51,8 @@ class HomeSection extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () {
-                      int id = books[index].getId!;
+                      if(isConnected!){
+                           int id = books[index].getId!;
                       String baseFile = books[index].baseFile!;
                       print(id);
                       Navigator.push(
@@ -61,6 +64,13 @@ class HomeSection extends StatelessWidget {
                           ),
                         ),
                       );
+                      }
+
+                      else {
+                        AppUtils.showSnackBarforNetwork(context, "No Network Connection");
+                      }
+                      
+                     
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -69,11 +79,9 @@ class HomeSection extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                           shape: BoxShape.rectangle,
                         ),
-                        child: isConnected ==true? Image(
-                            fit: BoxFit.fill,
-                            image: NetworkImage(books[index].thumbnail)): noNetworImage(),
+                        child:CacheImage(imageUrl:  books[index].thumbnail,))
                       ),
-                    ),
+                    
                   );
                 }),
           ),

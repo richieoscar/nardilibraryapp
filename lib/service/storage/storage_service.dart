@@ -3,10 +3,19 @@ abstract class StorageService {
 
   String? getUserName();
 
-  Future<void> saveRole(String role);
+  Future<bool?> saveRole(String? role);
+
+   Future<void> saveUserID(int id);
+
+   Future<void> clear();
 
   String? getRole();
+  
 
   Future<void>? saveEmail(String email);
   String? getEmail();
+
+  Future<void> keepMeLoggedIn(bool isLoggedIn);
+
+  Future<bool?> getKeepMeLoggedIn();
 }

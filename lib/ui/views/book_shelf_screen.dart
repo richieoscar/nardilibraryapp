@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:nardilibraryapp/model/Books.dart';
+import 'package:flutter/material.dart';
 import 'package:nardilibraryapp/model/shelf/add_to_shelf.dart';
 import 'package:nardilibraryapp/resources/app_colors.dart';
 import 'package:nardilibraryapp/resources/app_style.dart';
@@ -8,9 +7,8 @@ import 'package:nardilibraryapp/ui/views/details_screen.dart';
 import 'package:nardilibraryapp/util/network_connection.dart';
 import 'package:nardilibraryapp/util/utils.dart';
 import 'package:nardilibraryapp/viewmodels/book_shelf_viewmodel.dart';
-import 'package:nardilibraryapp/widgets/book_shelf_list.dart';
 import 'package:nardilibraryapp/widgets/books_shelf_empty.dart';
-import 'package:nardilibraryapp/widgets/custom_app_bar.dart';
+import 'package:nardilibraryapp/widgets/cache_image.dart';
 import 'package:nardilibraryapp/widgets/progressar.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +22,7 @@ class BookShelf extends StatefulWidget {
 
 class _BookShelfState extends State<BookShelf> {
   bool? _isConnected;
+
   @override
   void initState() {
     checkConnectivity();
@@ -45,49 +44,49 @@ class _BookShelfState extends State<BookShelf> {
 
   @override
   Widget build(BuildContext context) {
-    var viewmodel = Provider.of<BookShelfViewmodel>(context);
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.white,
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          "NardLibrary",
-          style: AppStyle.appBarText,
+    // var viewmodel = Provider.of<BookShelfViewmodel>(context);
+    return Consumer<BookShelfViewmodel>(builder: (context, viewmodel, child) {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: AppColors.white,
+          elevation: 0,
+          centerTitle: true,
+          title: Text(
+            "NardLibrary",
+            style: AppStyle.appBarText,
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Icon(
+                Icons.clear_all_outlined,
+                color: AppColors.nardBlack,
+              ),
+            )
+          ],
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Icon(
-              Icons.clear_all_outlined,
-              color: AppColors.nardBlack,
-            ),
-          )
-        ],
-      ),
-      body: SafeArea(
-        child: viewmodel.getIsLoading
-            ? ProgressBar(viewmodel.getIsLoading)
-            : Column(
-                children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "Your Book Shelf",
-                    style: AppStyle.shelfHeadlineText,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  viewmodel.isShelfEmpty
-                      ? BookShelfEmpty()
-                      : Expanded(
-                          child: Consumer<BookShelfViewmodel>(
-                            builder: (_, viewmodel, __) => ListView.builder(
+        body: SafeArea(
+          child: viewmodel.getIsLoading
+              ? ProgressBar(viewmodel.getIsLoading)
+              : Column(
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Your Book Shelf",
+                      style: AppStyle.shelfHeadlineText,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    viewmodel.isShelfEmpty
+                        ? const BookShelfEmpty()
+                        : Expanded(
+                            child: ListView.builder(
                               itemCount: viewmodel.shelvedBooks.length,
                               shrinkWrap: true,
-                              physics: BouncingScrollPhysics(),
+                              physics: const BouncingScrollPhysics(),
                               itemBuilder: (context, index) {
                                 return InkWell(
                                   onTap: () {
@@ -123,11 +122,10 @@ class _BookShelfState extends State<BookShelf> {
                                                     BorderRadius.circular(10),
                                                 shape: BoxShape.rectangle,
                                               ),
-                                              child: _isConnected==true? Image(
-                                                  fit: BoxFit.fill,
-                                                  image: NetworkImage(viewmodel
+                                              child: CacheImage(
+                                                  imageUrl: viewmodel
                                                       .shelvedBooks[index]
-                                                      .thumbnail)):noNetworkImage(),
+                                                      .thumbnail),
                                             ),
                                             const SizedBox(
                                               width: 10,
@@ -172,11 +170,11 @@ class _BookShelfState extends State<BookShelf> {
                               },
                             ),
                           ),
-                        )
-                ],
-              ),
-      ),
-    );
+                  ],
+                ),
+        ),
+      );
+    });
   }
 
   Widget noNetworkImage() {

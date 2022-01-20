@@ -6,40 +6,69 @@ class StorageServiceImpl implements StorageService {
   static final StorageServiceImpl _instance = StorageServiceImpl._internal();
   static get instance => _instance;
 
-  SharedPreferences? _userNamePref;
-  SharedPreferences? _userRolePref;
-  SharedPreferences? _userEmailPref;
+ 
+  SharedPreferences? _storagePref;
+  
+  
 
   @override
   String? getUserName() {
-    return _userNamePref!.getString("userName");
+   // return _userNamePref!.getString("userName");
   }
 
   @override
   Future<bool> saveUserName(String username) async {
-    _userNamePref = await SharedPreferences.getInstance();
-    return await _userNamePref!.setString("userName", username);
+    _storagePref = await SharedPreferences.getInstance();
+    return await _storagePref!.setString("userName", username);
   }
 
   @override
   String? getRole() {
-    return _userRolePref!.getString("role");
+  //  return _storagePref?.getString("role");
   }
 
   @override
-  Future<void> saveRole(String role) async {
-    _userRolePref = await SharedPreferences.getInstance();
-    _userRolePref!.setString("role", role);
+  Future<bool?> saveRole(String? role) async {
+    _storagePref = await SharedPreferences.getInstance();
+    return await _storagePref?.setString("role", role!);
   }
+
+ 
 
   @override
   Future<void>? saveEmail(String email) async {
-    _userEmailPref = await SharedPreferences.getInstance();
-    _userEmailPref!.setString("email", email);
+    _storagePref = await SharedPreferences.getInstance();
+    _storagePref!.setString("email", email);
   }
 
   @override
   String? getEmail() {
-   return  _userEmailPref!.getString("email");
+    return _storagePref!.getString("email");
+  }
+
+  @override
+  Future<bool?> getKeepMeLoggedIn() async {
+    _storagePref = await SharedPreferences.getInstance();
+    return _storagePref!.getBool("isLoggedIn");
+  }
+
+  @override
+  Future<void> keepMeLoggedIn(bool isLoggedIn) async {
+    _storagePref = await SharedPreferences.getInstance();
+    _storagePref!.setBool("isLoggedIn", isLoggedIn);
+  }
+
+ 
+
+  @override
+  Future<void> saveUserID(int id) async {
+    _storagePref = await SharedPreferences.getInstance();
+    _storagePref!.setInt("id", id);
+  }
+
+  @override
+  Future<void> clear() async {
+    _storagePref = await SharedPreferences.getInstance();
+    _storagePref!.clear();
   }
 }
