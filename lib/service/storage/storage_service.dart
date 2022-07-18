@@ -5,7 +5,7 @@ abstract class StorageService {
 
   Future<bool?> saveRole(String? role);
 
-   Future<void> saveUserID(int id);
+   Future<void> saveUserID(String id);
 
    Future<void> clear();
 

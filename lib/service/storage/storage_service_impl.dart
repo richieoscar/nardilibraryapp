@@ -6,14 +6,11 @@ class StorageServiceImpl implements StorageService {
   static final StorageServiceImpl _instance = StorageServiceImpl._internal();
   static get instance => _instance;
 
- 
   SharedPreferences? _storagePref;
-  
-  
 
   @override
   String? getUserName() {
-   // return _userNamePref!.getString("userName");
+    // return _userNamePref!.getString("userName");
   }
 
   @override
@@ -24,7 +21,7 @@ class StorageServiceImpl implements StorageService {
 
   @override
   String? getRole() {
-  //  return _storagePref?.getString("role");
+    //  return _storagePref?.getString("role");
   }
 
   @override
@@ -32,8 +29,6 @@ class StorageServiceImpl implements StorageService {
     _storagePref = await SharedPreferences.getInstance();
     return await _storagePref?.setString("role", role!);
   }
-
- 
 
   @override
   Future<void>? saveEmail(String email) async {
@@ -58,17 +53,16 @@ class StorageServiceImpl implements StorageService {
     _storagePref!.setBool("isLoggedIn", isLoggedIn);
   }
 
- 
-
   @override
-  Future<void> saveUserID(int id) async {
+  Future<void> saveUserID(String id) async {
     _storagePref = await SharedPreferences.getInstance();
-    _storagePref!.setInt("id", id);
+    _storagePref!.setString("id", id);
   }
 
   @override
   Future<void> clear() async {
     _storagePref = await SharedPreferences.getInstance();
-    _storagePref!.clear();
+    bool isCleared = await _storagePref!.clear();
+    if (isCleared) print("Storage Pref cleared");
   }
 }

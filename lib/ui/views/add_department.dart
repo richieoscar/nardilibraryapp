@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nardilibraryapp/resources/app_colors.dart';
 import 'package:nardilibraryapp/resources/app_style.dart';
-import 'package:nardilibraryapp/ui/views/verify_email_screen.dart';
 import 'package:nardilibraryapp/viewmodels/delete_user_viemodel.dart';
-import 'package:nardilibraryapp/viewmodels/forgot_password_viewmodel.dart';
-
 import 'package:nardilibraryapp/widgets/custom_app_bar.dart';
 import 'package:nardilibraryapp/widgets/custom_button.dart';
 import 'package:nardilibraryapp/widgets/custome_text_form_field.dart';

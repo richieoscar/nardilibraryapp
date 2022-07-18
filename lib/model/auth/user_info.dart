@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 class UserInfo {
   int? _id;
   String? _userName;
@@ -154,5 +155,10 @@ class UserInfo {
     _userName = json['username'];
     _password = json['password'];
     _profiled = json['profiled'];
+  }
+
+  @override
+  String toString() {
+    return 'UserInfo(_id: $_id, _userName: $_userName, _password: $_password, _address: $_address, _commencementYear: $_commencementYear, _department: $_department, _designation: $_designation, _dob: $_dob, _email: $_email, _firstName: $_firstName, _folio: $_folio, _gender: $_gender, _institution: $_institution, _otherNames: $_otherNames, _phone: $_phone, _role: $_role, _state: $_state, _surname: $_surname, _profiled: $_profiled)';
   }
 }

@@ -23,10 +23,7 @@ class HomePageViewmodel extends ChangeNotifier {
   AppLogger logger = AppLogger();
 
   HomePageViewmodel() {
-    getFeaturedBooks();
-    getDepartments();
-    getRole();
-    getUsername();
+    initHome();
   }
 
   List<Book> _featuredBooks = [];
@@ -36,7 +33,11 @@ class HomePageViewmodel extends ChangeNotifier {
   List<Book> _homeBooks = [];
   String _role = "";
   String _username = "";
+  String _id = "";
+  String _email = "";
   String get username => _username;
+  String get id => _id;
+  String get email => _email;
 
   get role => _role;
 
@@ -47,19 +48,28 @@ class HomePageViewmodel extends ChangeNotifier {
   get featuredBooks => _featuredBooks;
   bool isLoading = true;
 
-  void getUsername() async {
+  Future<void> initHome() async {
+    await getFeaturedBooks();
+    await getDepartments();
+    await getRole();
+    await getUsername();
+  }
+
+  Future<void> getUsername() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     _username = pref.getString("userName") ?? "";
+    _id = pref.getString("id") ?? "";
+    _email = pref.getString("email") ?? "";
     notifyListeners();
   }
 
-  getRole() async {
+  Future<void> getRole() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     _role = pref.getString("role") ?? "";
     notifyListeners();
   }
 
-  void getFeaturedBooks() async {
+  Future<void> getFeaturedBooks() async {
     ResourceResponse? resourceResponse =
         await _bookResourceService.getFeaturedBooks();
 
@@ -76,7 +86,7 @@ class HomePageViewmodel extends ChangeNotifier {
     }
   }
 
-  void getDepartments() async {
+  Future<void> getDepartments() async {
     DepartmentResponse? resourceResponse =
         await _bookResourceService.getDepartments();
 

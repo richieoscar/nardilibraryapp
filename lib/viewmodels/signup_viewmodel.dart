@@ -55,12 +55,12 @@ class SignUpViewmodel extends ChangeNotifier {
     }
 
     AuthResponse? response = await _service.SignUpUser(info, context);
-    if (response!.status == SUCCESS) {
+    if (response?.status == SUCCESS) {
       _storageService.saveRole(info.role.toString());
       isVisible = false;
     }
 
-    if (response.status == FAILED) {
+    if (response?.status == FAILED) {
       isVisible = false;
     }
   }

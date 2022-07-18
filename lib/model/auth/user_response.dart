@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:nardilibraryapp/model/auth/user_info.dart';
 
 class UserResponse {
@@ -16,8 +17,8 @@ class UserResponse {
    
   }
 
+ 
+
   @override
-  String toString() {
-    return super.toString();
-  }
+  String toString() => 'UserResponse(status: $status, message: $message, userInfo: $userInfo)';
 }

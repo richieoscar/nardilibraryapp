@@ -100,7 +100,6 @@ class WebApiImpl implements WebApi {
         print("Saving user role at login");
         print(loginResponse.data.role);
         _storageService.saveRole(loginResponse.data.role);
-        
 
         return loginResponse;
       } else {
@@ -147,8 +146,9 @@ class WebApiImpl implements WebApi {
 
       if (response.statusCode == 200) {
         signUpResponse = AuthResponse.fromJson(jsonDecode(response.body));
-        _storageService.saveRole(info.role);
-        print("Saving user role at Sign up");
+        print(signUpResponse);
+      //  _storageService.saveRole(info.role);
+       // print("Saving user role at Sign up");
         return signUpResponse;
       }
       if (response.statusCode == 500) {
@@ -517,7 +517,7 @@ class WebApiImpl implements WebApi {
   @override
   Future<UserResponse?> getUser(String email) async {
     UserResponse? userResponse;
-    _logger.logInfo("Inside searchResources()");
+    _logger.logInfo("Inside getUSer()");
     try {
       Response response = await post(Uri.parse(_GET_USER_PROFILE_URL),
           headers: _headers,
@@ -527,9 +527,9 @@ class WebApiImpl implements WebApi {
         _logger.logInfo(response.statusCode.toString());
         _logger.logInfo(response.body);
         userResponse = UserResponse.fromJson(jsonDecode(response.body));
-        _storageService.saveUserID(userResponse.userInfo!.id);
-        _storageService.saveEmail(email);
-        print(userResponse);
+        // _storageService.saveUserID(userResponse.userInfo!.id);
+        // _storageService.saveEmail(email);
+        // print(userResponse);
         //_logger.logInfo("FeaturedBooks" + featuredBooks.books);
         return userResponse;
       } else {

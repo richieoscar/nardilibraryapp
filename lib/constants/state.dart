@@ -64,7 +64,7 @@ const KDefaltWhite = Colors.white;
 
 //roles
 const USER_ROLE = "2";
-const user_role = 2;
+const user_role = 1;
 const ADMIN = "1";
 
 //Socket exception message

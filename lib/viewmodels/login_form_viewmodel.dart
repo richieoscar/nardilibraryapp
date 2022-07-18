@@ -10,6 +10,7 @@ import 'package:nardilibraryapp/service/auth/auth_service.dart';
 import 'package:nardilibraryapp/service/auth/auth_service_impl.dart';
 import 'package:nardilibraryapp/service/storage/storage_service.dart';
 import 'package:nardilibraryapp/service/storage/storage_service_impl.dart';
+import 'package:nardilibraryapp/util/logger.dart';
 import 'package:nardilibraryapp/util/utils.dart';
 import 'package:nardilibraryapp/util/validate_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,10 +18,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LoginFormViewModel extends ChangeNotifier {
   final AuthService _service = AuthServiceImpl.instance;
   StorageService _storageService = StorageServiceImpl.instance;
-
-  LoginFormViewModel() {
-    getCachedDetails();
-  }
 
   bool _isVisible = false;
   String? _email;
@@ -38,8 +35,6 @@ class LoginFormViewModel extends ChangeNotifier {
   bool _isGettingUser = false;
   get isGetUser => _isGettingUser;
 
- 
-
   set isVisible(bool value) {
     _isVisible = value;
     notifyListeners();
@@ -51,6 +46,8 @@ class LoginFormViewModel extends ChangeNotifier {
     _username = pref.getString("userName");
     _email = pref.getString("email");
     notifyListeners();
+    print("Loading Cache details on Login viewmodel constructor");
+    print("ID $_id, $_email, $_username");
   }
 
   void login(String email, String password, BuildContext context) async {
@@ -58,8 +55,8 @@ class LoginFormViewModel extends ChangeNotifier {
     notifyListeners();
     AuthResponse? response = await _service.loginUser(email, password, context);
     if (response!.status == "success") {
-      _storageService.saveEmail(email);
-      getUser(email, context);
+     await getUser(email, context);
+     await getCachedDetails();
       // print(_storageService.getEmail());
       isVisible = false;
       notifyListeners();
@@ -71,9 +68,9 @@ class LoginFormViewModel extends ChangeNotifier {
     }
   }
 
-  getUser(String email, BuildContext context) async {
+ Future<void> getUser(String email, BuildContext context) async {
     _isGettingUser = true;
-     
+
     UserResponse? response = await _service.getUser(email, context);
 
     if (response == null) {
@@ -83,7 +80,12 @@ class LoginFormViewModel extends ChangeNotifier {
 
     if (response?.status == SUCCESS) {
       user = response?.userInfo;
+      _storageService.saveUserID(user!.id.toString());
+      _storageService.saveEmail(user!.email);
+      _storageService.saveUserName(user!.userName);
       _isGettingUser = false;
+      print("Printing user");
+      print(user);
       notifyListeners();
     } else {
       AppUtils.showSnackBar(context, "Could not fetch User, Try Again");

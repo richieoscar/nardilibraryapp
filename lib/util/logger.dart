@@ -15,4 +15,5 @@ class AppLogger {
     final Logger _logger = Logger();
     _logger.w(message);
   }
+
 }

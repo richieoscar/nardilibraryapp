@@ -6,7 +6,9 @@ import 'package:nardilibraryapp/service/storage/storage_service_impl.dart';
 import 'package:nardilibraryapp/ui/views/forgot_password_screen.dart';
 import 'package:nardilibraryapp/ui/views/update_profile.dart';
 import 'package:nardilibraryapp/ui/views/view_profile.dart';
+import 'package:nardilibraryapp/viewmodels/homepage_viemodel.dart';
 import 'package:nardilibraryapp/viewmodels/login_form_viewmodel.dart';
+import 'package:nardilibraryapp/viewmodels/profile_screen_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/view_profile_viewmodel.dart';
 import 'package:nardilibraryapp/widgets/custom_home_section.dart';
 import 'package:nardilibraryapp/widgets/progressar.dart';
@@ -19,12 +21,12 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var viewmodel = Provider.of<LoginFormViewModel>(context);
+    var viewmodel = Provider.of<HomePageViewmodel>(context);
     return Scaffold(
         backgroundColor: AppColors.faintColor,
         body: SafeArea(
-          child: viewmodel.isGetUser
-              ? ProgressBar(viewmodel.isGetUser)
+          child: viewmodel.isLoading
+              ? ProgressBar(viewmodel.isLoading)
               : Column(
                   children: [
                     Container(
@@ -49,16 +51,14 @@ class Profile extends StatelessWidget {
                                   style: AppStyle.whiteBoldText,
                                 ),
                                 const SizedBox(
-                                  height: 8,
+                                  height: 8, 
                                 ),
-                                Text(
-                                    "User ID ${viewmodel.id ?? viewmodel.user!.id}",
+                                Text("User ID ${viewmodel.id}",
                                     style: AppStyle.profileText),
                                 const SizedBox(
                                   height: 8,
                                 ),
-                                Text(
-                                    "Logged In:  ${viewmodel.username ?? viewmodel.user!.userName}",
+                                Text("Logged In:  ${viewmodel.username}",
                                     style: AppStyle.profileText),
                               ],
                             ),
@@ -75,8 +75,7 @@ class Profile extends StatelessWidget {
                         icon: Icons.person,
                         onpressed: () {
                           String? email =
-                              viewmodel.email ?? viewmodel.user!.email;
-
+                              viewmodel.email;
                           print(email);
 
                           if (email != null) {
@@ -113,9 +112,9 @@ class Profile extends StatelessWidget {
                       onpressed: () {
                         StorageServiceImpl service =
                             StorageServiceImpl.instance;
-                        service.clear();
-                        Navigator.popAndPushNamed(
-                            context, NardAccess.routeName);
+                        service.keepMeLoggedIn(false);
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, NardAccess.routeName, (route) => false);
                       },
                       color: Colors.red,
                     ),

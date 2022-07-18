@@ -34,17 +34,17 @@ class AuthServiceImpl implements AuthService {
     AuthResponse? response = await _apiService.login(username, password);
     if (response!.status == SUCCESS) {
       print(response.message);
-     // print(response.data.role);
+      // print(response.data.role);
       await _storageService.saveUserName(response.message);
 
       if (response.data.role == USER_ROLE) {
         print("User Role");
-       // print(response.data.role);
-      // await _storageService.saveRole(response.data.role);
+        // print(response.data.role);
+        // await _storageService.saveRole(response.data.role);
         _navService.navigateUntil(UserDashboard.routeName, context);
         return response;
       } else if (response.data.role == ADMIN) {
-      //  _storageService.saveRole(response.data.role!);
+        //  _storageService.saveRole(response.data.role!);
         _navService.navigate(AdminDashboard.routeName, context);
         return response;
       }
@@ -59,18 +59,20 @@ class AuthServiceImpl implements AuthService {
   Future<AuthResponse?> SignUpUser(UserInfo info, BuildContext context) async {
     AuthResponse? response = await _apiService.SignUpUser(info);
 
-    if (response!.status == SUCCESS) {
-      print(response);
-    //  print("Saved user role on signup ${response.data.role}");
-      
-      _navService.navigate(FinishRegistration.routeName, context);
+    if (response != null) {
+      if (response.status == SUCCESS) {
+        print(response);
+        //  print("Saved user role on signup ${response.data.role}");
+
+        _navService.navigate(FinishRegistration.routeName, context);
+        return response;
+      }
+      if (response.status == FAILED) {
+        AppUtils.showSnackBar(context, response.message);
+        print(response.status);
+      }
       return response;
     }
-    if (response.status == FAILED) {
-      AppUtils.showSnackBar(context, response.message);
-      print(response.status);
-    }
-    return response;
   }
 
   @override
@@ -80,7 +82,7 @@ class AuthServiceImpl implements AuthService {
 
     if (response!.status == SUCCESS) {
       print(response);
-    //  _storageService.saveRole(info.role);
+      //  _storageService.saveRole(info.role);
       AppUtils.showSnackBar(context, "User Created Succesfully");
       return response;
     }

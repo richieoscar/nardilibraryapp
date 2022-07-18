@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:nardilibraryapp/model/auth/auth_data.dart';
 
 class AuthResponse {
@@ -26,4 +27,9 @@ class AuthResponse {
       _data = AuthData.fromJson(json["data"]);
     }
   }
+
+ 
+
+  @override
+  String toString() => 'AuthResponse(_status: $_status, _message: $_message, _data: $_data)';
 }
