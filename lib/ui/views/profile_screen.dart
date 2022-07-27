@@ -51,7 +51,7 @@ class Profile extends StatelessWidget {
                                   style: AppStyle.whiteBoldText,
                                 ),
                                 const SizedBox(
-                                  height: 8, 
+                                  height: 8,
                                 ),
                                 Text("User ID ${viewmodel.id}",
                                     style: AppStyle.profileText),
@@ -74,8 +74,7 @@ class Profile extends StatelessWidget {
                         title: "View Full Profile",
                         icon: Icons.person,
                         onpressed: () {
-                          String? email =
-                              viewmodel.email;
+                          String? email = viewmodel.email;
                           print(email);
 
                           if (email != null) {
@@ -113,8 +112,9 @@ class Profile extends StatelessWidget {
                         StorageServiceImpl service =
                             StorageServiceImpl.instance;
                         service.keepMeLoggedIn(false);
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, NardAccess.routeName, (route) => false);
+                        viewmodel.clearStorage();
+                        Navigator.pushReplacementNamed(
+                            context, NardAccess.routeName);
                       },
                       color: Colors.red,
                     ),

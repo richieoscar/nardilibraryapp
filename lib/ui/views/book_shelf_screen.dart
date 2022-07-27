@@ -52,7 +52,7 @@ class _BookShelfState extends State<BookShelf> {
           elevation: 0,
           centerTitle: true,
           title: Text(
-            "NardLibrary",
+            "Book Shelf",
             style: AppStyle.appBarText,
           ),
           actions: [
@@ -71,14 +71,14 @@ class _BookShelfState extends State<BookShelf> {
               : Column(
                   children: [
                     const SizedBox(
-                      height: 10,
+                      height: 5,
                     ),
-                    Text(
-                      "Your Book Shelf",
-                      style: AppStyle.shelfHeadlineText,
-                    ),
+                    // Text(
+                    //   "Your Book Shelf",
+                    //   style: AppStyle.shelfHeadlineText,
+                    // ),
                     const SizedBox(
-                      height: 10,
+                      height: 1,
                     ),
                     viewmodel.isShelfEmpty
                         ? const BookShelfEmpty()
@@ -107,63 +107,71 @@ class _BookShelfState extends State<BookShelf> {
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 15),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
+                                        horizontal: 5, vertical: 0),
+                                    child: Card(
+                                      elevation: 0.2,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Container(
-                                              width: 80,
-                                              height: 80,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                shape: BoxShape.rectangle,
-                                              ),
-                                              child: CacheImage(
-                                                  imageUrl: viewmodel
-                                                      .shelvedBooks[index]
-                                                      .thumbnail),
-                                            ),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            Column(
+                                            Row(
                                               children: [
                                                 Container(
-                                                  width: 150,
-                                                  child: Text(
-                                                    viewmodel
-                                                        .shelvedBooks[index]
-                                                        .name,
-                                                    style: AppStyle.smallText,
-                                                    softWrap: true,
+                                                  width: 80,
+                                                  height: 80,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(10),
+                                                    shape: BoxShape.rectangle,
                                                   ),
+                                                  child: CacheImage(
+                                                      imageUrl: viewmodel
+                                                          .shelvedBooks[index]
+                                                          .thumbnail),
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Column(
+                                                  children: [
+                                                    Container(
+                                                      width: 150,
+                                                      child: Text(
+                                                        viewmodel
+                                                            .shelvedBooks[index]
+                                                            .name,
+                                                        style: AppStyle.smallText,
+                                                        softWrap: true,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ],
                                             ),
+                                            IconButton(
+                                              onPressed: () {
+                                                int id = viewmodel
+                                                    .shelvedBooks[index].getId!;
+                                    
+                                                String? username =
+                                                    viewmodel.username;
+                                                print(id);
+                                                print(username);
+                                                viewmodel.removeFromShelf(
+                                                    AddToShelf(id, username),
+                                                    context);
+                                                viewmodel.remove(index);
+                                              },
+                                              icon: Icon(
+                                                Icons.delete,
+                                                color: Colors.red[300],
+                                              ),
+                                            ),
                                           ],
                                         ),
-                                        IconButton(
-                                          onPressed: () {
-                                            int id = viewmodel
-                                                .shelvedBooks[index].getId!;
-                                            String? username =
-                                                viewmodel.username;
-                                            print(id);
-                                            print(username);
-                                            viewmodel.removeFromShelf(
-                                                AddToShelf(id, username),
-                                                context);
-                                          },
-                                          icon: Icon(
-                                            Icons.delete,
-                                            color: Colors.red[300],
-                                          ),
-                                        ),
-                                      ],
+                                      ),
                                     ),
                                   ),
                                 );

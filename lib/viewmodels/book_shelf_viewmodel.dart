@@ -75,6 +75,11 @@ class BookShelfViewmodel extends ChangeNotifier {
     }
   }
 
+  void remove(int index){
+    _shelvedBooks!.removeAt(index);
+    notifyListeners();
+  }
+
   void removeFromShelf(AddToShelf shelf, BuildContext context) async {
     ShelfResponse? shelfResponse =
         await _bookResourceService.removeFromShelf(shelf);

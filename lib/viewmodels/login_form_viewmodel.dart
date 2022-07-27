@@ -22,7 +22,7 @@ class LoginFormViewModel extends ChangeNotifier {
   bool _isVisible = false;
   String? _email;
   String? _username = "";
-  int? _id;
+  String? _id;
 
   get username => _username;
 
@@ -42,7 +42,7 @@ class LoginFormViewModel extends ChangeNotifier {
 
   getCachedDetails() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    _id = pref.getInt("id");
+    _id = pref.getString("id");
     _username = pref.getString("userName");
     _email = pref.getString("email");
     notifyListeners();

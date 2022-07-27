@@ -24,6 +24,7 @@ import 'package:nardilibraryapp/ui/views/password_reset_complete.dart';
 import 'package:nardilibraryapp/ui/views/splash_screen.dart';
 import 'package:nardilibraryapp/ui/views/verify_email_screen.dart';
 import 'package:nardilibraryapp/ui/views/view_profile.dart';
+import 'package:nardilibraryapp/viewmodels/admin_update_user_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/all_featured_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/book_detail_viewmodel.dart';
 import 'package:nardilibraryapp/viewmodels/book_shelf_viewmodel.dart';
@@ -66,7 +67,8 @@ void main() {
       ChangeNotifierProvider(create: (_) => ViewProfileViewmodel()),
       ChangeNotifierProvider(create: (_) => BookShelfViewmodel()),
        ChangeNotifierProvider(create: (_) => SplashViewmodel()),
-       ChangeNotifierProvider(create: (_) => ProfileScreenViewmodle())
+       ChangeNotifierProvider(create: (_) => ProfileScreenViewmodle()),
+        ChangeNotifierProvider(create: (_) => UpdateUserViewmodel())
     ],
     child: Home(),
 

@@ -41,7 +41,7 @@ class AuthServiceImpl implements AuthService {
         print("User Role");
         // print(response.data.role);
         // await _storageService.saveRole(response.data.role);
-        _navService.navigateUntil(UserDashboard.routeName, context);
+        _navService.navigate(UserDashboard.routeName, context);
         return response;
       } else if (response.data.role == ADMIN) {
         //  _storageService.saveRole(response.data.role!);

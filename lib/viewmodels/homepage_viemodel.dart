@@ -16,10 +16,15 @@ import 'package:nardilibraryapp/util/logger.dart';
 import 'package:nardilibraryapp/util/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../model/auth/user_response.dart';
+import '../service/auth/auth_service.dart';
+import '../service/auth/auth_service_impl.dart';
+
 class HomePageViewmodel extends ChangeNotifier {
   final StorageService _storageService = StorageServiceImpl.instance;
   final BookResourceService _bookResourceService = BookResourceImpl.instance;
   final NavigationService _navigationService = NavigationServiceImpl.instance;
+  final AuthService _service = AuthServiceImpl.instance;
   AppLogger logger = AppLogger();
 
   HomePageViewmodel() {
@@ -107,5 +112,10 @@ class HomePageViewmodel extends ChangeNotifier {
 
   void navigate(String route, BuildContext context) {
     _navigationService.navigateAddStack(route, context);
+  }
+
+  void clearStorage() {
+    _storageService.clear();
+    notifyListeners();
   }
 }

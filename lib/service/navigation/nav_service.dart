@@ -11,4 +11,6 @@ abstract class NavigationService {
   void navigateUntil(String route, BuildContext context);
 
   void navigateAddStack(String route, BuildContext context);
+
+  void pop(BuildContext context);
 }

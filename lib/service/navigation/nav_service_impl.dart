@@ -16,7 +16,7 @@ class NavigationServiceImpl implements NavigationService {
 
   @override
   void navigateUntil(String route, BuildContext context) {
-    Navigator.pushNamedAndRemoveUntil(context, route, (route) => false);
+    Navigator.pushReplacementNamed(context, route);
   }
 
   @override
@@ -28,5 +28,10 @@ class NavigationServiceImpl implements NavigationService {
   void navigateToBooksFromDepartment(
       String route, BuildContext context, int id) {
     Navigator.pushNamed(context, route, arguments: int);
+  }
+
+  @override
+  void pop(BuildContext context) {
+    Navigator.pop(context);
   }
 }

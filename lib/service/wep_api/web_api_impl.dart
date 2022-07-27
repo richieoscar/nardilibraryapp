@@ -18,6 +18,7 @@ import 'package:nardilibraryapp/model/bookresource/resource_response.dart';
 import 'package:nardilibraryapp/model/bookresource/department.dart';
 import 'package:nardilibraryapp/model/bookresource/add_resource.dart';
 import 'package:nardilibraryapp/model/shelf/add_to_shelf.dart';
+import 'package:nardilibraryapp/model/shelf/shelf.dart';
 import 'package:nardilibraryapp/model/shelf/shelf_response.dart';
 import 'package:nardilibraryapp/model/unit.dart';
 import 'package:nardilibraryapp/service/storage/storage_service.dart';
@@ -147,8 +148,8 @@ class WebApiImpl implements WebApi {
       if (response.statusCode == 200) {
         signUpResponse = AuthResponse.fromJson(jsonDecode(response.body));
         print(signUpResponse);
-      //  _storageService.saveRole(info.role);
-       // print("Saving user role at Sign up");
+        //  _storageService.saveRole(info.role);
+        // print("Saving user role at Sign up");
         return signUpResponse;
       }
       if (response.statusCode == 500) {
@@ -415,6 +416,12 @@ class WebApiImpl implements WebApi {
       if (response.statusCode == 200) {
         shelfResponse = ShelfResponse.fromJson(jsonDecode(response.body));
         return shelfResponse;
+      } else if (response.statusCode == 500) {
+        shelfResponse = ShelfResponse.fromJson(jsonDecode(response.body));
+        Shelf shelf = shelfResponse.data as Shelf;
+        if (shelf.username != null && shelf.resourceId != null) {
+          return ShelfResponse("ALREADY_IN_SHELF", "", null);
+        }
       } else {
         print("Print Error response");
         print(response.statusCode);

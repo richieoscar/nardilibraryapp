@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var viewmodel = Provider.of<HomePageViewmodel>(context);
-     print(viewmodel.role);
+    print(viewmodel.role);
     return Scaffold(
       body: viewmodel.isLoading
           ? ProgressBar(viewmodel.isLoading)
@@ -72,7 +72,6 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 10),
                       child: Text(
-                       
                         viewmodel.role == ADMIN
                             ? "Hello Admin,"
                             : "Hello, ${viewmodel.username}",
@@ -199,12 +198,14 @@ class _HomePageState extends State<HomePage> {
                   textInputAction: TextInputAction.search,
                   onSubmitted: (value) {
                     _performSearchQuery(value);
+                     _searchCOntroller.clear();
                   },
                   cursorColor: AppColors.backgroundColor,
                   decoration: InputDecoration(
                     suffixIcon: IconButton(
                       onPressed: () {
                         _performSearchQuery(_searchCOntroller.text);
+                        _searchCOntroller.clear();
                       },
                       icon: Icon(Icons.search_rounded,
                           color: AppColors.searcIconColor),

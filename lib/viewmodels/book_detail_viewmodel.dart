@@ -65,6 +65,9 @@ class BookDetailViewmodel extends ChangeNotifier {
     if (response!.status == SUCCESS) {
       AppUtils.showSnackBar(context, "Book Added to your shelf");
     }
+     if (response!.status == "ALREADY_IN_SHELF") {
+      AppUtils.showSnackBar(context, "Book Already in shelf");
+    }
     if (response!.status == FAILED) {
       AppUtils.showSnackBar(context, "Failed to add book to your shelf");
     }

@@ -55,6 +55,12 @@ class _BookDetailState extends State<BookDetails> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _status = null;
+  }
+
+  @override
   Widget build(BuildContext context) {
     var viewmodel = Provider.of<BookDetailViewmodel>(context);
     return Scaffold(
@@ -112,10 +118,9 @@ class _BookDetailState extends State<BookDetails> {
                               height: 200,
                               child: Card(
                                 elevation: 10,
-                                child: CacheImage(imageUrl:
-                                  viewmodel.book.thumbnail ??
+                                child: CacheImage(
+                                  imageUrl: viewmodel.book.thumbnail ??
                                       "assets/nobook.png",
-
                                 ),
                               ),
                             ),
